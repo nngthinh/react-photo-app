@@ -97,6 +97,7 @@
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
       "^.+\\.module\\.(css|sass|scss)$"
     ],
+    "moduleDirectories": ["node_modules", "src"],
     "modulePaths": [],
     "moduleNameMapper": {
       "^react-native$": "react-native-web",
