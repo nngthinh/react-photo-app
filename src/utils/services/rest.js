@@ -1,7 +1,7 @@
 import * as axios from "axios";
 
 // Rest service with Beaer supported
-class RestBearerService {
+export class RestService {
   // Generate the new config with bearer token in the header field
   static #addTokenToConfig = (config, token) => {
     if (typeof token === "string" && token.length > 0) {
@@ -15,27 +15,27 @@ class RestBearerService {
 
   // All RESTful services
   static async get(url, token = "", otherConfigs = {}) {
-    config = RestBearerService.#addTokenToConfig(otherConfigs, token);
+    const config = RestService.#addTokenToConfig(otherConfigs, token);
     return await axios.get(url, config);
   }
 
   static async post(url, body, token = "", otherConfigs = {}) {
-    config = RestBearerService.#addTokenToConfig(otherConfigs, token);
+    const config = RestService.#addTokenToConfig(otherConfigs, token);
     return await axios.post(url, body, config);
   }
 
   static async put(url, body, token = "", otherConfigs = {}) {
-    config = RestBearerService.#addTokenToConfig(otherConfigs, token);
-    return await axios.put(url, body);
+    const config = RestService.#addTokenToConfig(otherConfigs, token);
+    return await axios.put(url, body, config);
   }
 
   static async patch(url, body, token = "", otherConfigs = {}) {
-    config = RestBearerService.#addTokenToConfig(otherConfigs, token);
-    return await axios.patch(url, body);
+    const config = RestService.#addTokenToConfig(otherConfigs, token);
+    return await axios.patch(url, body, config);
   }
 
   static async delete(url, body, token = "", otherConfigs = {}) {
-    config = RestBearerService.#addTokenToConfig(otherConfigs, token);
-    return await axios.delete(url, body);
+    const config = RestService.#addTokenToConfig(otherConfigs, token);
+    return await axios.delete(url, body, config);
   }
 }
