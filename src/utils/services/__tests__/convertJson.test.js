@@ -36,18 +36,21 @@ const complexSnakeData = {
   ],
 };
 
-test("Convert simple json from camel to snake", () => {
-  expect(convertCamelToSnakeJSON(simpleCamelData)).toEqual(simpleSnakeData);
+describe("camel to snake", () => {
+  test("convert simple json from camel to snake", () => {
+    expect(convertCamelToSnakeJSON(simpleCamelData)).toEqual(simpleSnakeData);
+  });
+  test("convert complex json from camel to snake ", () => {
+    expect(convertCamelToSnakeJSON(complexCamelData)).toEqual(complexSnakeData);
+  });
 });
 
-test("Convert complex json from camel to snake ", () => {
-  expect(convertCamelToSnakeJSON(complexCamelData)).toEqual(complexSnakeData);
-});
+describe("snake to camel", () => {
+  test("convert simple json from snake to camel", () => {
+    expect(convertSnakeToCamelJSON(simpleSnakeData)).toEqual(simpleCamelData);
+  });
 
-test("Convert simple json from snake to camel", () => {
-  expect(convertSnakeToCamelJSON(simpleSnakeData)).toEqual(simpleCamelData);
-});
-
-test("Convert complex json from snake to camel", () => {
-  expect(convertSnakeToCamelJSON(complexSnakeData)).toEqual(complexCamelData);
+  test("convert complex json from snake to camel", () => {
+    expect(convertSnakeToCamelJSON(complexSnakeData)).toEqual(complexCamelData);
+  });
 });
