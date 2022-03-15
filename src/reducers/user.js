@@ -2,18 +2,26 @@ const userReducer = (state = {}, action) => {
   switch (action.type) {
     case "SIGN_IN":
       return {
-        type: "SIGN_IN",
+        ...state,
+        pendingAction: "SIGN_IN",
       };
     case "SIGN_UP":
       return {
-        type: "SIGN_UP",
+        ...state,
+        pendingAction: "SIGN_UP",
       };
     case "SIGN_OUT":
       return {
-        type: "SIGN_OUT",
+        ...state,
+        pendingAction: "SIGN_OUT",
+      };
+    case "GET_USER_INFO":
+      return {
+        ...state,
+        pendingAction: "GET_USER_INFO",
       };
     default:
-      state;
+      return state;
   }
 };
 
