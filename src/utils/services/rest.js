@@ -7,7 +7,10 @@ export class RestService {
     if (typeof token === "string" && token.length > 0) {
       return {
         ...config,
-        headers: { ...config["headers"], Authorization: `Bearer ${token}` },
+        headers: {
+          ...config["headers"],
+          Authorization: `Bearer ${token}`,
+        },
       };
     }
     return config;

@@ -1,17 +1,19 @@
+// Executes async query to the backend
 const clientMiddleware = (store) => (next) => async (action) => {
-  if (!action.pendingAction) {
+  if (!action.pendingActionType) {
     return next(action);
   }
 
   // Destructure the action
   const { pendingActionType: type, pendingAction: promise } = action;
 
-  // next action and return value
+  // Execute async dispatch
   let nextAction, returnValue;
   try {
-    const result = await promise;
+    const result = await promise();
     nextAction = {
       type: `${type}_SUCCESS`,
+      previousAction: { ...action }, // previous action that supplied for futher actions
       data: result,
     };
     returnValue = {
@@ -21,7 +23,8 @@ const clientMiddleware = (store) => (next) => async (action) => {
   } catch (error) {
     nextAction = {
       type: `${type}_FAILED`,
-      data: error,
+      previousAction: { ...action },
+      error: error,
     };
 
     returnValue = {
