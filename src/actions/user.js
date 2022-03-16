@@ -15,4 +15,4 @@ const getUserInfoAction = () => ({
   pendingAction: () => UserRepository.getUserInfo(),
 });
 
-export { signInAction, signUpAction };
+export { signInAction, signUpAction, getUserInfoAction };
