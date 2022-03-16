@@ -13,22 +13,20 @@ const clientMiddleware = (store) => (next) => async (action) => {
     const result = await promise();
     nextAction = {
       type: `${type}_SUCCESS`,
-      previousAction: { ...action }, // previous action that supplied for futher actions
       data: result,
     };
     returnValue = {
-      sucess: true,
+      success: true,
       data: result,
     };
   } catch (error) {
     nextAction = {
       type: `${type}_FAILED`,
-      previousAction: { ...action },
       error: error,
     };
 
     returnValue = {
-      sucess: false,
+      success: false,
       message: error,
     };
   }
