@@ -1,29 +1,23 @@
+import { KUserActions } from "constants/actions";
+
 const initialState = {
   isLoggedIn: false,
 };
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SIGN_IN":
-      return {
-        ...state,
-        pendingAction: "SIGN_IN",
-      };
-    case "SIGN_UP":
-      return {
-        ...state,
-        pendingAction: "SIGN_UP",
-      };
-    case "SIGN_OUT":
-      return {
-        ...state,
-        pendingAction: "SIGN_OUT",
-      };
-    case "GET_USER_INFO":
-      return {
-        ...state,
-        pendingAction: "GET_USER_INFO",
-      };
+    case KUserActions.SIGN_IN_SUCCESS:
+      return { ...state };
+    case KUserActions.SIGN_IN_FAILED:
+      return { ...state };
+    case KUserActions.SIGN_UP_SUCCESS:
+      return { ...state };
+    case KUserActions.SIGN_UP_FAILED:
+      return { ...state };
+    case KUserActions.SIGN_OUT_SUCCESS:
+      return { ...state };
+    case KUserActions.SIGN_OUT_FAILED:
+      return { ...state };
     default:
       return state;
   }

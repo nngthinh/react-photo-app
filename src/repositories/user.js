@@ -18,20 +18,29 @@ class UserRepository {
   static signUp(name, email, password) {
     const url = `${baseUrl}/users`;
     const body = {
-      name: name,
       email: email,
       password: password,
+      name: name,
     };
-    RestService.post(body)
+    RestService.post(url, body)
       .then((data) => {
         console.log(data);
       })
       .catch((err) => console.log(err));
   }
 
+  static signOut() {
+    // Just detele user token because ... BE didn't have that service -_-
+  }
+
   static getUserInfo() {
     const url = `${baseUrl}/users/me`;
-    // Get token from local storage (to be continued ...)
+    // Get token from local storage
+    RestService.get(url)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => console.log(err));
   }
 }
 

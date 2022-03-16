@@ -1,3 +1,3 @@
-import SignInView from "./SignIn";
+import SignIn from "./SignIn";
 
-export default SignInView;
+export default SignIn;
