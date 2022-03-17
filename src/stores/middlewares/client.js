@@ -11,23 +11,24 @@ const clientMiddleware = (store) => (next) => async (action) => {
   let nextAction, returnValue;
   try {
     const result = await promise();
+    const data = result.data;
     nextAction = {
       type: `${type}_SUCCESS`,
-      data: result,
+      data: data,
     };
     returnValue = {
       success: true,
-      data: result,
+      data: data,
     };
-  } catch (error) {
+  } catch (err) {
+    const error = err.response.data;
     nextAction = {
       type: `${type}_FAILED`,
       error: error,
     };
-
     returnValue = {
       success: false,
-      message: error,
+      error: error,
     };
   }
 
