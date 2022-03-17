@@ -1,7 +1,7 @@
 import { baseUrl } from "constants/apiUrl";
 const { RestService } = require("utils/services/rest");
 
-class Category {
+class CategoriesRepository {
   static async createCategory(name, description, image_url) {
     const url = `${baseUrl}/categories`;
     const body = {
@@ -9,7 +9,7 @@ class Category {
       description: description,
       imageUrl: url,
     };
-    
+
     try {
       const result = await RestService.postWithToken(url, body);
       return result;
@@ -21,7 +21,12 @@ class Category {
   static async viewCateogries(offset, limit) {
     const url = `${baseUrl}/categories?offset=${offset}&limit=${limit}`;
     try {
-      const result = await 
+      const result = await RestService.getWithToken(url);
+      return result;
+    } catch (error) {
+      throw error;
     }
   }
 }
+
+export default CategoriesRepository;
