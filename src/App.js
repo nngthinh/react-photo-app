@@ -3,18 +3,22 @@ import SignIn from "components/Auth/SignIn";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { loadState } from "utils/services/localStorage";
-import { getUserInfoAction } from "actions/user";
+import { getUserInfoAction, signOutAction } from "actions/user";
 import Home from "components/Home";
 import { useEffect } from "react";
 
 const App = () => {
-  // const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  // const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   const getUserInfoResult = await dispatch(getUserInfoAction())();
-  // }, [dispatch, isLoggedIn]);
+  useEffect(() => {
+    if (isLoggedIn) {
+      const getUserInfoResult = dispatch(getUserInfoAction());
+      if (getUserInfoResult.failed) {
+        dispatch(signOutAction())();
+      }
+    }
+  }, [dispatch, isLoggedIn]);
   // Route page
   return <AppView></AppView>;
 };

@@ -2,7 +2,6 @@ import * as React from "react";
 import { useDispatch } from "react-redux";
 import { signInAction, signUpAction } from "actions/user";
 import InputItem from "components/Common/Item";
-import { loadState, saveState } from "utils/services/localStorage";
 import "./signUp.css";
 
 // Components
@@ -123,11 +122,6 @@ const SignUpView = ({ onSignUp, onAutoSignIn }) => {
     if (signUpResult.success) {
       // Sign in and get token
       const signInResult = await onAutoSignIn(email.value, password.value);
-      if (signInResult.success) {
-        const token = signInResult.data.accessToken;
-        const state = loadState();
-        saveState({ ...state, user: { token: token } });
-      }
     } else {
       // Field validation
       if (signUpResult.error.data) {

@@ -5,8 +5,20 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import configureStore from "stores/configureStore";
 import { Provider } from "react-redux";
+import { loadState, saveState } from "utils/services/localStorage";
 
-const store = configureStore();
+const persistedState = loadState();
+const store = configureStore(persistedState);
+
+// Save state to local storage
+store.subscribe(() => {
+  const state = store.getState();
+  saveState({
+    user: state.user,
+    categories: state.categories,
+    items: state.items,
+  });
+});
 
 ReactDOM.render(
   <React.StrictMode>
