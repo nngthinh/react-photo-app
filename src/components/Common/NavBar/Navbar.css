@@ -1,8 +1,11 @@
 .navbar {
-  height: 50px;
+  background-color: aquamarine;
 }
 
-.navbarWrapepr {
+.navbarWrapper {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  height: 70px;
+  padding: 0px 24px;
 }
