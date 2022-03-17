@@ -10,6 +10,10 @@ class KUserActions {
   static PENDING_SIGN_OUT = "SIGN_OUT";
   static SIGN_OUT_SUCCESS = "SIGN_OUT_SUCCESS";
   static SIGN_OUT_FAILED = "SIGN_OUT_FAILED";
+
+  static PENDING_GET_USER_INFO = "GET_USER_INFO";
+  static GET_USER_INFO_SUCCESS = "GET_USER_INFO_SUCCESS";
+  static GET_USER_INFO_FAILED = "GET_USER_INFO_FAILED";
 }
 
 class KCategoriesAction {
