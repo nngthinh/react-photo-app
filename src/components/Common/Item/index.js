@@ -1,4 +1,5 @@
 const InputItem = ({
+  name,
   type,
   value,
   placeholder,
@@ -11,14 +12,15 @@ const InputItem = ({
     <div className="inputItem">
       <input
         className="inputItemField"
+        name={name}
         value={value}
         type="text"
-        placeholder="Name"
+        placeholder={placeholder}
         onChange={handleOnChange}
         onBlur={handleOnBlur}
         {...restProps}
       ></input>
-      {error ? <div className="inputItemError">error</div> : <></>}
+      {error ? <div className="inputItemError">{error}</div> : <></>}
     </div>
   );
 };
