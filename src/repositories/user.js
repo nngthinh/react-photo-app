@@ -1,5 +1,4 @@
 import { baseUrl } from "constants/apiUrl";
-import { loadState, saveState } from "utils/services/localStorage";
 const { RestService } = require("utils/services/rest");
 
 class UserRepository {
@@ -34,9 +33,7 @@ class UserRepository {
 
   static async signOut() {
     // Didn't have sign out api.
-    // Just remove the user state when signing out
-    const { user, ...rest } = loadState();
-    saveState({ ...rest });
+    return setTimeout(() => {}, 0);
   }
 
   static async getUserInfo() {
