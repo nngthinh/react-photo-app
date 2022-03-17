@@ -1,7 +1,7 @@
 import { KUserActions } from "constants/actions";
 
 const initialState = {
-  isLoggedIn: false,
+  isLoggedIn: false, // TODO: Replace by geting local
 };
 
 const userReducer = (state = initialState, action) => {

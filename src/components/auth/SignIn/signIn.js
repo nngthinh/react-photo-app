@@ -7,7 +7,7 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const dispatchSignIn = dispatch(signInAction());
   return (
-    <div>
+    <div className="signIn">
       <div className="signInWrapper">
         <h1>Sign In</h1>
         <form>
