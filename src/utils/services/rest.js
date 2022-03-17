@@ -21,7 +21,7 @@ export class RestService {
     return config;
   };
 
-  static #getToken = () => loadState()?.token ?? "";
+  static #getToken = () => loadState()?.user?.token ?? "";
 
   // All RESTful services
   // - Without token
