@@ -1,7 +1,7 @@
 import { KUserActions } from "constants/actions";
 
 const initialState = {
-  isLoggedIn: false, // TODO: Replace by geting local
+  isLoggedIn: false,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -11,13 +11,23 @@ const userReducer = (state = initialState, action) => {
     case KUserActions.SIGN_UP_FAILED:
       return { ...state };
     case KUserActions.SIGN_IN_SUCCESS:
-      return { ...state };
+      return {
+        isLoggedIn: true,
+        token: action.data.accessToken,
+      };
     case KUserActions.SIGN_IN_FAILED:
       return { ...state };
     case KUserActions.SIGN_OUT_SUCCESS:
-      return { ...state };
+      return { isLoggedIn: false };
     case KUserActions.SIGN_OUT_FAILED:
       return { ...state };
+    case KUserActions.GET_USER_INFO_SUCCESS: {
+      const userInfo = action.data;
+      return { ...state, info: { name: userInfo.name, id: userInfo.id } };
+    }
+    case KUserActions.GET_USER_INFO_FAILED: {
+      return { ...state };
+    }
     default:
       return state;
   }
