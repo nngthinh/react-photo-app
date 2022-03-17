@@ -1,4 +1,5 @@
 import { baseUrl } from "constants/apiUrl";
+import { loadState, saveState } from "utils/services/localStorage";
 const { RestService } = require("utils/services/rest");
 
 class UserRepository {
@@ -9,10 +10,10 @@ class UserRepository {
       password: password,
     };
     try {
-      const res = await RestService.post(url, body);
-      return res;
-    } catch (err) {
-      throw err;
+      const result = await RestService.post(url, body);
+      return result;
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -24,25 +25,28 @@ class UserRepository {
       name: name,
     };
     try {
-      const res = await RestService.post(url, body);
-      return res;
-    } catch (err) {
-      throw err;
+      const result = await RestService.post(url, body);
+      return result;
+    } catch (error) {
+      throw error;
     }
   }
 
   static async signOut() {
-    // Just detele user token because ... BE didn't have that service -_-
+    // Didn't have sign out api.
+    // Just remove the user state when signing out
+    const { user, ...rest } = loadState();
+    saveState({ ...rest });
   }
 
   static async getUserInfo() {
     const url = `${baseUrl}/users/me`;
     // Get token from local storage
     try {
-      const res = await RestService.get(url);
-      return res;
-    } catch (err) {
-      throw err;
+      const result = await RestService.getWithToken(url);
+      return result;
+    } catch (error) {
+      throw error;
     }
   }
 }
