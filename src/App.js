@@ -14,8 +14,8 @@ const App = () => {
   useEffect(() => {
     if (isLoggedIn) {
       const getUserInfoResult = dispatch(getUserInfoAction());
-      if (getUserInfoResult.failed) {
-        dispatch(signOutAction())();
+      if (!getUserInfoResult.success) {
+        dispatch(signOutAction());
       }
     }
   }, [dispatch, isLoggedIn]);
