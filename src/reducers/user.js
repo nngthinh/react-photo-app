@@ -7,16 +7,16 @@ const initialState = {
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case KUserActions.SIGN_UP_SUCCESS:
-      return { ...state };
+      return { isLoggedIn: false };
     case KUserActions.SIGN_UP_FAILED:
-      return { ...state };
+      return { isLoggedIn: false };
     case KUserActions.SIGN_IN_SUCCESS:
       return {
         isLoggedIn: true,
         token: action.data.accessToken,
       };
     case KUserActions.SIGN_IN_FAILED:
-      return { ...state };
+      return { isLoggedIn: false };
     case KUserActions.SIGN_OUT_SUCCESS:
       return { isLoggedIn: false };
     case KUserActions.SIGN_OUT_FAILED:

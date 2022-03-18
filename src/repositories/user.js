@@ -33,7 +33,7 @@ class UserRepository {
 
   static async signOut() {
     // Didn't have sign out api.
-    return setTimeout(() => {}, 0);
+    return setTimeout(() => Promise.resolve(), 500);
   }
 
   static async getUserInfo() {

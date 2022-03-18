@@ -1,26 +1,61 @@
 import { signOutAction } from "actions/user";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { ButtonItem } from "../Item";
 import "./Navbar.css";
 
 const Navbar = () => {
-  const userInfo = useSelector((state) => state.user.info);
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const dispatchSignOut = () => dispatch(signOutAction());
-  return <NavbarView userInfo={userInfo} onSignOut={dispatchSignOut} />;
+  return <NavbarView user={user} onSignOut={dispatchSignOut} />;
 };
 
-const NavbarView = ({ userInfo, onSignOut }) => {
-  const isLoggedIn = userInfo ? true : false;
+const NavbarView = ({ user, onSignOut }) => {
+  const isLoggedIn = user.isLoggedIn ?? false;
+  // Navigators
+  const nagivate = useNavigate();
+  const navigateSignIn = () => nagivate(`/signin`);
+
+  // Button click
+  const handleSignIn = (e) => {
+    navigateSignIn();
+  };
+
+  const handleSignOut = async (e) => {
+    const signOutResult = await onSignOut();
+    if (signOutResult.success) {
+      window.location.reload(false);
+    }
+  };
+
+  // Return view
   return (
-    <div className="navbar">
+    <div className="navbar u-shadowSmall">
       <div className="navbarWrapper">
-        <div className="left">
+        <div className="left Brown500">
           <div>
-            {isLoggedIn ? `Hi ${userInfo.name}!` : "Welcome to Photo app!"}
+            {isLoggedIn
+              ? `Hi ${user.info?.name ?? ""}!`
+              : "Welcome to Photo app!"}
           </div>
         </div>
         <div className="right">
-          {isLoggedIn ? <button>Sign Out</button> : <button>Sign In</button>}
+          {isLoggedIn ? (
+            <ButtonItem
+              value={"Sign Out"}
+              variant={"negative_outline"}
+              onClick={handleSignOut}
+              size="medium"
+            ></ButtonItem>
+          ) : (
+            <ButtonItem
+              value={"Sign In"}
+              variant={"primary_outline"}
+              onClick={handleSignIn}
+              size="medium"
+            ></ButtonItem>
+          )}
         </div>
       </div>
     </div>

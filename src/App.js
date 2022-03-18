@@ -3,6 +3,7 @@ import SignIn from "components/Auth/SignIn";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
+import "@ahaui/css/dist/index.min.css";
 import { getUserInfoAction, signOutAction } from "actions/user";
 import Home from "components/Home";
 import { useEffect } from "react";
@@ -23,12 +24,12 @@ const App = () => {
   return <AppView></AppView>;
 };
 
-const AppView = ({ onAutoSignIn }) => {
+const AppView = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/signIn" element={<SignIn />}></Route>
-        <Route path="/signUp" element={<SignUp />}></Route>
+        <Route path="/signin" element={<SignIn />}></Route>
+        <Route path="/signup" element={<SignUp />}></Route>
         <Route path="/*" element={<Home />}></Route>
       </Routes>
     </Router>

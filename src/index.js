@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import "@ahaui/css/dist/index.min.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import configureStore from "stores/configureStore";
