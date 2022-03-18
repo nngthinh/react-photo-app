@@ -13,13 +13,16 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isLoggedIn) {
-      const getUserInfoResult = dispatch(getUserInfoAction());
-      if (!getUserInfoResult.success) {
-        dispatch(signOutAction());
+    const autoSignIn = async (isLoggedIn) => {
+      if (isLoggedIn) {
+        const getUserInfoResult = await dispatch(getUserInfoAction());
+        if (!getUserInfoResult.success) {
+          dispatch(signOutAction());
+        }
       }
-    }
-  }, [dispatch, isLoggedIn]);
+    };
+    autoSignIn(isLoggedIn);
+  }, [isLoggedIn]);
   // Route page
   return <AppView></AppView>;
 };
