@@ -1,7 +1,7 @@
 import { ToastContainer, toast, Icon } from "@ahaui/react";
 const Toast = ({
   position = "bottom-left",
-  autoDismiss = false,
+  autoDismiss = 5000,
   dismissible = true,
   hideProgressBar = true,
 }) => {
