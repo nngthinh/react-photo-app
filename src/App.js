@@ -22,7 +22,7 @@ const App = () => {
       }
     };
     autoSignIn(isLoggedIn);
-  }, [isLoggedIn]);
+  }, [isLoggedIn, dispatch]);
   // Route page
   return <AppView></AppView>;
 };

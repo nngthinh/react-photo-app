@@ -1,7 +1,7 @@
 import { loadState, saveState } from "utils/services/localStorage";
 import configureStore from "stores/configureStore";
 
-const createStoreSynchedWithLocal = (initialState) => {
+const createStoreSynchedWithLocalStorage = (initialState) => {
   // Create store with initial value
   const store = initialState
     ? configureStore(initialState)
@@ -23,4 +23,4 @@ const createStoreSynchedWithLocal = (initialState) => {
   return store;
 };
 
-export default createStoreSynchedWithLocal;
+export default createStoreSynchedWithLocalStorage;

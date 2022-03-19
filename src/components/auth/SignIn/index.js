@@ -88,11 +88,12 @@ const SignInView = ({ onSignIn }) => {
   // Return view
   return (
     <div className="signIn">
-      <div className="signInWrapper u-paddingTopHuge">
+      <div className="signInWrapper u-marginTopExtraLarge">
         <h1 className="u-marginBottomExtraLarge">Sign in</h1>
         <form id="signInForm" onSubmit={handleSubmit}>
           <div className="inputSecion u-marginBottomLarge">
             <InputItem
+              data-testid="email"
               className="u-marginBottomExtraSmall"
               type="text"
               value={email.value}
@@ -104,6 +105,7 @@ const SignInView = ({ onSignIn }) => {
               error={email.error}
             ></InputItem>
             <InputItem
+              data-testid="password"
               className="u-marginBottomExtraSmall"
               type="password"
               value={password.value}
@@ -118,6 +120,7 @@ const SignInView = ({ onSignIn }) => {
         </form>
         <div className="buttonSection">
           <ButtonItem
+            data-testid="signInButton"
             className="u-marginBottomTiny"
             value={"Sign In"}
             type="submit"
@@ -129,9 +132,10 @@ const SignInView = ({ onSignIn }) => {
             variant="lighter"
           />
           <ButtonItem
+            data-testid="signUpButton"
             variant="secondary"
             className="u-marginBottomTiny"
-            value={"Sign Up"}
+            value={"Create account"}
             onClick={() => navigateSignUp()}
           ></ButtonItem>
         </div>

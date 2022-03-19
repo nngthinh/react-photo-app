@@ -43,6 +43,7 @@ const NavbarView = ({ user, onSignOut }) => {
         <div className="right">
           {isLoggedIn ? (
             <ButtonItem
+              data-testid="signOutButton"
               value={"Sign Out"}
               variant={"negative_outline"}
               onClick={handleSignOut}
@@ -50,6 +51,7 @@ const NavbarView = ({ user, onSignOut }) => {
             ></ButtonItem>
           ) : (
             <ButtonItem
+              data-testid="signInButton"
               value={"Sign In"}
               variant={"primary_outline"}
               onClick={handleSignIn}

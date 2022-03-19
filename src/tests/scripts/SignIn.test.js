@@ -1,5 +1,4 @@
 import axios from "axios";
-import SignIn from "components/Auth/SignIn";
 import baseUrl from "constants/apiUrl";
 
 jest.mock("axios");

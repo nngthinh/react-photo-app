@@ -5,9 +5,9 @@ import "@ahaui/css/dist/index.min.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import createStoreSynchedWithLocal from "stores";
+import createStoreSynchedWithLocalStorage from "stores";
 
-const store = createStoreSynchedWithLocal();
+const store = createStoreSynchedWithLocalStorage();
 
 ReactDOM.render(
   <React.StrictMode>

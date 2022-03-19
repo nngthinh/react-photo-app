@@ -139,11 +139,12 @@ const SignUpView = ({ onSignUp, onAutoSignIn }) => {
   // Return view
   return (
     <div className="signUp">
-      <div className="signUpWrapper u-paddingTopHuge">
+      <div className="signUpWrapper u-marginTopExtraLarge">
         <h1 className="u-marginBottomExtraLarge">Create new account</h1>
         <form id="signUpForm" onSubmit={handleSubmit}>
           <div className="inputSecion u-marginBottomLarge">
             <InputItem
+              data-testid="name"
               className="u-marginBottomExtraSmall"
               type="text"
               value={name.value}
@@ -155,6 +156,7 @@ const SignUpView = ({ onSignUp, onAutoSignIn }) => {
               error={name.error}
             ></InputItem>
             <InputItem
+              data-testid="email"
               className="u-marginBottomExtraSmall"
               type="text"
               value={email.value}
@@ -166,6 +168,7 @@ const SignUpView = ({ onSignUp, onAutoSignIn }) => {
               error={email.error}
             ></InputItem>
             <InputItem
+              data-testid="password"
               className="u-marginBottomExtraSmall"
               type="password"
               value={password.value}
@@ -180,6 +183,7 @@ const SignUpView = ({ onSignUp, onAutoSignIn }) => {
         </form>
         <div className="buttonSection">
           <ButtonItem
+            data-testid="signUpButton"
             className="u-marginBottomTiny"
             value={"Create account"}
             type="submit"
@@ -191,6 +195,7 @@ const SignUpView = ({ onSignUp, onAutoSignIn }) => {
             variant="lighter"
           />
           <ButtonItem
+            data-testid="signInButton"
             variant="secondary"
             className="u-marginBottomTiny"
             value={"Sign In"}
