@@ -18,7 +18,7 @@ const userReducer = (state = initialState, action) => {
     case KUserActions.SIGN_IN_FAILED:
       return { isLoggedIn: false };
     case KUserActions.SIGN_OUT_SUCCESS:
-      return { isLoggedIn: false };
+      return { isLoggedIn: false, recentlySignedOut: true };
     case KUserActions.SIGN_OUT_FAILED:
       return { ...state };
     case KUserActions.GET_USER_INFO_SUCCESS: {
@@ -27,6 +27,9 @@ const userReducer = (state = initialState, action) => {
     }
     case KUserActions.GET_USER_INFO_FAILED: {
       return { ...state };
+    }
+    case KUserActions.CLEAN_USER_INFO: {
+      return { isLoggedIn: false };
     }
     default:
       return state;

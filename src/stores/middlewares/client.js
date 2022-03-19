@@ -39,11 +39,11 @@ const clientMiddleware = (store) => (next) => async (action) => {
     else {
       nextAction = {
         type: `${type}_FAILED`,
-        error: error,
+        error: { message: error },
       };
       returnValue = {
         success: false,
-        error: error,
+        error: { message: error },
       };
     }
   }

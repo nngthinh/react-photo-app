@@ -14,6 +14,8 @@ class KUserActions {
   static PENDING_GET_USER_INFO = "GET_USER_INFO";
   static GET_USER_INFO_SUCCESS = "GET_USER_INFO_SUCCESS";
   static GET_USER_INFO_FAILED = "GET_USER_INFO_FAILED";
+
+  static CLEAN_USER_INFO = "REFRESH";
 }
 
 class KCategoriesAction {

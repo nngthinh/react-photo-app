@@ -10,6 +10,7 @@ import {
 import "./signUp.css";
 import { useNavigate } from "react-router-dom";
 import { Separator } from "@ahaui/react";
+import { notifyNegative, notifyPositive } from "components/Common/Toast";
 
 // Components
 const SignUp = () => {
@@ -116,12 +117,11 @@ const SignUpView = ({ onSignUp, onAutoSignIn }) => {
       password.value
     );
     if (signUpResult.success) {
+      notifyPositive("Create account successfully.");
       // Sign in and get token
       const signInResult = await onAutoSignIn(email.value, password.value);
       if (signInResult.success) {
         navigateHome();
-      } else {
-        navigateSignIn();
       }
     } else {
       // Field validation
@@ -131,8 +131,8 @@ const SignUpView = ({ onSignUp, onAutoSignIn }) => {
         setEmail({ type: "ON_VALIDATE", error: fieldErrors.email?.[0] });
         setPassword({ type: "ON_VALIDATE", error: fieldErrors.password?.[0] });
       }
-      // Modal message
-      console.log(signUpResult.error.message);
+      const messageError = signUpResult.error.message;
+      notifyNegative(`${messageError}`);
     }
   };
 

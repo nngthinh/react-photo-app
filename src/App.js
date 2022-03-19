@@ -4,33 +4,48 @@ import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import "@ahaui/css/dist/index.min.css";
-import { getUserInfoAction, signOutAction } from "actions/user";
+import {
+  cleanUserInfoAction,
+  getUserInfoAction,
+  signOutAction,
+} from "actions/user";
 import Home from "components/Home";
 import { useEffect } from "react";
-import Toast, { notifyNegative, notifyPositive } from "components/Common/Toast";
+import Toast from "components/Common/Toast";
 import CustomModal from "components/Common/Modal";
+import { notifyPositive } from "components/Common/Toast";
 
 const App = () => {
   // States
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const isRecentlySignedOut = useSelector(
+    (state) => state.user.recentlySignedOut
+  );
   const modal = useSelector((state) => state.modal);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const cleanUserInfo = async () => {
+      if (isRecentlySignedOut) {
+        await dispatch(cleanUserInfoAction());
+        notifyPositive("Sign out successfully.");
+      }
+    };
+    cleanUserInfo();
+  }, []);
 
   // Auto sign in
   useEffect(() => {
     const autoSignIn = async (isLoggedIn) => {
       if (isLoggedIn) {
         const getUserInfoResult = await dispatch(getUserInfoAction());
-        if (getUserInfoResult.success) {
-          notifyPositive("Success");
-        } else {
+        if (!getUserInfoResult.success) {
           dispatch(signOutAction());
-          notifyNegative("Failed");
         }
       }
     };
     autoSignIn(isLoggedIn);
-  }, [isLoggedIn, dispatch]);
+  }, [dispatch, isLoggedIn]);
   // Route page
   return (
     <>

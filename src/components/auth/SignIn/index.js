@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { validateEmail, validatePassword } from "utils/validation/auth";
 import "./SignIn.css";
 import { Separator } from "@ahaui/react";
+import { notifyNegative, notifyPositive } from "components/Common/Toast";
 const SignIn = () => {
   const dispatch = useDispatch();
   const dispatchSignIn = (email, password) =>
@@ -72,6 +73,7 @@ const SignInView = ({ onSignIn }) => {
     // Sign up
     const signInResult = await onSignIn(email.value, password.value);
     if (signInResult.success) {
+      notifyPositive("Sign in successfully.");
       navigateHome();
     } else {
       if (signInResult.error.data) {
@@ -79,8 +81,8 @@ const SignInView = ({ onSignIn }) => {
         setEmail({ type: "ON_VALIDATE", error: fieldErrors.email?.[0] });
         setPassword({ type: "ON_VALIDATE", error: fieldErrors.password?.[0] });
       } else {
-        // Modal message
-        console.log(signInResult.error.message);
+        const messageError = signInResult.error.message;
+        notifyNegative(`${messageError}`);
       }
     }
   };

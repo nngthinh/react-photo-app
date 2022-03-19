@@ -36,10 +36,8 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
 
   const handleSignOut = (e) => {
     const signOut = async (e) => {
-      const signOutResult = await onSignOut();
-      if (signOutResult.success) {
-        window.location.reload(false);
-      }
+      await onSignOut();
+      window.location.reload(false);
     };
     onShowModal(
       {
