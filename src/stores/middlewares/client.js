@@ -22,16 +22,30 @@ const clientMiddleware = (store) => (next) => async (action) => {
       success: true,
       data: data,
     };
-  } catch (err) {
-    const error = err.response.data;
-    nextAction = {
-      type: `${type}_FAILED`,
-      error: convertSnakeToCamelJSON(error),
-    };
-    returnValue = {
-      success: false,
-      error: convertSnakeToCamelJSON(error),
-    };
+  } catch (error) {
+    // Response from server
+    if (error.response) {
+      const errorData = error.response.data;
+      nextAction = {
+        type: `${type}_FAILED`,
+        error: convertSnakeToCamelJSON(errorData),
+      };
+      returnValue = {
+        success: false,
+        error: convertSnakeToCamelJSON(errorData),
+      };
+    }
+    // Other error (e.g undefined data)
+    else {
+      nextAction = {
+        type: `${type}_FAILED`,
+        error: error,
+      };
+      returnValue = {
+        success: false,
+        error: error,
+      };
+    }
   }
 
   next(nextAction);

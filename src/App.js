@@ -7,6 +7,13 @@ import "@ahaui/css/dist/index.min.css";
 import { getUserInfoAction, signOutAction } from "actions/user";
 import Home from "components/Home";
 import { useEffect } from "react";
+import Toast, {
+  notify,
+  notifyInformation,
+  notifyNegative,
+  notifyPositive,
+  notifyWarning,
+} from "components/Common/Toast";
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -16,12 +23,19 @@ const App = () => {
     const autoSignIn = async (isLoggedIn) => {
       if (isLoggedIn) {
         const getUserInfoResult = await dispatch(getUserInfoAction());
-        if (!getUserInfoResult.success) {
-          dispatch(signOutAction());
+        if (getUserInfoResult.success) {
+          return true;
         }
+        dispatch(signOutAction());
       }
+      return false;
     };
-    autoSignIn(isLoggedIn);
+    const res = autoSignIn(isLoggedIn);
+    notify("General");
+    notifyInformation("Info");
+    notifyPositive("Success");
+    notifyWarning("Warn");
+    notifyNegative("Failed");
   }, [isLoggedIn, dispatch]);
   // Route page
   return <AppView></AppView>;
@@ -29,13 +43,16 @@ const App = () => {
 
 const AppView = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/signin" element={<SignIn />}></Route>
-        <Route path="/signup" element={<SignUp />}></Route>
-        <Route path="/*" element={<Home />}></Route>
-      </Routes>
-    </Router>
+    <>
+      <Toast />
+      <Router>
+        <Routes>
+          <Route path="/signin" element={<SignIn />}></Route>
+          <Route path="/signup" element={<SignUp />}></Route>
+          <Route path="/*" element={<Home />}></Route>
+        </Routes>
+      </Router>
+    </>
   );
 };
 

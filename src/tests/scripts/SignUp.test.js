@@ -1,7 +1,8 @@
 import axios from "axios";
 import App from "App";
 import baseUrl from "constants/apiUrl";
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
+import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
 import createStoreSynchedWithLocalStorage from "stores";
@@ -11,13 +12,14 @@ import {
   validateName,
   validatePassword,
 } from "utils/validation/auth";
+import { setupMockedServer } from "tests/mock/server";
+
+// Global store with no user session
+const store = createStoreSynchedWithLocalStorage();
 
 function flushPromises() {
   return new Promise((resolve) => setImmediate(resolve));
 }
-
-// Global store with no user session
-const store = createStoreSynchedWithLocalStorage();
 
 afterEach(() => {
   localStorage.clear();
@@ -36,37 +38,38 @@ const signInUrl = `${baseUrl}/users`;
 const getUserInfo = `${baseUrl}/users/me`;
 
 jest.mock("axios");
-axios.get = jest.fn((url, config) => {
-  return Promise((resolve) => resolve({ data: "Error" }));
-  if (url === getUserInfo) {
-    return Promise.resolve({ data: "Error" });
-  }
-});
-axios.post = jest.fn((url, body, config) => {
-  return Promise((resolve) => resolve({ data: "Error" }));
-  // Sign up
-  if (url === signUpUrl) {
-    // const { name, email, password } = body;
-    // validateName(name) && validateEmail(email) && validatePassword(password);
-    return { response: { data: "Error" } };
-  }
-  // Sign in
-  else if (url === signInUrl) {
-    return {
-      access_token:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MywiaWF0IjoxNjQ3MjM1NzQ3LCJleHAiOjE2NDczMjIxNDd9.01yuTZgLzz61L3aHnbqkczy9fB0tuTKTwd_39iRqkLQ",
-    };
-  }
-});
+
+// => {
+//   return Promise.resolve({ data: "Error" });
+//   // Sign up
+//   if (url === signUpUrl) {
+//     // const { name, email, password } = body;
+//     // validateName(name) && validateEmail(email) && validatePassword(password);
+//     return { response: { data: "Error" } };
+//   }
+//   // Sign in
+//   else if (url === signInUrl) {
+//     return {
+//       access_token:
+//         "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MywiaWF0IjoxNjQ3MjM1NzQ3LCJleHAiOjE2NDczMjIxNDd9.01yuTZgLzz61L3aHnbqkczy9fB0tuTKTwd_39iRqkLQ",
+//     };
+//   }
+// });
 
 describe("sign up success", () => {
-  test("no error", () => {
+  beforeEach(() => {
+    setupMockedServer();
+  });
+
+  it("should verb... no error", async (done) => {
     render(
       <Provider store={store}>
         <App />
       </Provider>
     );
     // Move to sign up page
+
+    // Go to sign up page
     userEvent.click(screen.getByTestId("signInButton"));
     userEvent.click(screen.getByTestId("signUpButton"));
     // Type fields
@@ -75,12 +78,10 @@ describe("sign up success", () => {
     userEvent.type(screen.getByTestId("password"), mockedUser.password);
     // Sign up
     userEvent.click(screen.getByTestId("signUpButton"));
-    // flushPromises();
-    // jest.runAllTimers();
 
-    screen.debug();
-
-    //userEvent.click();
+    // Wait for success
+    await waitFor(() => expect(axios.get.mock.calls.length).toEqual(1));
+    await waitFor(() => expect(axios.post.mock.calls.length).toEqual(2));
   });
 });
 describe("sign up failed", () => {

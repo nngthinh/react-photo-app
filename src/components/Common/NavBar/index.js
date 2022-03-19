@@ -1,7 +1,7 @@
 import { signOutAction } from "actions/user";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ButtonItem } from "../Item";
+import { ButtonItem } from "../Items";
 import "./Navbar.css";
 
 const Navbar = () => {
