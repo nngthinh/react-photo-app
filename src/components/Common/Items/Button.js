@@ -1,14 +1,20 @@
 import { Button } from "@ahaui/react";
 
-const ButtonItem = ({ value, variant, size, width, disabled, ...rest }) => {
+const ButtonItem = ({
+  value,
+  variant = "primary",
+  size = "large",
+  width = "full",
+  disabled = false,
+  ...rest
+} = {}) => {
   return (
     <div className="buttonItem">
       <Button
-        {...rest}
-        variant={variant ?? "primary"}
-        size={size ?? "large"}
-        width={width ?? "full"}
-        disabled={disabled ?? false}
+        variant={variant}
+        size={size}
+        width={width}
+        disabled={disabled}
         {...rest}
       >
         {value}

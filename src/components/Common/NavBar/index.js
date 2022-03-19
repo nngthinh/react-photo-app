@@ -1,3 +1,4 @@
+import { showModalAction, clearModalAction } from "actions/modal";
 import { signOutAction } from "actions/user";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -8,11 +9,22 @@ const Navbar = () => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const dispatchSignOut = () => dispatch(signOutAction());
-  return <NavbarView user={user} onSignOut={dispatchSignOut} />;
+  const dispatchShowModal = (contents, props) =>
+    dispatch(showModalAction(contents, props));
+  const dispatchClearModal = () => dispatch(clearModalAction());
+  return (
+    <NavbarView
+      user={user}
+      onSignOut={dispatchSignOut}
+      onShowModal={dispatchShowModal}
+      onClearModal={dispatchClearModal}
+    />
+  );
 };
 
-const NavbarView = ({ user, onSignOut }) => {
+const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
   const isLoggedIn = user.isLoggedIn ?? false;
+
   // Navigators
   const nagivate = useNavigate();
   const navigateSignIn = () => nagivate(`/signin`);
@@ -22,11 +34,35 @@ const NavbarView = ({ user, onSignOut }) => {
     navigateSignIn();
   };
 
-  const handleSignOut = async (e) => {
-    const signOutResult = await onSignOut();
-    if (signOutResult.success) {
-      window.location.reload(false);
-    }
+  const handleSignOut = (e) => {
+    const signOut = async (e) => {
+      const signOutResult = await onSignOut();
+      if (signOutResult.success) {
+        window.location.reload(false);
+      }
+    };
+    onShowModal(
+      {
+        title: "Signing out",
+        body: "Are you sure you want to sign out?",
+        button1: "Cancel",
+        button2: "Yes",
+      },
+      {
+        modal: {
+          onHide: () => onClearModal(),
+        },
+        header: {
+          onHine: () => onClearModal(),
+        },
+        button1: {
+          onClick: () => onClearModal(),
+        },
+        button2: {
+          onClick: () => signOut(),
+        },
+      }
+    );
   };
 
   // Return view

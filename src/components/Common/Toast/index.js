@@ -4,7 +4,7 @@ const Toast = ({
   autoDismiss = 5000,
   dismissible = true,
   hideProgressBar = true,
-}) => {
+} = {}) => {
   return (
     <ToastContainer
       position={position}
@@ -56,12 +56,10 @@ const ToastView = ({ icon, title, message }) => {
         <Icon name={icon} size="small" />
       </div>
       <div className="u-flexGrow1">
-        {title ? (
+        {title && (
           <div className="u-fontMedium u-marginTopTiny u-marginBottomExtraSmall">
             {title}
           </div>
-        ) : (
-          ""
         )}
         <div className="u-marginTopTiny">{message}</div>
       </div>

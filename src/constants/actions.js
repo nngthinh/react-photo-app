@@ -26,4 +26,9 @@ class KCategoriesAction {
   static CREATE_CATEGORY_FAILED = "CREATE_CATEGORY_FAILED";
 }
 
-export { KUserActions, KCategoriesAction };
+class KModalAction {
+  static SHOW_MODAL = "SHOW_MODAL";
+  static CLEAR_MODAL = "CLEAR_MODAL";
+}
+
+export { KUserActions, KCategoriesAction, KModalAction };
