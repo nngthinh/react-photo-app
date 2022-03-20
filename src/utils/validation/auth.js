@@ -15,6 +15,10 @@ const validateEmail = (email) =>
     : null;
 
 const validatePassword = (password) =>
-  password.length < 6 ? "Shorter than minimum length 6." : null;
+  password.length < 6
+    ? "Shorter than minimum length 6."
+    : !password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/)
+    ? "Contains at least one uppercase, one lowercase, and one number."
+    : null;
 
 export { validateName, validateEmail, validatePassword };

@@ -82,7 +82,7 @@ const SignInView = ({ onSignIn }) => {
         setPassword({ type: "ON_VALIDATE", error: fieldErrors.password?.[0] });
       } else {
         const messageError = signInResult.error.message;
-        notifyNegative(`${messageError}`);
+        notifyNegative(String(messageError));
       }
     }
   };

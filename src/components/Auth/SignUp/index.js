@@ -132,7 +132,7 @@ const SignUpView = ({ onSignUp, onAutoSignIn }) => {
         setPassword({ type: "ON_VALIDATE", error: fieldErrors.password?.[0] });
       }
       const messageError = signUpResult.error.message;
-      notifyNegative(`${messageError}`);
+      notifyNegative(String(messageError));
     }
   };
 

@@ -40,7 +40,7 @@ describe("camel to snake", () => {
   test("convert simple json from camel to snake", () => {
     expect(convertCamelToSnakeJSON(simpleCamelData)).toEqual(simpleSnakeData);
   });
-  test("convert complex json from camel to snake ", () => {
+  test("convert complex json from camel to snake", () => {
     expect(convertCamelToSnakeJSON(complexCamelData)).toEqual(complexSnakeData);
   });
 });

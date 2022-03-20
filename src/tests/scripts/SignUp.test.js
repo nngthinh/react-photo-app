@@ -1,74 +1,73 @@
 import axios from "axios";
 import App from "App";
-import baseUrl from "constants/apiUrl";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
 import createStoreSynchedWithLocalStorage from "stores";
-import { validate } from "webpack";
-import {
-  validateEmail,
-  validateName,
-  validatePassword,
-} from "utils/validation/auth";
-import { setupMockedServer } from "tests/mock/server";
 
 // Global store with no user session
 const store = createStoreSynchedWithLocalStorage();
 
-function flushPromises() {
-  return new Promise((resolve) => setImmediate(resolve));
-}
+// Mock data
+const mockedUser = {
+  name: "Admin",
+  email: "admin@gmail.com",
+  password: "123abC#ef",
+};
+const duplicatedEmail = "admin2@gmail.com";
 
+jest.mock("axios");
+
+// Setup
+beforeEach(() => {
+  axios.get.mockImplementation(async (url, config) => {
+    Promise.resolve({ data: { name: mockedUser.name, id: 1 } });
+  });
+  axios.post.mockImplementation(async (url, body, config) => {
+    const { pathname } = new URL(url);
+    // Sign up
+    if (pathname === "/users") {
+      if (body.email === duplicatedEmail) {
+        return Promise.reject({
+          response: { data: { message: "Email already exists" } },
+        });
+      }
+      return Promise.resolve({ data: {} });
+    }
+    // Sign in
+    else {
+      if (
+        body.email !== mockedUser.email ||
+        body.password !== mockedUser.password
+      ) {
+        return Promise.reject({
+          response: {
+            data: { message: "Invalid email or password." },
+          },
+        });
+      }
+      return Promise.resolve({
+        data: {
+          accessToken: "sampleAccessToken",
+        },
+      });
+    }
+  });
+});
+
+// Clean storage
 afterEach(() => {
   localStorage.clear();
 });
 
-// Mock database
-const mockedUser = {
-  name: "Admin",
-  email: "admin@gmail.com",
-  password: "123abc",
-};
-
-// Mock server
-const signUpUrl = `${baseUrl}/auth`;
-const signInUrl = `${baseUrl}/users`;
-const getUserInfo = `${baseUrl}/users/me`;
-
-jest.mock("axios");
-
-// => {
-//   return Promise.resolve({ data: "Error" });
-//   // Sign up
-//   if (url === signUpUrl) {
-//     // const { name, email, password } = body;
-//     // validateName(name) && validateEmail(email) && validatePassword(password);
-//     return { response: { data: "Error" } };
-//   }
-//   // Sign in
-//   else if (url === signInUrl) {
-//     return {
-//       access_token:
-//         "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MywiaWF0IjoxNjQ3MjM1NzQ3LCJleHAiOjE2NDczMjIxNDd9.01yuTZgLzz61L3aHnbqkczy9fB0tuTKTwd_39iRqkLQ",
-//     };
-//   }
-// });
-
 describe("sign up success", () => {
-  beforeEach(() => {
-    setupMockedServer();
-  });
-
-  it("should verb... no error", async (done) => {
+  it("should return no error", async () => {
     render(
       <Provider store={store}>
         <App />
       </Provider>
     );
-    // Move to sign up page
-
     // Go to sign up page
     userEvent.click(screen.getByTestId("signInButton"));
     userEvent.click(screen.getByTestId("signUpButton"));
@@ -78,14 +77,109 @@ describe("sign up success", () => {
     userEvent.type(screen.getByTestId("password"), mockedUser.password);
     // Sign up
     userEvent.click(screen.getByTestId("signUpButton"));
-
-    // Wait for success
-    await waitFor(() => expect(axios.get.mock.calls.length).toEqual(1));
+    // Wait for calling all api
     await waitFor(() => expect(axios.post.mock.calls.length).toEqual(2));
+    await waitFor(() => expect(axios.get.mock.calls.length).toEqual(1));
+    // Wait for toast message
+    await screen.findByText(/create account successfully\./i);
   });
 });
+
 describe("sign up failed", () => {
-  test("error in name", () => {});
-  test("error in email", () => {});
-  test("error in password", () => {});
+  it("should return name field error", () => {
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
+    // Go to sign up page
+    userEvent.click(screen.getByTestId("signInButton"));
+    userEvent.click(screen.getByTestId("signUpButton"));
+    // Missing name
+    userEvent.click(screen.getByTestId("signUpButton"));
+    expect(
+      screen.getByText(/length must be between 1 and 30\./i)
+    ).toBeInTheDocument();
+    // Name longer than 30
+    userEvent.type(
+      screen.getByTestId("name"),
+      "longer than 30 charrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"
+    );
+    userEvent.click(screen.getByTestId("signUpButton"));
+    expect(
+      screen.getByText(/length must be between 1 and 30\./i)
+    ).toBeInTheDocument();
+    // Ensures there's no post request
+    expect(axios.post.mock.calls.length).toEqual(0);
+  });
+
+  it("should return email field error", async () => {
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
+    // Go to sign up page
+    userEvent.click(screen.getByTestId("signInButton"));
+    userEvent.click(screen.getByTestId("signUpButton"));
+    // Missing email
+    userEvent.click(screen.getByTestId("signUpButton"));
+    expect(
+      screen.getByText(/not a valid email address\./i)
+    ).toBeInTheDocument();
+    // Email longer than 30
+    userEvent.type(
+      screen.getByTestId("email"),
+      "abcdejkfkjhkjfhasdkjhfahjsdfkjghasdf1234567890@gmail.com"
+    );
+    userEvent.click(screen.getByTestId("signUpButton"));
+    expect(
+      screen.getByText(/longer than maximum length 30\./i)
+    ).toBeInTheDocument();
+    // Ensures there's no post request
+    expect(axios.post.mock.calls.length).toEqual(0);
+  });
+
+  it("should return password field error", async () => {
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
+    // Go to sign up page
+    userEvent.click(screen.getByTestId("signInButton"));
+    userEvent.click(screen.getByTestId("signUpButton"));
+    // Missing password
+    userEvent.click(screen.getByTestId("signUpButton"));
+    await screen.findByText(/shorter than minimum length 6\./i);
+    // Not sastified password constraints
+    userEvent.type(screen.getByTestId("password"), "123abc");
+    userEvent.click(screen.getByTestId("signUpButton"));
+    await screen.findByText(
+      /contains at least one uppercase, one lowercase, and one number\./i
+    );
+    // Ensures there's no post request
+    expect(axios.post.mock.calls.length).toEqual(0);
+  });
+
+  it("should return duplicated email error", async () => {
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
+    // Go to sign up page
+    userEvent.click(screen.getByTestId("signInButton"));
+    userEvent.click(screen.getByTestId("signUpButton"));
+    // Type fields
+    userEvent.type(screen.getByTestId("name"), mockedUser.name);
+    userEvent.type(screen.getByTestId("email"), duplicatedEmail);
+    userEvent.type(screen.getByTestId("password"), mockedUser.password);
+    // Sign up
+    userEvent.click(screen.getByTestId("signUpButton"));
+    // Wait for calling all api
+    await waitFor(() => expect(axios.post.mock.calls.length).toEqual(1));
+    // Wait for toast message
+    await screen.findByText(/email already exists/i);
+  });
 });
