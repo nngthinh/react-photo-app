@@ -22,7 +22,7 @@ const showModalAction = (contents, props) => {
         },
         header: {
           closeButton: true,
-          onHine: () => {},
+          onHide: () => {},
           ...props.header,
         },
         button1: {

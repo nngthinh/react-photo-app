@@ -51,7 +51,7 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
           onHide: () => onClearModal(),
         },
         header: {
-          onHine: () => onClearModal(),
+          onHide: () => onClearModal(),
         },
         button1: {
           onClick: () => onClearModal(),
