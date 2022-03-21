@@ -21,10 +21,10 @@ export class RestService {
     return config;
   };
 
+  // Authorized token
   static #getToken = () => loadState()?.user?.token ?? "";
 
-  // All RESTful services
-  // - Without token
+  // All RESTful APIs
   static async get(url, config = {}) {
     try {
       const result = await axios.get(url, config);
@@ -48,9 +48,9 @@ export class RestService {
   }
 
   static async getWithToken(url, config = {}) {
-    const token = RestService.#getToken();
-    const finalConfig = RestService.#addTokenToConfigs(config, token);
     try {
+      const token = RestService.#getToken();
+      const finalConfig = RestService.#addTokenToConfigs(config, token);
       const result = await axios.get(url, finalConfig);
       return convertSnakeToCamelJSON(result);
     } catch (error) {
@@ -59,14 +59,40 @@ export class RestService {
   }
 
   static async postWithToken(url, body, config = {}) {
-    const token = RestService.#getToken();
-    const finalConfig = RestService.#addTokenToConfigs(config, token);
     try {
+      const token = RestService.#getToken();
+      const finalConfig = RestService.#addTokenToConfigs(config, token);
       const result = await axios.post(
         url,
         convertCamelToSnakeJSON(body),
         finalConfig
       );
+      return convertSnakeToCamelJSON(result);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async putWithToken(url, body, config = {}) {
+    try {
+      const token = RestService.#getToken();
+      const finalConfig = RestService.#addTokenToConfigs(config, token);
+      const result = await axios.put(
+        url,
+        convertCamelToSnakeJSON(body),
+        finalConfig
+      );
+      return convertSnakeToCamelJSON(result);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async deleteWithToken(url, config = {}) {
+    try {
+      const token = RestService.#getToken();
+      const finalConfig = RestService.#addTokenToConfigs(config, token);
+      const result = await axios.delete(url, finalConfig);
       return convertSnakeToCamelJSON(result);
     } catch (error) {
       throw error;
