@@ -1,3 +1,5 @@
+import { isValidPassword, isValidEmail } from "./common";
+
 const validateName = (name) =>
   name.length > 30 || name.length === 0
     ? "Length must be between 1 and 30."
@@ -6,18 +8,14 @@ const validateName = (name) =>
 const validateEmail = (email) =>
   email.length > 30
     ? "Longer than maximum length 30."
-    : !String(email)
-        .toLowerCase()
-        .match(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        )
+    : !isValidEmail(email)
     ? "Not a valid email address."
     : null;
 
 const validatePassword = (password) =>
   password.length < 6
     ? "Shorter than minimum length 6."
-    : !password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/)
+    : !isValidPassword(password)
     ? "Contains at least one uppercase, one lowercase, and one number."
     : null;
 
