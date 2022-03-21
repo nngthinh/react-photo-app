@@ -23,8 +23,14 @@ const updateCategoryDetailAction = (
   description,
   imageUrl
 ) => ({
-    pendingActionType: KCategoriesAction.PENDING_UPDATE_CATEGORY,
-    pendingAction: async () => CategoriesRepository.updateCategory(categoryId, name, description, imageUrl);
+  pendingActionType: KCategoriesAction.PENDING_UPDATE_CATEGORY,
+  pendingAction: async () =>
+    CategoriesRepository.updateCategory(
+      categoryId,
+      name,
+      description,
+      imageUrl
+    ),
 });
 
 export {
