@@ -1,17 +1,32 @@
 import { KCategoriesAction } from "constants/actions";
 import CategoriesRepository from "repositories/category";
 
-const viewCategoriesAction = (offset, limit) => ({
-    pendingActionType: KCategoriesAction.PENDING_VIEW_CATEGORIES,
-    pendingAction: async () => CategoriesRepository.viewCateogries(offset, limit);
+const viewCategoriesListAction = (offset, limit) => ({
+  pendingActionType: KCategoriesAction.PENDING_VIEW_CATEGORIES,
+  pendingAction: async () => CategoriesRepository.viewCateogries(offset, limit),
 });
 
-const createCategoryAction = (name, description, imageUrl) => ({
-    pendingActionType: KCategoriesAction.PENDING_CREATE_CATEGORY,
-    pendingActionL: async () => CategoriesRepository.createCategory(name, description, imageUrl)
+const createCategoriesListAction = (name, description, imageUrl) => ({
+  pendingActionType: KCategoriesAction.PENDING_CREATE_CATEGORY,
+  pendingAction: async () =>
+    CategoriesRepository.createCategory(name, description, imageUrl),
 });
 
-const viewCategoryAction = (categoryId) => ({});
-const updateCategoryAction = (categoryId, name, description, imageUrl) => ({});
+const viewCategoryDetailAction = (categoryId) => ({
+  pendingActionType: KCategoriesAction.PENDING_VIEW_CATEGORY,
+  pendingAction: async () => CategoriesRepository.createCategory(categoryId),
+});
 
-export {viewCategoriesAction, createCategoryAction};
+const updateCategoryDetailAction = (
+  categoryId,
+  name,
+  description,
+  imageUrl
+) => ({});
+
+export {
+  viewCategoriesListAction,
+  createCategoriesListAction,
+  viewCategoryDetailAction,
+  updateCategoryDetailAction,
+};
