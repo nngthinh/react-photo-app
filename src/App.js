@@ -32,7 +32,7 @@ const App = () => {
       }
     };
     cleanUserInfo();
-  }, []);
+  });
 
   // Auto sign in
   useEffect(() => {

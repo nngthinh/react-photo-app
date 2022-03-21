@@ -4,7 +4,6 @@ import { limitCategories } from "constants/pagination";
 const initialState = {
   pagination: {
     limit: limitCategories,
-    currentPage: 0,
   },
   data: {},
 };
@@ -15,10 +14,10 @@ const categoriesReducer = (state = initialState, action) => {
       const categoriesInfo = action.data;
       return {
         pagination: {
-          ...state.pagination,
-          total: categoriesInfo.totalCategories,
+          limit: state.pagination.limit,
+          total: Math.ceil(categoriesInfo.totalItems / state.pagination.limit),
         },
-        data: categoriesInfo.categories,
+        data: categoriesInfo.items, // shouldn't be cached
       };
     }
     case KCategoriesAction.VIEW_CATEGORIES_FAILED:

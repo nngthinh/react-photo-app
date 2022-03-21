@@ -5,7 +5,7 @@ class ItemsRepository {
   static async viewItems(categoryId, offset, limit) {
     const url = `${baseUrl}/categories/${categoryId}/items?offset=${offset}&limit=${limit}`;
     try {
-      const result = await RestService.getWithToken(url);
+      const result = await RestService.get(url);
       return result;
     } catch (error) {
       throw error;
@@ -27,7 +27,7 @@ class ItemsRepository {
   static async viewItem(categoryId, itemId) {
     const url = `${baseUrl}/categories/${categoryId}/items/${itemId}`;
     try {
-      const result = await RestService.getWithToken(url);
+      const result = await RestService.get(url);
       return result;
     } catch (error) {
       throw error;

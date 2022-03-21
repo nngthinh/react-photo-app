@@ -16,8 +16,9 @@ const createStoreSynchedWithLocalStorage = (initialState) => {
     const state = store.getState();
     saveState({
       user: state.user,
-      categories: state.categories,
-      items: state.items,
+      // NOTE: Not cache data anymore
+      // categories: state.categories,
+      // items: state.items,
     });
   });
 

@@ -1,52 +1,29 @@
 import { Pagination } from "@ahaui/react";
-import { useReducer } from "react";
+import { useNavigate } from "react-router-dom";
+import { limitCategories } from "constants/pagination";
 
 const PaginationItem = ({
   minIndex = 1,
-  maxIndex = 20,
+  maxIndex = 0,
   currentIndex = minIndex,
-  step = 5,
+  step = limitCategories,
   size = "medium",
 }) => {
-  // Index state
-  const [index, setIndex] = useReducer((index, action) => {
-    switch (action.type) {
-      case "NAVIGATE_TO":
-        return action.index;
-      case "NAVIGATE_NEXT":
-        return index === maxIndex ? index : index + 1;
-      case "NAVIGATE_BACK":
-        return index === minIndex ? index : index - 1;
-      default:
-        return index;
-    }
-  }, currentIndex);
-
-  // Common
-  const extendCenterIndexRange = Math.floor(step / 2);
-
-  // onCLick event for each Pagination Item
-  const onNavigateIndex = (index) => {
-    if (typeof index === "boolean") {
-      setIndex({ type: `NAVIGATE_${index ? "NEXT" : "BACK"}` });
-    } else {
-      setIndex({ type: `NAVIGATE_TO`, index });
-    }
-  };
-
+  const navigate = useNavigate();
   // Generate all parts
   const generateHeadPagination = () => (
     <>
-      {
+      {currentIndex === minIndex ? (
+        <Pagination.Prev disabled />
+      ) : (
         <Pagination.Prev
-          onClick={() => onNavigateIndex(false)}
-          disabled={index === minIndex}
+          onClick={() => navigate(`./?page=${currentIndex - 1}`)}
         />
-      }
+      )}
       {
         <Pagination.Item
-          onClick={() => onNavigateIndex(minIndex)}
-          active={index === minIndex}
+          onClick={() => navigate(`./?page=${minIndex}`)}
+          active={currentIndex === minIndex}
         >
           {minIndex}
         </Pagination.Item>
@@ -55,8 +32,9 @@ const PaginationItem = ({
   );
 
   const generateMiddlePagination = () => {
-    const _initialLower = index - extendCenterIndexRange;
-    const _initialUpper = index + extendCenterIndexRange;
+    const extendCenterIndexRange = Math.floor(step / 2);
+    const _initialLower = currentIndex - extendCenterIndexRange;
+    const _initialUpper = currentIndex + extendCenterIndexRange;
     const _lowerBound = minIndex + 1;
     const _upperBound = maxIndex - 1;
     const _lower = Math.max(
@@ -75,13 +53,13 @@ const PaginationItem = ({
     return (
       <>
         {_lower - 1 > minIndex && <Pagination.Ellipsis />}
-        {indexesArr.map((i) => (
+        {indexesArr.map((index) => (
           <Pagination.Item
-            onClick={() => onNavigateIndex(i)}
-            active={i === index}
-            key={i}
+            onClick={() => navigate(`./?page=${index}`)}
+            active={index === currentIndex}
+            key={index}
           >
-            {i}
+            {index}
           </Pagination.Item>
         ))}
         {_upper + 1 < maxIndex && <Pagination.Ellipsis />}
@@ -93,18 +71,19 @@ const PaginationItem = ({
     <>
       {minIndex !== maxIndex && (
         <Pagination.Item
-          onClick={() => onNavigateIndex(maxIndex)}
-          active={index === maxIndex}
+          onClick={() => navigate(`./?page=${maxIndex}`)}
+          active={currentIndex === maxIndex}
         >
           {maxIndex}
         </Pagination.Item>
       )}
-      {
+      {currentIndex === maxIndex ? (
+        <Pagination.Next disabled />
+      ) : (
         <Pagination.Next
-          onClick={() => onNavigateIndex(true)}
-          disabled={index === maxIndex}
+          onClick={() => navigate(`./?page=${currentIndex + 1}`)}
         />
-      }
+      )}
     </>
   );
 

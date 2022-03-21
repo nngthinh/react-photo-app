@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import { useReducer } from "react";
 import { signInAction } from "actions/user";
 import { ButtonItem, InputItem } from "components/Common/Items";
 import { useDispatch } from "react-redux";
@@ -55,9 +55,6 @@ const SignInView = ({ onSignIn }) => {
     },
     { value: "", errors: null }
   );
-
-  // Button state
-  const [submit, setSubmit] = useState(false);
 
   // Navigators
   const navigate = useNavigate();

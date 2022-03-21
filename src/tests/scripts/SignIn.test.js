@@ -148,9 +148,6 @@ describe("sign in failed", () => {
     await waitFor(() => expect(axios.post.mock.calls.length).toEqual(1));
     // Wait for toast message
     await screen.findByText(/invalid email or password/i);
-    // await waitForElementToBeRemoved(
-    //   screen.queryByText(/invalid email or password/i)
-    // );
     // Wrong password
     userEvent.clear(screen.getByTestId("email"));
     userEvent.clear(screen.getByTestId("password"));
