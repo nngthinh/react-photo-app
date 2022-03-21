@@ -1,4 +1,4 @@
-import { isValidUrl } from "utils/validation/common";
+import { isValidUrl } from "utils/validations/common";
 
 const validateDescription = (description) =>
   description.length > 200 || description.length === 0

@@ -3,7 +3,7 @@ import { signInAction } from "actions/user";
 import { ButtonItem, InputItem } from "components/Common/Items";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { validateEmail, validatePassword } from "utils/validation/auth";
+import { validateEmail, validatePassword } from "utils/validations/auth";
 import "./SignIn.css";
 import { Separator } from "@ahaui/react";
 import { notifyNegative, notifyPositive } from "components/Common/Toast";

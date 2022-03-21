@@ -6,7 +6,7 @@ import {
   validateName,
   validateEmail,
   validatePassword,
-} from "utils/validation/auth";
+} from "utils/validations/auth";
 import "./signUp.css";
 import { useNavigate } from "react-router-dom";
 import { Separator } from "@ahaui/react";
