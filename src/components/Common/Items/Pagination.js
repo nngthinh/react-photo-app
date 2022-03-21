@@ -3,7 +3,7 @@ import { useReducer } from "react";
 
 const PaginationItem = ({
   minIndex = 1,
-  maxIndex = 7,
+  maxIndex = 20,
   currentIndex = minIndex,
   step = 5,
   size = "medium",
@@ -14,9 +14,9 @@ const PaginationItem = ({
       case "NAVIGATE_TO":
         return action.index;
       case "NAVIGATE_NEXT":
-        return index + 1;
+        return index === maxIndex ? index : index + 1;
       case "NAVIGATE_BACK":
-        return index - 1;
+        return index === minIndex ? index : index - 1;
       default:
         return index;
     }
@@ -40,7 +40,7 @@ const PaginationItem = ({
       {
         <Pagination.Prev
           onClick={() => onNavigateIndex(false)}
-          disabled={index > minIndex}
+          disabled={index === minIndex}
         />
       }
       {
@@ -102,7 +102,7 @@ const PaginationItem = ({
       {
         <Pagination.Next
           onClick={() => onNavigateIndex(true)}
-          disabled={index < maxIndex}
+          disabled={index === maxIndex}
         />
       }
     </>
