@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useReducer, useState } from "react";
 import { useDispatch } from "react-redux";
 import { signInAction, signUpAction } from "actions/user";
 import { ButtonItem, InputItem } from "components/Common/Items";
@@ -30,7 +30,7 @@ const SignUp = () => {
 
 const SignUpView = ({ onSignUp, onAutoSignIn }) => {
   // Input states
-  const [name, setName] = React.useReducer(
+  const [name, setName] = useReducer(
     (name, nameAction) => {
       switch (nameAction.type) {
         case "ON_CHANGE":
@@ -50,7 +50,7 @@ const SignUpView = ({ onSignUp, onAutoSignIn }) => {
     { value: "", error: null }
   );
 
-  const [email, setEmail] = React.useReducer(
+  const [email, setEmail] = useReducer(
     (email, emailAction) => {
       switch (emailAction.type) {
         case "ON_CHANGE":
@@ -70,7 +70,7 @@ const SignUpView = ({ onSignUp, onAutoSignIn }) => {
     { value: "", error: null }
   );
 
-  const [password, setPassword] = React.useReducer(
+  const [password, setPassword] = useReducer(
     (password, passwordAction) => {
       switch (passwordAction.type) {
         case "ON_CHANGE":

@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import { PaginationItem } from "../Items";
 import "./Sidebar.css";
 const Sidebar = () => {
   const categoriesList = useSelector((state) => state.categories);
@@ -7,16 +8,17 @@ const Sidebar = () => {
   return <SidebarView />;
 };
 
-const SidebarView = ({ categoriesList = [] }) => {
+const SidebarView = ({ mode = "partial", categoriesList = [] }) => {
   return (
-    <div className="sidebar">
-      <title>Category</title>
-      <ul>
-        {categoriesList.map((category) => (
-          <li key={category.id}>{category.name}</li>
-        ))}
-      </ul>
-    </div>
+    <PaginationItem></PaginationItem>
+    // <div className="sidebar">
+    //   <title>Category</title>
+    //   <ul>
+    //     {categoriesList.map((category) => (
+    //       <li key={category.id}>{category.name}</li>
+    //     ))}
+    //   </ul>
+    // </div>
   );
 };
 
