@@ -4,10 +4,7 @@ const { RestService } = require("utils/services/rest");
 class UserRepository {
   static async signIn(email, password) {
     const url = `${baseUrl}/auth`;
-    const body = {
-      email: email,
-      password: password,
-    };
+    const body = { email, password };
     try {
       const result = await RestService.post(url, body);
       return result;
@@ -18,11 +15,7 @@ class UserRepository {
 
   static async signUp(name, email, password) {
     const url = `${baseUrl}/users`;
-    const body = {
-      email: email,
-      password: password,
-      name: name,
-    };
+    const body = { email, password, name };
     try {
       const result = await RestService.post(url, body);
       return result;
