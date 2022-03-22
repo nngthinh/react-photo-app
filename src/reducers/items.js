@@ -15,6 +15,7 @@ const itemsReducer = (state = initialState, action) => {
         ...state,
         pagination: { total: Math.ceil(itemInfo.totalItems / limitItems) },
         list: itemInfo.items,
+        detail: {},
       };
     }
     case KItemsAction.VIEW_ITEMS_FAILED:
@@ -25,7 +26,7 @@ const itemsReducer = (state = initialState, action) => {
       return { ...state };
     case KItemsAction.VIEW_ITEM_SUCCESS: {
       const itemInfo = action.data;
-      return { ...state, detail: itemInfo };
+      return { ...state, list: [], detail: itemInfo };
     }
     case KItemsAction.VIEW_ITEM_FAILED:
       return { ...state };
