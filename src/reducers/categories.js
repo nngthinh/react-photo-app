@@ -17,7 +17,6 @@ const categoriesReducer = (state = initialState, action) => {
           total: Math.ceil(categoriesInfo.totalItems / limitCategories),
         },
         list: categoriesInfo.items, // shouldn't be cached
-        detail: {},
       };
     }
     case KCategoriesAction.VIEW_CATEGORIES_FAILED:
@@ -28,7 +27,7 @@ const categoriesReducer = (state = initialState, action) => {
       return { ...state };
     case KCategoriesAction.VIEW_CATEGORY_SUCCESS: {
       const categoryInfo = action.data;
-      return { ...state, list: [], detail: categoryInfo };
+      return { ...state, detail: categoryInfo };
     }
     case KCategoriesAction.VIEW_CATEGORY_FAILED:
       return { ...state };
