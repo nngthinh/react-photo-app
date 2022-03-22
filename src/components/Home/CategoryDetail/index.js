@@ -7,6 +7,7 @@ import { viewItemsListAction } from "actions/items";
 import { PaginationItem } from "components/Common/Items";
 import { notifyNegative } from "components/Common/Toast";
 import { limitItems } from "constants/pagination";
+import { Icon } from "@ahaui/react";
 
 const CategoryDetail = () => {
   const { categoryId } = useParams();
@@ -19,32 +20,26 @@ const CategoryDetail = () => {
 
   // Items pagination
   const [searchParams, setSearchParams] = useSearchParams();
-  let page = parseInt(searchParams.get("page") ?? 0);
+  let page = parseInt(searchParams.get("page") ?? 1);
 
   useEffect(() => {
-    if (page < 1) {
-      setSearchParams({ page: 1 }, { replace: true });
-    } else {
-      const viewCategoryDetail = async () => {
-        // get category detail
-        const viewCategoyResult = await dispatch(
-          viewCategoryAction(categoryId)
+    const viewCategoryDetail = async () => {
+      // get category detail
+      const viewCategoyResult = await dispatch(viewCategoryAction(categoryId));
+      if (!viewCategoyResult.success) {
+        notifyNegative(viewCategoyResult.error.message);
+      } else {
+        // and get items list
+        const [offset, limit] = [limitItems * (page - 1), limitItems];
+        const viewItemsListResult = await dispatch(
+          viewItemsListAction(categoryId, offset, limit)
         );
-        if (!viewCategoyResult.success) {
+        if (!viewItemsListResult.success) {
           notifyNegative(viewCategoyResult.error.message);
-        } else {
-          // and get items list
-          const [offset, limit] = [limitItems * (page - 1), limitItems];
-          const viewItemsListResult = await dispatch(
-            viewItemsListAction(categoryId, offset, limit)
-          );
-          if (!viewItemsListResult.success) {
-            notifyNegative(viewCategoyResult.error.message);
-          }
         }
-      };
-      viewCategoryDetail();
-    }
+      }
+    };
+    viewCategoryDetail();
   }, [categoryId, dispatch, page, setSearchParams]);
 
   return (
@@ -73,6 +68,9 @@ const CategoryDetailView = ({
         <h1>{name}</h1>
         <div>{description}</div>
         <img src={imageUrl} alt={name} />
+        <Link to={`/categories/${categoryId}/edit`}>
+          <Icon size="small" name="edit" />
+        </Link>
       </div>
       <PaginationItem {...itemsPagination}></PaginationItem>
       {itemsList.length && (

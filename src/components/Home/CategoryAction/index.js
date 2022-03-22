@@ -1,11 +1,23 @@
-const CategoryAction = () => {
-  return <CategoryActionView></CategoryActionView>;
+const CategoryAction = ({ type }) => {
+  return type === "add" ? (
+    <CategoryActionAddView></CategoryActionAddView>
+  ) : (
+    <CategoryActionEditView></CategoryActionEditView>
+  );
 };
 
-const CategoryActionView = () => {
+const CategoryActionAddView = () => {
   return (
     <>
-      <div>Category Action</div>
+      <div>Category Add View</div>
+    </>
+  );
+};
+
+const CategoryActionEditView = () => {
+  return (
+    <>
+      <div>Category Edit View</div>
     </>
   );
 };

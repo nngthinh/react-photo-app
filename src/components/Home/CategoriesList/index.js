@@ -19,28 +19,23 @@ const CategoriesList = () => {
   // const navigate = useNavigate();
   // const searchParams = new URLSearchParams(location.search);
   const [searchParams, setSearchParams] = useSearchParams();
-  let page = parseInt(searchParams.get("page") ?? 0);
+  let page = parseInt(searchParams.get("page") ?? 1);
 
   // Fetch the categories list
   useEffect(() => {
-    // Default page is 0
-    if (page < 1) {
-      setSearchParams({ page: 1 }, { replace: true }); // Remember to replace the old wrong url
-    } else {
-      // Get from server
-      const getCategoriesList = async () => {
-        const [offset, limit] = [limitCategories * (page - 1), limitCategories];
-        const viewCategoriesListResult = await dispatch(
-          viewCategoriesListAction(offset, limit)
-        );
+    // Get from server
+    const getCategoriesList = async () => {
+      const [offset, limit] = [limitCategories * (page - 1), limitCategories];
+      const viewCategoriesListResult = await dispatch(
+        viewCategoriesListAction(offset, limit)
+      );
 
-        if (!viewCategoriesListResult.success) {
-          notifyNegative(viewCategoriesListResult.error.message);
-        }
-      };
-      getCategoriesList();
-    }
-  }, [dispatch, page, setSearchParams]);
+      if (!viewCategoriesListResult.success) {
+        notifyNegative(viewCategoriesListResult.error.message);
+      }
+    };
+    getCategoriesList();
+  }, [dispatch, page]);
 
   return (
     page > 0 && (

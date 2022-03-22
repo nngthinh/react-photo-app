@@ -7,7 +7,7 @@ import {
   validateEmail,
   validatePassword,
 } from "utils/validations/auth";
-import "./signUp.css";
+import "./index.css";
 import { useNavigate } from "react-router-dom";
 import { Separator } from "@ahaui/react";
 import { notifyNegative, notifyPositive } from "components/Common/Toast";
