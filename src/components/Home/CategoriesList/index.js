@@ -5,6 +5,7 @@ import { notifyNegative } from "components/Common/Toast";
 import { viewCategoriesListAction } from "actions/categories";
 import { Link, useSearchParams } from "react-router-dom";
 import { limitCategories } from "constants/pagination";
+import { Icon } from "@ahaui/react";
 
 const CategoriesList = () => {
   const categoriesPaginationTotal = useSelector(
@@ -24,7 +25,7 @@ const CategoriesList = () => {
   useEffect(() => {
     // Default page is 0
     if (page < 1) {
-      setSearchParams({ page: 1 });
+      setSearchParams({ page: 1 }, { replace: true }); // Remember to replace the old wrong url
     } else {
       // Get from server
       const getCategoriesList = async () => {
@@ -57,9 +58,13 @@ const CategoriesList = () => {
 const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
   return (
     <>
-      <PaginationItem {...categoryPagination}></PaginationItem>
       <div>Categories List</div>
-      {Array.isArray(categoriesList) && categoriesList.length > 0 && (
+      <PaginationItem {...categoryPagination}></PaginationItem>
+      <Link to={`/categories/add`}>
+        <Icon size="medium" name="create" />
+      </Link>
+
+      {categoriesList.length && (
         <ul>
           {categoriesList.map((category) => (
             <li key={category.id}>

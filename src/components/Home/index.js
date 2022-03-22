@@ -18,12 +18,20 @@ const HomeView = () => {
       <Routes>
         <Route path="/categories" element={<CategoriesList />}></Route>
         <Route
+          path="/categories/add"
+          element={<CategoryAction type="add" />}
+        ></Route>
+        <Route
           path="/categories/:categoryId"
           element={<CategoryDetail />}
         ></Route>
         <Route
-          path="/categories/:categoryId/:categoryAction"
-          element={<CategoryAction />}
+          path="/categories/:categoryId/edit"
+          element={<CategoryAction type="edit" />}
+        ></Route>
+        <Route
+          path="/categories/:categoryId/add"
+          element={<ItemAction type="add" />}
         ></Route>
         <Route
           path="/categories/:categoryId/items"
@@ -34,8 +42,8 @@ const HomeView = () => {
           element={<ItemDetail />}
         ></Route>
         <Route
-          path="/categories/:categoryId/items/:itemId/:itemAction"
-          element={<ItemAction />}
+          path="/categories/:categoryId/items/:itemId/edit"
+          element={<ItemAction type="edit" />}
         ></Route>
         <Route path="/*" element={<Navigate to="/categories" />} />
       </Routes>

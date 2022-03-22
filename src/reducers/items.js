@@ -1,4 +1,5 @@
 import { KItemsAction } from "constants/actions";
+import { limitItems } from "constants/pagination";
 
 const initialState = {
   pagination: {},
@@ -12,7 +13,7 @@ const itemsReducer = (state = initialState, action) => {
       const itemInfo = action.data;
       return {
         ...state,
-        pagination: { total: itemInfo.totalItems },
+        pagination: { total: Math.ceil(itemInfo.totalItems / limitItems) },
         list: itemInfo.items,
       };
     }
