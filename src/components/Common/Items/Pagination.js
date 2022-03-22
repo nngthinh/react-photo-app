@@ -19,15 +19,6 @@ const PaginationItem = ({
           onClick={() => navigate(`./?page=${currentIndex - 1}`)}
         />
       )}
-      {
-        <Pagination.Item
-          onClick={() => navigate(`./?page=${minIndex}`)}
-          active={currentIndex === minIndex}
-          data-testid={`${minIndex}-tail`}
-        >
-          {minIndex}
-        </Pagination.Item>
-      }
     </>
   );
 
@@ -53,6 +44,15 @@ const PaginationItem = ({
     return (
       maxIndex >= minIndex && (
         <>
+          {
+            <Pagination.Item
+              onClick={() => navigate(`./?page=${minIndex}`)}
+              active={currentIndex === minIndex}
+              data-testid={`${minIndex}-tail`}
+            >
+              {minIndex}
+            </Pagination.Item>
+          }
           {_lower - 1 > minIndex && <Pagination.Ellipsis />}
           {indexesArr.map((index) => (
             <Pagination.Item
@@ -65,6 +65,15 @@ const PaginationItem = ({
             </Pagination.Item>
           ))}
           {_upper + 1 < maxIndex && <Pagination.Ellipsis />}
+          {minIndex !== maxIndex && (
+            <Pagination.Item
+              onClick={() => navigate(`./?page=${maxIndex}`)}
+              active={currentIndex === maxIndex}
+              data-testid={`${maxIndex}-tail`}
+            >
+              {maxIndex}
+            </Pagination.Item>
+          )}
         </>
       )
     );
@@ -72,15 +81,6 @@ const PaginationItem = ({
 
   const generateTailPagination = () => (
     <>
-      {minIndex !== maxIndex && (
-        <Pagination.Item
-          onClick={() => navigate(`./?page=${maxIndex}`)}
-          active={currentIndex === maxIndex}
-          data-testid={`${maxIndex}-tail`}
-        >
-          {maxIndex}
-        </Pagination.Item>
-      )}
       {currentIndex === maxIndex ? (
         <Pagination.Next disabled />
       ) : (
