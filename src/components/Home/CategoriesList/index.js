@@ -3,27 +3,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { PaginationItem } from "components/Common/Items";
 import { notifyNegative } from "components/Common/Toast";
 import { viewCategoriesListAction } from "actions/categories";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { limitCategories } from "constants/pagination";
 
 const CategoriesList = () => {
-  const paginationTotal = useSelector(
+  const categoriesPaginationTotal = useSelector(
     (state) => state.categories.pagination.total
   );
-  const categoriesList = useSelector((state) => state.categories.data);
+  const categoriesList = useSelector((state) => state.categories.list);
   const dispatch = useDispatch();
 
-  const location = useLocation();
-  const navigate = useNavigate();
-  // Get page from URL search params
-  const searchParams = new URLSearchParams(location.search);
+  // Can use useLocation, useNavigate and URLSearchParams
+  // const location = useLocation();
+  // const navigate = useNavigate();
+  // const searchParams = new URLSearchParams(location.search);
+  const [searchParams, setSearchParams] = useSearchParams();
   let page = parseInt(searchParams.get("page") ?? 0);
 
   // Fetch the categories list
   useEffect(() => {
     // Default page is 0
     if (page < 1) {
-      navigate("./?page=1");
+      setSearchParams({ page: 1 });
     } else {
       // Get from server
       const getCategoriesList = async () => {
@@ -38,13 +39,13 @@ const CategoriesList = () => {
       };
       getCategoriesList();
     }
-  }, [dispatch, navigate, location, page]);
+  }, [dispatch, page, setSearchParams]);
 
   return (
     page > 0 && (
       <CategoriesListView
         categoryPagination={{
-          maxIndex: paginationTotal,
+          maxIndex: categoriesPaginationTotal ?? 0,
           currentIndex: page,
         }}
         categoriesList={categoriesList}
@@ -54,7 +55,6 @@ const CategoriesList = () => {
 };
 
 const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
-  console.log(categoriesList);
   return (
     <>
       <PaginationItem {...categoryPagination}></PaginationItem>

@@ -3,7 +3,8 @@ import { limitCategories } from "constants/pagination";
 
 const initialState = {
   pagination: {},
-  data: {},
+  list: {},
+  detail: {},
 };
 
 const categoriesReducer = (state = initialState, action) => {
@@ -11,10 +12,11 @@ const categoriesReducer = (state = initialState, action) => {
     case KCategoriesAction.VIEW_CATEGORIES_SUCCESS: {
       const categoriesInfo = action.data;
       return {
+        ...state,
         pagination: {
           total: Math.ceil(categoriesInfo.totalItems / limitCategories),
         },
-        data: categoriesInfo.items, // shouldn't be cached
+        list: categoriesInfo.items, // shouldn't be cached
       };
     }
     case KCategoriesAction.VIEW_CATEGORIES_FAILED:
@@ -23,8 +25,10 @@ const categoriesReducer = (state = initialState, action) => {
       return { ...state };
     case KCategoriesAction.CREATE_CATEGORY_FAILED:
       return { ...state };
-    case KCategoriesAction.VIEW_CATEGORY_SUCCESS:
-      return { ...state };
+    case KCategoriesAction.VIEW_CATEGORY_SUCCESS: {
+      const categoryInfo = action.data;
+      return { ...state, detail: categoryInfo };
+    }
     case KCategoriesAction.VIEW_CATEGORY_FAILED:
       return { ...state };
     case KCategoriesAction.UPDATE_CATEGORY_SUCCESS:
