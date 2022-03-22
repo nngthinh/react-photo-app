@@ -58,10 +58,10 @@ const ToastView = ({ icon, title, message }) => {
       <div className="u-flexGrow1">
         {title && (
           <div className="u-fontMedium u-marginTopTiny u-marginBottomExtraSmall">
-            {title}
+            {String(title)}
           </div>
         )}
-        <div className="u-marginTopTiny">{message}</div>
+        <div className="u-marginTopTiny">{String(message)}</div>
       </div>
     </div>
   );
