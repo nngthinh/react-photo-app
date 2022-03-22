@@ -8,7 +8,7 @@ const PaginationItem = ({
   currentIndex = minIndex,
   step = limitCategories,
   size = "medium",
-}) => {
+} = {}) => {
   const navigate = useNavigate();
   // Generate all parts
   const generateHeadPagination = () => (
@@ -24,6 +24,7 @@ const PaginationItem = ({
         <Pagination.Item
           onClick={() => navigate(`./?page=${minIndex}`)}
           active={currentIndex === minIndex}
+          data-testid={`${minIndex}-tail`}
         >
           {minIndex}
         </Pagination.Item>
@@ -51,19 +52,22 @@ const PaginationItem = ({
     }
 
     return (
-      <>
-        {_lower - 1 > minIndex && <Pagination.Ellipsis />}
-        {indexesArr.map((index) => (
-          <Pagination.Item
-            onClick={() => navigate(`./?page=${index}`)}
-            active={index === currentIndex}
-            key={index}
-          >
-            {index}
-          </Pagination.Item>
-        ))}
-        {_upper + 1 < maxIndex && <Pagination.Ellipsis />}
-      </>
+      maxIndex >= minIndex && (
+        <>
+          {_lower - 1 > minIndex && <Pagination.Ellipsis />}
+          {indexesArr.map((index) => (
+            <Pagination.Item
+              onClick={() => navigate(`./?page=${index}`)}
+              active={index === currentIndex}
+              key={index}
+              data-testid={`${index}-middle`}
+            >
+              {index}
+            </Pagination.Item>
+          ))}
+          {_upper + 1 < maxIndex && <Pagination.Ellipsis />}
+        </>
+      )
     );
   };
 
@@ -73,6 +77,7 @@ const PaginationItem = ({
         <Pagination.Item
           onClick={() => navigate(`./?page=${maxIndex}`)}
           active={currentIndex === maxIndex}
+          data-testid={`${maxIndex}-tail`}
         >
           {maxIndex}
         </Pagination.Item>
