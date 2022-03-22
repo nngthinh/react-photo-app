@@ -1,12 +1,11 @@
 import { Pagination } from "@ahaui/react";
 import { useNavigate } from "react-router-dom";
-import { limitCategories } from "constants/pagination";
 
 const PaginationItem = ({
   minIndex = 1,
   maxIndex = 0,
   currentIndex = minIndex,
-  step = limitCategories,
+  step = 3,
   size = "medium",
 } = {}) => {
   const navigate = useNavigate();
