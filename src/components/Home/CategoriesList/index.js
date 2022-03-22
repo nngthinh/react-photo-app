@@ -59,9 +59,9 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
     <>
       <PaginationItem {...categoryPagination}></PaginationItem>
       <div>Categories List</div>
-      <ul>
-        {Array.isArray(categoriesList) &&
-          categoriesList.map((category) => (
+      {Array.isArray(categoriesList) && categoriesList.length > 0 && (
+        <ul>
+          {categoriesList.map((category) => (
             <li key={category.id}>
               <Link to={`/categories/${category.id}`}>
                 <h1>{category.name}</h1>
@@ -70,7 +70,8 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
               </Link>
             </li>
           ))}
-      </ul>
+        </ul>
+      )}
     </>
   );
 };
