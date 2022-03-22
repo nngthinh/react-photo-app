@@ -56,7 +56,7 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
       <div>Categories List</div>
       <PaginationItem {...categoryPagination}></PaginationItem>
       <Link to={`/categories/add`}>
-        <Icon size="medium" name="create" />
+        <Icon size="medium" name="create" data-testid="createCategoryButton" />
       </Link>
 
       {categoriesList.length && (

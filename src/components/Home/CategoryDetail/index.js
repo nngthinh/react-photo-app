@@ -1,26 +1,16 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { viewCategoryAction } from "actions/categories";
-import { viewItemsListAction } from "actions/items";
-import { PaginationItem } from "components/Common/Items";
 import { notifyNegative } from "components/Common/Toast";
-import { limitItems } from "constants/pagination";
 import { Icon } from "@ahaui/react";
+import ItemsList from "../ItemsList";
 
 const CategoryDetail = () => {
   const { categoryId } = useParams();
   const categoryDetail = useSelector((state) => state.categories.detail);
-  const itemsList = useSelector((state) => state.items.list);
-  const itemsPaginationTotal = useSelector(
-    (state) => state.items.pagination.total
-  );
   const dispatch = useDispatch();
-
-  // Items pagination
-  const [searchParams, setSearchParams] = useSearchParams();
-  let page = parseInt(searchParams.get("page") ?? 1);
 
   useEffect(() => {
     const viewCategoryDetail = async () => {
@@ -29,38 +19,20 @@ const CategoryDetail = () => {
       if (!viewCategoyResult.success) {
         notifyNegative(viewCategoyResult.error.message);
       } else {
-        // and get items list
-        const [offset, limit] = [limitItems * (page - 1), limitItems];
-        const viewItemsListResult = await dispatch(
-          viewItemsListAction(categoryId, offset, limit)
-        );
-        if (!viewItemsListResult.success) {
-          notifyNegative(viewCategoyResult.error.message);
-        }
       }
     };
     viewCategoryDetail();
-  }, [categoryId, dispatch, page, setSearchParams]);
+  }, [categoryId, dispatch]);
 
   return (
     <CategoryDetailView
       categoryId={categoryId}
       categoryDetail={categoryDetail}
-      itemsList={itemsList}
-      itemsPagination={{
-        maxIndex: itemsPaginationTotal ?? 0,
-        currentIndex: page,
-      }}
     ></CategoryDetailView>
   );
 };
 
-const CategoryDetailView = ({
-  categoryId,
-  categoryDetail,
-  itemsPagination,
-  itemsList = [],
-} = {}) => {
+const CategoryDetailView = ({ categoryId, categoryDetail }) => {
   const { name, description, imageUrl } = categoryDetail;
   return (
     <>
@@ -71,20 +43,8 @@ const CategoryDetailView = ({
         <Link to={`/categories/${categoryId}/edit`}>
           <Icon size="small" name="edit" />
         </Link>
+        <ItemsList categoryId={categoryId}></ItemsList>
       </div>
-      <PaginationItem {...itemsPagination}></PaginationItem>
-      {itemsList.length && (
-        <ul>
-          {itemsList.map((item) => (
-            <li key={item.id}>
-              <Link to={`/categories/${categoryId}/items/${item.id}`}>
-                <div>{item.description}</div>
-                <img src={item.imageUrl} alt={item.name} />
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
     </>
   );
 };

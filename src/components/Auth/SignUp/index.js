@@ -14,7 +14,6 @@ import { notifyNegative, notifyPositive } from "components/Common/Toast";
 
 // Components
 const SignUp = () => {
-  // TODO: Should lift it up?
   const dispatch = useDispatch();
   const dispatchSignUp = (name, email, password) =>
     dispatch(signUpAction(name, email, password));
