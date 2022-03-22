@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { PaginationItem } from "components/Common/Items";
 import { notifyNegative } from "components/Common/Toast";
 import { viewCategoriesListAction } from "actions/categories";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { limitCategories } from "constants/pagination";
 
 const CategoriesList = () => {
@@ -33,7 +33,7 @@ const CategoriesList = () => {
         );
 
         if (!viewCategoriesListResult.success) {
-          notifyNegative(viewCategoriesListResult.error);
+          notifyNegative(viewCategoriesListResult.error.message);
         }
       };
       getCategoriesList();
@@ -44,10 +44,8 @@ const CategoriesList = () => {
     page > 0 && (
       <CategoriesListView
         categoryPagination={{
-          minIndex: 1,
           maxIndex: paginationTotal,
           currentIndex: page,
-          step: limitCategories,
         }}
         categoriesList={categoriesList}
       />
@@ -65,9 +63,11 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
         {Array.isArray(categoriesList) &&
           categoriesList.map((category) => (
             <li key={category.id}>
-              <h1>{category.name}</h1>
-              <div>{category.description}</div>
-              <img src={category.imageUrl} alt={category.name} />
+              <Link to={`/categories/${category.id}`}>
+                <h1>{category.name}</h1>
+                <div>{category.description}</div>
+                <img src={category.imageUrl} alt={category.name} />
+              </Link>
             </li>
           ))}
       </ul>
