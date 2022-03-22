@@ -3,7 +3,7 @@ import { limitCategories } from "constants/pagination";
 
 const initialState = {
   pagination: {},
-  list: {},
+  list: [],
   detail: {},
 };
 

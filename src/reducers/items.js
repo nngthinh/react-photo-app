@@ -2,7 +2,7 @@ import { KItemsAction } from "constants/actions";
 
 const initialState = {
   pagination: {},
-  list: {},
+  list: [],
   detail: {},
 };
 
