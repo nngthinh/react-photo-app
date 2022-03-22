@@ -25,10 +25,21 @@ const cleanUserInfoAction = () => ({
   type: KUserActions.CLEAN_USER_INFO,
 });
 
+const setLaterUrlAction = (laterUrl) => ({
+  type: KUserActions.SET_URL_AFTER_LOGGED_IN,
+  laterUrl,
+});
+
+const removeLaterUrlAction = () => ({
+  type: KUserActions.REMOVE_URL_AFTER_LOGGED_IN,
+});
+
 export {
   signInAction,
   signUpAction,
   signOutAction,
   getUserInfoAction,
   cleanUserInfoAction,
+  setLaterUrlAction,
+  removeLaterUrlAction,
 };

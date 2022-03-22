@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { notifyNegative, notifyPositive } from "components/Common/Toast";
 import { validateDescription, validateImageUrl } from "utils/validations/items";
 import { ButtonItem, InputItem } from "components/Common/Items";
@@ -9,6 +9,7 @@ import {
   viewItemAction,
   updateItemAction,
 } from "actions/items";
+import { setLaterUrlAction } from "actions/user";
 
 const ItemAction = ({ type }) => {
   const { categoryId, itemId } = useParams();
@@ -17,20 +18,31 @@ const ItemAction = ({ type }) => {
   const itemDetail = useSelector((state) => state.items.detail);
 
   const dispatch = useDispatch();
+  // Items actions
   const dispatchCreateItem = (description, imageUrl) =>
     dispatch(createItemAction(description, imageUrl));
   const dispatchUpdateItem = (categoryId, itemId, description, imageUrl) =>
     dispatch(updateItemAction(categoryId, itemId, description, imageUrl));
 
   const navigate = useNavigate();
+  const location = useLocation();
 
+  // Auto navigate to sign in
   useEffect(() => {
     if (!isLoggedIn) {
+      dispatch(
+        setLaterUrlAction(
+          `${location.pathname}${location.search}${location.hash}`
+        )
+      );
       navigate("/signin");
     }
-    // In adding category, no operation is required in advance
-    // In editing category, we need to fetch it's data
-    else if (type === "edit") {
+  });
+
+  // In adding category, no operation is required in advance
+  // In editing category, we need to fetch it's data
+  useEffect(() => {
+    if (type === "edit") {
       const getItemInfo = async () => {
         const viewItemDetailResult = await dispatch(
           viewItemAction(categoryId, itemId)
@@ -41,7 +53,7 @@ const ItemAction = ({ type }) => {
       };
       getItemInfo();
     }
-  }, [categoryId, dispatch, isLoggedIn, itemId, navigate, type]);
+  }, [categoryId, dispatch, itemId, type]);
 
   return type === "add" ? (
     <CategoryActionView

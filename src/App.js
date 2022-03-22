@@ -1,12 +1,20 @@
 import SignUp from "components/Auth/SignUp";
 import SignIn from "components/Auth/SignIn";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import "./App.css";
 import "@ahaui/css/dist/index.min.css";
 import {
   cleanUserInfoAction,
   getUserInfoAction,
+  removeLaterUrlAction,
   signOutAction,
 } from "actions/user";
 import Home from "components/Home";
@@ -18,12 +26,17 @@ import { notifyPositive } from "components/Common/Toast";
 const App = () => {
   // States
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const laterUrl = useSelector((state) => state.user.laterUrl);
   const isRecentlySignedOut = useSelector(
     (state) => state.user.recentlySignedOut
   );
   const modal = useSelector((state) => state.modal);
   const dispatch = useDispatch();
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Auto notifying the sign out status
   useEffect(() => {
     const cleanUserInfo = async () => {
       if (isRecentlySignedOut) {
@@ -34,7 +47,14 @@ const App = () => {
     cleanUserInfo();
   });
 
-  // Auto sign in
+  useEffect(() => {
+    if (isLoggedIn && laterUrl) {
+      dispatch(removeLaterUrlAction());
+      navigate(laterUrl);
+    }
+  });
+
+  // Auto sign in and later url navigation
   useEffect(() => {
     const autoSignIn = async (isLoggedIn) => {
       if (isLoggedIn) {
@@ -67,13 +87,11 @@ const NotiView = ({ modal }) => {
 const MainAppView = () => {
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path="/signin" element={<SignIn />}></Route>
-          <Route path="/signup" element={<SignUp />}></Route>
-          <Route path="/*" element={<Home />}></Route>
-        </Routes>
-      </Router>
+      <Routes>
+        <Route path="/signin" element={<SignIn />}></Route>
+        <Route path="/signup" element={<SignUp />}></Route>
+        <Route path="/*" element={<Home />}></Route>
+      </Routes>
     </>
   );
 };
