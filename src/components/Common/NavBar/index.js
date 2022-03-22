@@ -3,7 +3,7 @@ import { signOutAction } from "actions/user";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ButtonItem } from "../Items";
-import "./Navbar.css";
+import "./index.css";
 
 const Navbar = () => {
   const user = useSelector((state) => state.user);

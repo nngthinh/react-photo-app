@@ -18,7 +18,6 @@ const CategoryDetail = () => {
       const viewCategoyResult = await dispatch(viewCategoryAction(categoryId));
       if (!viewCategoyResult.success) {
         notifyNegative(viewCategoyResult.error.message);
-      } else {
       }
     };
     viewCategoryDetail();
@@ -35,8 +34,8 @@ const CategoryDetail = () => {
 const CategoryDetailView = ({ categoryId, categoryDetail }) => {
   const { name, description, imageUrl } = categoryDetail;
   return (
-    <>
-      <div>
+    <div className="categoryDetail">
+      <div className="categoryDetailWrapper">
         <h1>{name}</h1>
         <div>{description}</div>
         <img src={imageUrl} alt={name} />
@@ -45,7 +44,7 @@ const CategoryDetailView = ({ categoryId, categoryDetail }) => {
         </Link>
         <ItemsList categoryId={categoryId}></ItemsList>
       </div>
-    </>
+    </div>
   );
 };
 

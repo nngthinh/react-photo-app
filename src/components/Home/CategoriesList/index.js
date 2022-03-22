@@ -18,7 +18,7 @@ const CategoriesList = () => {
   // const location = useLocation();
   // const navigate = useNavigate();
   // const searchParams = new URLSearchParams(location.search);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   let page = parseInt(searchParams.get("page") ?? 1);
 
   // Fetch the categories list

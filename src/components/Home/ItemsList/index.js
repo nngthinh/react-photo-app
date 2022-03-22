@@ -14,12 +14,11 @@ const ItemsList = ({ categoryId }) => {
   const dispatch = useDispatch();
 
   // Items pagination
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   let page = parseInt(searchParams.get("page") ?? 1);
 
   useEffect(() => {
     const viewItemsList = async () => {
-      // and get items list
       const [offset, limit] = [limitItems * (page - 1), limitItems];
       const viewItemsListResult = await dispatch(
         viewItemsListAction(categoryId, offset, limit)
@@ -29,9 +28,10 @@ const ItemsList = ({ categoryId }) => {
       }
     };
     viewItemsList();
-  });
+  }, [categoryId, dispatch, page]);
   return (
     <ItemsListView
+      categoryId={categoryId}
       itemsList={itemsList}
       itemsPagination={{
         maxIndex: itemsPaginationTotal ?? 0,
