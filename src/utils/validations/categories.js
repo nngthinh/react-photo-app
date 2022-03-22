@@ -1,4 +1,4 @@
-const { validateUrl } = require("./common");
+import { isValidUrl } from "utils/validations/common";
 
 const validateName = (name) =>
   name.length > 30 || name.length === 0
@@ -15,7 +15,7 @@ const validateImageUrl = (url) =>
     ? "Longer than maximum length 200."
     : url.length === 0
     ? "Missing data for required field."
-    : !validateUrl(url)
+    : !isValidUrl(url)
     ? "Not a valid URL."
     : null;
 
