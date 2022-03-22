@@ -1,15 +1,16 @@
 import { Pagination } from "@ahaui/react";
-import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 const PaginationItem = ({
   minIndex = 1,
   maxIndex = 0,
   currentIndex = minIndex,
-  step = 3,
-  size = "medium",
+  step = 5,
+  size = "small",
 } = {}) => {
-  const navigate = useNavigate();
   const isValid = maxIndex >= minIndex;
+  const [searchParams, setSearchParams] = useSearchParams();
+
   // Generate all parts
   const generateHeadPagination = () => (
     <>
@@ -17,7 +18,7 @@ const PaginationItem = ({
         <Pagination.Prev disabled />
       ) : (
         <Pagination.Prev
-          onClick={() => navigate(`./?page=${currentIndex - 1}`)}
+          onClick={() => setSearchParams({ page: currentIndex - 1 })}
         />
       )}
     </>
@@ -47,7 +48,7 @@ const PaginationItem = ({
         <>
           {
             <Pagination.Item
-              onClick={() => navigate(`./?page=${minIndex}`)}
+              onClick={() => setSearchParams({ page: minIndex })}
               active={currentIndex === minIndex}
               data-testid={`${minIndex}-tail`}
             >
@@ -57,7 +58,7 @@ const PaginationItem = ({
           {_lower - 1 > minIndex && <Pagination.Ellipsis />}
           {indexesArr.map((index) => (
             <Pagination.Item
-              onClick={() => navigate(`./?page=${index}`)}
+              onClick={() => setSearchParams({ page: index })}
               active={index === currentIndex}
               key={index}
               data-testid={`${index}-middle`}
@@ -68,7 +69,7 @@ const PaginationItem = ({
           {_upper + 1 < maxIndex && <Pagination.Ellipsis />}
           {minIndex !== maxIndex && (
             <Pagination.Item
-              onClick={() => navigate(`./?page=${maxIndex}`)}
+              onClick={() => setSearchParams({ page: maxIndex })}
               active={currentIndex === maxIndex}
               data-testid={`${maxIndex}-tail`}
             >
@@ -86,7 +87,7 @@ const PaginationItem = ({
         <Pagination.Next disabled />
       ) : (
         <Pagination.Next
-          onClick={() => navigate(`./?page=${currentIndex + 1}`)}
+          onClick={() => setSearchParams({ page: currentIndex + 1 })}
         />
       )}
     </>
