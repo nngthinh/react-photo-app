@@ -9,10 +9,11 @@ const PaginationItem = ({
   size = "medium",
 } = {}) => {
   const navigate = useNavigate();
+  const isValid = maxIndex >= minIndex;
   // Generate all parts
   const generateHeadPagination = () => (
     <>
-      {currentIndex === minIndex ? (
+      {!isValid && currentIndex <= minIndex ? (
         <Pagination.Prev disabled />
       ) : (
         <Pagination.Prev
@@ -42,7 +43,7 @@ const PaginationItem = ({
     }
 
     return (
-      maxIndex >= minIndex && (
+      isValid && (
         <>
           {
             <Pagination.Item
@@ -81,7 +82,7 @@ const PaginationItem = ({
 
   const generateTailPagination = () => (
     <>
-      {currentIndex === maxIndex ? (
+      {!isValid && currentIndex >= maxIndex ? (
         <Pagination.Next disabled />
       ) : (
         <Pagination.Next
