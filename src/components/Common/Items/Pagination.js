@@ -14,7 +14,7 @@ const PaginationItem = ({
   // Generate all parts
   const generateHeadPagination = () => (
     <>
-      {!isValid && currentIndex <= minIndex ? (
+      {!isValid || currentIndex <= minIndex ? (
         <Pagination.Prev disabled />
       ) : (
         <Pagination.Prev
@@ -83,7 +83,7 @@ const PaginationItem = ({
 
   const generateTailPagination = () => (
     <>
-      {!isValid && currentIndex >= maxIndex ? (
+      {!isValid || currentIndex >= maxIndex ? (
         <Pagination.Next disabled />
       ) : (
         <Pagination.Next
