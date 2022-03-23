@@ -77,10 +77,10 @@ const CategoryAction = ({ type }) => {
 const CategoryActionView = ({
   type,
   categoryId,
-  categoryDetail = {},
+  categoryDetail,
   onCreateCategory,
   onUpdateCategory,
-} = {}) => {
+}) => {
   // Input states
   const [name, setName] = useReducer(
     (name, nameAction) => {
@@ -144,10 +144,14 @@ const CategoryActionView = ({
   );
 
   useEffect(() => {
-    setImageUrl({ type: "ON_CHANGE", value: categoryDetail.imageUrl });
-    setDescription({ type: "ON_CHANGE", value: categoryDetail.description });
-    setName({ type: "ON_CHANGE", value: categoryDetail.name });
-  }, [categoryDetail]);
+    setImageUrl({ type: "ON_CHANGE", value: categoryDetail?.imageUrl });
+    setDescription({ type: "ON_CHANGE", value: categoryDetail?.description });
+    setName({ type: "ON_CHANGE", value: categoryDetail?.name });
+  }, [
+    categoryDetail?.description,
+    categoryDetail?.imageUrl,
+    categoryDetail?.name,
+  ]);
 
   const navigate = useNavigate();
 

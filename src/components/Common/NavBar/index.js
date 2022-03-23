@@ -1,7 +1,7 @@
 import { showModalAction, clearModalAction } from "actions/modal";
 import { signOutAction } from "actions/user";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ButtonItem } from "../Items";
 import { notifyNegative, notifyPositive } from "../Toast";
 import "./index.css";

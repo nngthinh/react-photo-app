@@ -9,7 +9,7 @@ const PaginationItem = ({
   size = "small",
 } = {}) => {
   const isValid = maxIndex >= minIndex;
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   // Generate all parts
   const generateHeadPagination = () => (
