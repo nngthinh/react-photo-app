@@ -19,8 +19,8 @@ const ItemAction = ({ type }) => {
 
   const dispatch = useDispatch();
   // Items actions
-  const dispatchCreateItem = (description, imageUrl) =>
-    dispatch(createItemAction(description, imageUrl));
+  const dispatchCreateItem = (categoryId, description, imageUrl) =>
+    dispatch(createItemAction(categoryId, description, imageUrl));
   const dispatchUpdateItem = (categoryId, itemId, description, imageUrl) =>
     dispatch(updateItemAction(categoryId, itemId, description, imageUrl));
 
@@ -60,6 +60,7 @@ const ItemAction = ({ type }) => {
     (type === "add" ? (
       <CategoryActionView
         type="add"
+        categoryId={categoryId}
         onCreateItem={dispatchCreateItem}
       ></CategoryActionView>
     ) : (
@@ -78,7 +79,7 @@ const CategoryActionView = ({
   type,
   categoryId,
   itemId,
-  itemDetail = {},
+  itemDetail,
   onCreateItem,
   onUpdateItem,
 } = {}) => {
@@ -145,6 +146,7 @@ const CategoryActionView = ({
     if (type === "add") {
       const createItem = async () => {
         const createItemResult = await onCreateItem(
+          categoryId,
           description.value,
           imageUrl.value
         );
@@ -179,7 +181,7 @@ const CategoryActionView = ({
         );
         if (updateItemResult.success) {
           notifyPositive("Update item successfully.");
-          navigate(`/categories/${categoryId}/items/${itemId}`);
+          navigate(-1);
         } else {
           if (updateItemResult.error.data) {
             const errors = updateItemResult.error;
