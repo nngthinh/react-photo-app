@@ -3,7 +3,7 @@ import { signOutAction } from "actions/user";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 import { ButtonItem } from "../Items";
-import { notifyNegative } from "../Toast";
+import { notifyNegative, notifyPositive } from "../Toast";
 import "./index.css";
 
 const Navbar = () => {
@@ -40,6 +40,7 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
       if (signOutResult.success) {
         onClearModal();
         navigate("/");
+        notifyPositive("Sign out successfully.");
       } else {
         notifyNegative(signOutResult.error.message);
       }

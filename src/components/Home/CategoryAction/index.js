@@ -201,7 +201,7 @@ const CategoryActionView = ({
         );
         if (updateCategoryResult.success) {
           notifyPositive("Update category successfully.");
-          navigate(`/categories/${categoryId}`);
+          navigate(-1);
         } else {
           if (updateCategoryResult.error.data) {
             const errors = updateCategoryResult.error;

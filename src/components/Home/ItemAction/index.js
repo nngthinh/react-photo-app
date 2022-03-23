@@ -79,7 +79,7 @@ const CategoryActionView = ({
   type,
   categoryId,
   itemId,
-  itemDetail,
+  itemDetail = {},
   onCreateItem,
   onUpdateItem,
 } = {}) => {
@@ -152,7 +152,7 @@ const CategoryActionView = ({
         );
         if (createItemResult.success) {
           notifyPositive("Create item successfully.");
-          navigate(`/category/${categoryId}/items`);
+          navigate(-1);
         } else {
           if (createItemResult.error.data) {
             const errors = createItemResult.error;
