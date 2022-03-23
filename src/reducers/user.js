@@ -3,9 +3,8 @@ import { KUserActions } from "constants/actions";
 const initialState = {
   isLoggedIn: false,
   token: null,
-  recentlySignedOut: null,
-  laterUrl: null,
   info: null,
+  laterUrl: null,
 };
 
 const userReducer = (state = initialState, action) => {

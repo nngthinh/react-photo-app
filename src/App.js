@@ -1,14 +1,7 @@
 import SignUp from "components/Auth/SignUp";
 import SignIn from "components/Auth/SignIn";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  BrowserRouter as Router,
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import "@ahaui/css/dist/index.min.css";
 import {
@@ -21,31 +14,15 @@ import Home from "components/Home";
 import { useEffect } from "react";
 import Toast from "components/Common/Toast";
 import CustomModal from "components/Common/Modal";
-import { notifyPositive } from "components/Common/Toast";
 
 const App = () => {
   // States
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const laterUrl = useSelector((state) => state.user.laterUrl);
-  const isRecentlySignedOut = useSelector(
-    (state) => state.user.recentlySignedOut
-  );
   const modal = useSelector((state) => state.modal);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-  const location = useLocation();
-
-  // Auto notifying the sign out status
-  useEffect(() => {
-    const cleanUserInfo = async () => {
-      if (isRecentlySignedOut) {
-        await dispatch(cleanUserInfoAction());
-        notifyPositive("Sign out successfully.");
-      }
-    };
-    cleanUserInfo();
-  });
 
   useEffect(() => {
     if (isLoggedIn && laterUrl) {

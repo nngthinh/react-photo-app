@@ -1,8 +1,9 @@
 import { showModalAction, clearModalAction } from "actions/modal";
 import { signOutAction } from "actions/user";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { ButtonItem } from "../Items";
+import { notifyNegative } from "../Toast";
 import "./index.css";
 
 const Navbar = () => {
@@ -26,18 +27,22 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
   const isLoggedIn = user.isLoggedIn ?? false;
 
   // Navigators
-  const nagivate = useNavigate();
-  const navigateSignIn = () => nagivate(`/signin`);
+  const navigate = useNavigate();
 
   // Button click
   const handleSignIn = (e) => {
-    navigateSignIn();
+    navigate(`/signin`);
   };
 
   const handleSignOut = (e) => {
     const signOut = async (e) => {
-      await onSignOut();
-      window.location.reload(false);
+      const signOutResult = await onSignOut();
+      if (signOutResult.success) {
+        onClearModal();
+        navigate("/");
+      } else {
+        notifyNegative(signOutResult.error.message);
+      }
     };
     onShowModal(
       {
