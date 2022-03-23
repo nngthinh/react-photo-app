@@ -53,7 +53,7 @@ const ItemAction = ({ type }) => {
       };
       getItemInfo();
     }
-  }, [categoryId, dispatch, itemId, type]);
+  });
 
   return (
     isLoggedIn &&

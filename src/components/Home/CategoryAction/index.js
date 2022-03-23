@@ -54,7 +54,7 @@ const CategoryAction = ({ type }) => {
       };
       getCategoryInfo();
     }
-  }, [categoryId, dispatch, type]);
+  });
 
   return (
     isLoggedIn &&
