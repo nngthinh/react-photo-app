@@ -99,7 +99,7 @@ const CategoryActionView = ({
           return { ...name };
       }
     },
-    { value: categoryDetail.name ?? "", error: null }
+    { value: "", error: null }
   );
 
   const [description, setDescription] = useReducer(
@@ -120,7 +120,7 @@ const CategoryActionView = ({
           return { ...description };
       }
     },
-    { value: categoryDetail.description ?? "", error: null }
+    { value: "", error: null }
   );
 
   const [imageUrl, setImageUrl] = useReducer(
@@ -140,8 +140,14 @@ const CategoryActionView = ({
           return { ...imageUrl };
       }
     },
-    { value: categoryDetail.imageUrl ?? "", errors: null }
+    { value: "", errors: null }
   );
+
+  useEffect(() => {
+    setImageUrl({ type: "ON_CHANGE", value: categoryDetail.imageUrl });
+    setDescription({ type: "ON_CHANGE", value: categoryDetail.description });
+    setName({ type: "ON_CHANGE", value: categoryDetail.name });
+  }, [categoryDetail]);
 
   const navigate = useNavigate();
 

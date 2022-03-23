@@ -126,6 +126,11 @@ const CategoryActionView = ({
     { value: itemDetail.imageUrl ?? "", errors: null }
   );
 
+  useEffect(() => {
+    setImageUrl({ type: "ON_CHANGE", value: itemDetail.imageUrl });
+    setDescription({ type: "ON_CHANGE", value: itemDetail.description });
+  }, [itemDetail]);
+
   const navigate = useNavigate();
 
   // On action
