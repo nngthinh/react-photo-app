@@ -81,12 +81,12 @@ const ItemsListView = ({
               <Link to={`/categories/${categoryId}/items/${item.id}`}>
                 <div>{item.description}</div>
                 <img src={item.imageUrl} alt={item.name} />
-                {userInfo?.id === item.author.id && (
-                  <Link to={`/categories/${categoryId}/items/${item.id}/edit`}>
-                    <Icon size="small" name="edit" />
-                  </Link>
-                )}
               </Link>
+              {userInfo?.id === item.author.id && (
+                <Link to={`/categories/${categoryId}/items/${item.id}/edit`}>
+                  <Icon size="small" name="edit" />
+                </Link>
+              )}
             </li>
           ))}
         </ul>
