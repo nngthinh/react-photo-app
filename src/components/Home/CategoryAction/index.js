@@ -171,7 +171,7 @@ const CategoryActionView = ({
         );
         if (createCategoryResult.success) {
           notifyPositive("Create category successfully.");
-          navigate(`/category`);
+          navigate(-1);
         } else {
           if (createCategoryResult.error.data) {
             const errors = createCategoryResult.error;
