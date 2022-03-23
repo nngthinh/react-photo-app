@@ -34,17 +34,21 @@ const CategoryDetail = () => {
 const CategoryDetailView = ({ categoryId, categoryDetail }) => {
   const { name, description, imageUrl } = categoryDetail;
   return (
-    <div className="categoryDetail">
-      <div className="categoryDetailWrapper">
-        <h1>{name}</h1>
-        <div>{description}</div>
-        <img src={imageUrl} alt={name} />
-        <Link to={`/categories/${categoryId}/edit`}>
-          <Icon size="small" name="edit" />
-        </Link>
-        <ItemsList categoryId={categoryId}></ItemsList>
+    <>
+      <div className="categoryDetail">
+        <div className="categoryDetailWrapper">
+          <h1>{name}</h1>
+          <div>{description}</div>
+          <img src={imageUrl} alt={name} />
+
+          <Link to={`/categories/${categoryId}/edit`}>
+            <Icon size="small" name="edit" />
+          </Link>
+
+          <ItemsList categoryId={categoryId}></ItemsList>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

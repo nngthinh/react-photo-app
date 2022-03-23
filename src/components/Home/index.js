@@ -30,14 +30,14 @@ const HomeView = () => {
           path="/categories/:categoryId/edit"
           element={<CategoryAction type="edit" />}
         ></Route>
-        <Route
-          path="/categories/:categoryId/add"
-          element={<ItemAction type="add" />}
-        ></Route>
         {/* Item */}
         <Route
           path="/categories/:categoryId/items"
           element={<ItemsList />}
+        ></Route>
+        <Route
+          path="/categories/:categoryId/items/add"
+          element={<ItemAction type="add" />}
         ></Route>
         <Route
           path="/categories/:categoryId/items/:itemId"

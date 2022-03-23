@@ -5,9 +5,11 @@ import { limitItems } from "constants/pagination";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { Icon } from "@ahaui/react";
 
 const ItemsList = ({ categoryId }) => {
   const itemsList = useSelector((state) => state.items.list);
+  const userInfo = useSelector((state) => state.user.info);
   const itemsPaginationTotal = useSelector(
     (state) => state.items.pagination.total
   );
@@ -54,6 +56,7 @@ const ItemsList = ({ categoryId }) => {
           maxIndex: itemsPaginationTotal ?? 0,
           currentIndex: page,
         }}
+        userInfo={userInfo}
       ></ItemsListView>
     )
   );
@@ -63,9 +66,13 @@ const ItemsListView = ({
   categoryId,
   itemsPagination,
   itemsList = [],
+  userInfo = {},
 } = {}) => {
   return (
     <>
+      <Link to={`/categories/${categoryId}/items/add`}>
+        <Icon size="medium" name="create" data-testid="createItemButton" />
+      </Link>
       <PaginationItem {...itemsPagination}></PaginationItem>
       {itemsList.length && (
         <ul>
@@ -74,6 +81,11 @@ const ItemsListView = ({
               <Link to={`/categories/${categoryId}/items/${item.id}`}>
                 <div>{item.description}</div>
                 <img src={item.imageUrl} alt={item.name} />
+                {userInfo?.id === item.author.id && (
+                  <Link to={`/categories/${categoryId}/items/${item.id}/edit`}>
+                    <Icon size="small" name="edit" />
+                  </Link>
+                )}
               </Link>
             </li>
           ))}
