@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   createCategoryAction,
   viewCategoryAction,
@@ -13,6 +13,7 @@ import {
   validateName,
 } from "utils/validations/categories";
 import { ButtonItem, InputItem } from "components/Common/Items";
+import { setLaterUrlAction } from "actions/user";
 
 const CategoryAction = ({ type }) => {
   const { categoryId } = useParams();
@@ -26,14 +27,23 @@ const CategoryAction = ({ type }) => {
   const dispatchUpdateCategory = (categoryId, name, description, imageUrl) =>
     dispatch(updateCategoryAction(categoryId, name, description, imageUrl));
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (!isLoggedIn) {
-      navigate("/signin");
+      dispatch(
+        setLaterUrlAction(
+          `${location.pathname}${location.search}${location.hash}` // Store current URL for later redirection
+        )
+      );
+      navigate("/signin", { replace: true });
     }
-    // In adding category, no operation is required in advance
-    // In editing category, we need to fetch it's data
-    else if (type === "edit") {
+  });
+
+  // In adding category, no operation is required in advance
+  // In editing category, we need to fetch it's data
+  useEffect(() => {
+    if (type === "edit") {
       const getCategoryInfo = async () => {
         const viewCategoryDetailResult = await dispatch(
           viewCategoryAction(categoryId)
@@ -44,20 +54,23 @@ const CategoryAction = ({ type }) => {
       };
       getCategoryInfo();
     }
-  }, [categoryId, dispatch, isLoggedIn, navigate, type]);
+  }, [categoryId, dispatch, type]);
 
-  return type === "add" ? (
-    <CategoryActionView
-      type="add"
-      onCreateCategory={dispatchCreateCategory}
-    ></CategoryActionView>
-  ) : (
-    <CategoryActionView
-      type="edit"
-      categoryId={categoryId}
-      categoryDetail={categoryDetail}
-      onUpdateCategory={dispatchUpdateCategory}
-    ></CategoryActionView>
+  return (
+    isLoggedIn &&
+    (type === "add" ? (
+      <CategoryActionView
+        type="add"
+        onCreateCategory={dispatchCreateCategory}
+      ></CategoryActionView>
+    ) : (
+      <CategoryActionView
+        type="edit"
+        categoryId={categoryId}
+        categoryDetail={categoryDetail}
+        onUpdateCategory={dispatchUpdateCategory}
+      ></CategoryActionView>
+    ))
   );
 };
 

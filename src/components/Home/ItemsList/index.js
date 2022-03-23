@@ -4,7 +4,7 @@ import { notifyNegative } from "components/Common/Toast";
 import { limitItems } from "constants/pagination";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 
 const ItemsList = ({ categoryId }) => {
   const itemsList = useSelector((state) => state.items.list);
@@ -15,7 +15,20 @@ const ItemsList = ({ categoryId }) => {
 
   // Items pagination
   const [searchParams] = useSearchParams();
-  let page = parseInt(searchParams.get("page") ?? 1);
+  let page =
+    Array.from(searchParams).length === 0
+      ? 1
+      : parseInt(searchParams.get("page") ?? 0);
+
+  const navigate = useNavigate();
+
+  // Clear search param
+  useEffect(() => {
+    if (page === 0) {
+      // Not valid param
+      navigate(`/categories/${categoryId}`, { replace: true });
+    }
+  });
 
   useEffect(() => {
     const viewItemsList = async () => {
@@ -27,17 +40,22 @@ const ItemsList = ({ categoryId }) => {
         notifyNegative(viewItemsListResult.error.message);
       }
     };
-    viewItemsList();
+    if (page > 0) {
+      viewItemsList();
+    }
   }, [categoryId, dispatch, page]);
+
   return (
-    <ItemsListView
-      categoryId={categoryId}
-      itemsList={itemsList}
-      itemsPagination={{
-        maxIndex: itemsPaginationTotal ?? 0,
-        currentIndex: page,
-      }}
-    ></ItemsListView>
+    page > 0 && (
+      <ItemsListView
+        categoryId={categoryId}
+        itemsList={itemsList}
+        itemsPagination={{
+          maxIndex: itemsPaginationTotal ?? 0,
+          currentIndex: page,
+        }}
+      ></ItemsListView>
+    )
   );
 };
 

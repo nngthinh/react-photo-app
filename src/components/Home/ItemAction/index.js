@@ -32,10 +32,10 @@ const ItemAction = ({ type }) => {
     if (!isLoggedIn) {
       dispatch(
         setLaterUrlAction(
-          `${location.pathname}${location.search}${location.hash}`
+          `${location.pathname}${location.search}${location.hash}` // Store current URL for later redirection
         )
       );
-      navigate("/signin");
+      navigate("/signin", { replace: true });
     }
   });
 
@@ -55,19 +55,22 @@ const ItemAction = ({ type }) => {
     }
   }, [categoryId, dispatch, itemId, type]);
 
-  return type === "add" ? (
-    <CategoryActionView
-      type="add"
-      onCreateItem={dispatchCreateItem}
-    ></CategoryActionView>
-  ) : (
-    <CategoryActionView
-      type="edit"
-      categoryId={categoryId}
-      itemId={itemId}
-      itemDetail={itemDetail}
-      onUpdateItem={dispatchUpdateItem}
-    ></CategoryActionView>
+  return (
+    isLoggedIn &&
+    (type === "add" ? (
+      <CategoryActionView
+        type="add"
+        onCreateItem={dispatchCreateItem}
+      ></CategoryActionView>
+    ) : (
+      <CategoryActionView
+        type="edit"
+        categoryId={categoryId}
+        itemId={itemId}
+        itemDetail={itemDetail}
+        onUpdateItem={dispatchUpdateItem}
+      ></CategoryActionView>
+    ))
   );
 };
 

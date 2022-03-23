@@ -16,6 +16,7 @@ const HomeView = () => {
     <>
       <Navbar />
       <Routes>
+        {/* Category */}
         <Route path="/categories" element={<CategoriesList />}></Route>
         <Route
           path="/categories/add"
@@ -33,6 +34,7 @@ const HomeView = () => {
           path="/categories/:categoryId/add"
           element={<ItemAction type="add" />}
         ></Route>
+        {/* Item */}
         <Route
           path="/categories/:categoryId/items"
           element={<ItemsList />}
@@ -45,7 +47,17 @@ const HomeView = () => {
           path="/categories/:categoryId/items/:itemId/edit"
           element={<ItemAction type="edit" />}
         ></Route>
-        <Route path="/*" element={<Navigate to="/categories" />} />
+        {/* Replace wrong routes*/}
+        <Route
+          path="/*"
+          element={<Navigate to="/categories" replace={true} />}
+        />
+        <Route
+          path="/categories/:categoryId/items/*"
+          element={
+            <Navigate to="/categories/:categoryId/items" replace={true} />
+          }
+        />
       </Routes>
     </>
   );

@@ -5,7 +5,6 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import "@ahaui/css/dist/index.min.css";
 import {
-  cleanUserInfoAction,
   getUserInfoAction,
   removeLaterUrlAction,
   signOutAction,

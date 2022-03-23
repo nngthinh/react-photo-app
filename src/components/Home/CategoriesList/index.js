@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { PaginationItem } from "components/Common/Items";
 import { notifyNegative } from "components/Common/Toast";
 import { viewCategoriesListAction } from "actions/categories";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { limitCategories } from "constants/pagination";
 import { Icon } from "@ahaui/react";
 
@@ -19,7 +19,20 @@ const CategoriesList = () => {
   // const navigate = useNavigate();
   // const searchParams = new URLSearchParams(location.search);
   const [searchParams] = useSearchParams();
-  let page = parseInt(searchParams.get("page") ?? 1);
+  let page =
+    Array.from(searchParams).length === 0
+      ? 1
+      : parseInt(searchParams.get("page") ?? 0);
+
+  const navigate = useNavigate();
+
+  // Clear search param
+  useEffect(() => {
+    if (page === 0) {
+      // Not valid param
+      navigate("/category");
+    }
+  });
 
   // Fetch the categories list
   useEffect(() => {
@@ -34,7 +47,10 @@ const CategoriesList = () => {
         notifyNegative(viewCategoriesListResult.error.message);
       }
     };
-    getCategoriesList();
+
+    if (page > 0) {
+      getCategoriesList();
+    }
   }, [dispatch, page]);
 
   return (
