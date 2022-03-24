@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ButtonItem } from "../Items";
 import { notifyNegative, notifyPositive } from "../Toast";
-import { Avatar, Icon, Dropdown, Toggle } from "@ahaui/react";
+import { Avatar, Icon, Dropdown, Toggle, Separator } from "@ahaui/react";
 import "./index.css";
 import { useState } from "react";
 
@@ -93,38 +93,46 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
     <div className="navbar u-shadowSmall">
       <div className="navbarWrapper container">
         <div className="left Brown500 u-flex u-alignItemsCenter">
-          <span className="u-fontBold u-text500">PHOTOAPP</span>
+          <span className="u-fontBold u-text300">PHOTOAPP</span>
         </div>
         <div className="right">
-          <div
-            className="setDarkModeButton u-marginRightMedium"
-            data-testid="setDarkModeButton"
-            onClick={() => setIsDark(!isDark)}
-          >
-            <Toggle
-              checked={isDark}
-              textLabelOn={"Dark mode"}
-              textLabelOff={"Light mode"}
-            />
-          </div>
-          {isLoggedIn ? (
-            <Dropdown alignRight className="profile">
-              <Dropdown.Toggle className="u-lineHeightNone">
-                <div>
+          <Dropdown alignRight className="profile">
+            <Dropdown.Toggle className="u-lineHeightNone">
+              <div>
+                {isLoggedIn ? (
                   <Avatar
-                    className="u-backgroundPrimaryLight u-text400"
+                    className="u-backgroundPrimaryLight"
                     text={user.info?.name[0].toUpperCase()}
                     size="medium"
                   />
-                </div>
-              </Dropdown.Toggle>
-              <Dropdown.Container className="u-paddingVerticalExtraSmall">
-                <div className="u-paddingHorizontalSmall u-paddingVerticalMedium u-flex u-justifyContentCenter">
-                  {greeting(user.info?.name)}
-                </div>
+                ) : (
+                  <Icon size="medium" name="contact" className="u-textGray" />
+                )}
+              </div>
+            </Dropdown.Toggle>
+            <Dropdown.Container className="u-paddingVerticalExtraSmall">
+              <div className="u-paddingHorizontalSmall u-paddingVerticalExtraLarge u-flex u-justifyContentCenter">
+                {isLoggedIn
+                  ? greeting(user.info?.name)
+                  : "Welcome to PhotoApp!"}
+              </div>
+              {/* <Separator variant="lighter" /> */}
+              <Dropdown.Item
+                data-testid="setDarkModeButton"
+                className="u-flex u-justifyContentCenter u-alignItemsCenter u-paddingVerticalExtraSmall"
+                onClick={() => setIsDark(!isDark)}
+              >
+                <Toggle
+                  checked={isDark}
+                  textLabelOn={"Dark mode"}
+                  textLabelOff={"Light mode"}
+                />
+              </Dropdown.Item>
+              <Separator variant="lighter" className="u-marginTopExtraSmall" />
+              {isLoggedIn ? (
                 <Dropdown.Item
-                  className="u-paddingVerticalExtraSmall"
                   data-testid="signOutButton"
+                  className="u-flex u-justifyContentCenter u-alignItemsCenter u-paddingVerticalExtraSmall u-marginTopExtraSmall"
                   onClick={() => handleSignOut()}
                 >
                   <Icon name="power" size="small" className="u-textNegative" />
@@ -132,17 +140,24 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
                     Sign out
                   </span>
                 </Dropdown.Item>
-              </Dropdown.Container>
-            </Dropdown>
-          ) : (
-            <ButtonItem
-              data-testid="signInButton"
-              value={"Sign In"}
-              variant={"primary_outline"}
-              onClick={handleSignIn}
-              size="medium"
-            ></ButtonItem>
-          )}
+              ) : (
+                <Dropdown.Item
+                  data-testid="signInButton"
+                  className="u-flex u-justifyContentCenter u-alignItemsCenter u-paddingVerticalExtraSmall u-marginTopExtraSmall"
+                  onClick={() => handleSignIn()}
+                >
+                  <Icon
+                    name="arrowForward"
+                    size="small"
+                    className="u-textPrimary"
+                  />
+                  <span className="u-marginLeftExtraSmall u-textPrimary">
+                    Sign in
+                  </span>
+                </Dropdown.Item>
+              )}
+            </Dropdown.Container>
+          </Dropdown>
         </div>
       </div>
     </div>
