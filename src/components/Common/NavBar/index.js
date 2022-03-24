@@ -4,7 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ButtonItem } from "../Items";
 import { notifyNegative, notifyPositive } from "../Toast";
+import { Avatar, Icon, Dropdown, Toggle } from "@ahaui/react";
 import "./index.css";
+import { useState } from "react";
 
 const Navbar = () => {
   const user = useSelector((state) => state.user);
@@ -69,6 +71,9 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
     );
   };
 
+  // Dark mode state
+  const [isDark, setIsDark] = useState(false);
+
   // Return view
   return (
     <div className="navbar u-shadowSmall">
@@ -82,13 +87,42 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
         </div>
         <div className="right">
           {isLoggedIn ? (
-            <ButtonItem
-              data-testid="signOutButton"
-              value={"Sign Out"}
-              variant={"negative_outline"}
-              onClick={handleSignOut}
-              size="medium"
-            ></ButtonItem>
+            <Dropdown alignRight className="profile">
+              <Dropdown.Toggle className="u-lineHeightNone">
+                <div>
+                  <Avatar
+                    className="u-backgroundPrimaryLight u-text200"
+                    text={user.info?.name[0].toUpperCase()}
+                  />
+                </div>
+              </Dropdown.Toggle>
+              <Dropdown.Container className="u-paddingVerticalExtraSmall">
+                <Dropdown.Item className="u-paddingTopExtraSmall u-paddingBottomExtraSmall">
+                  <Toggle
+                    className="u-marginRightSmall"
+                    checked={isDark}
+                    onClick={() => setIsDark(!isDark)}
+                    textLabelOn={"Dark mode"}
+                    textLabelOff={"Light mode"}
+                  />
+                </Dropdown.Item>
+                <Dropdown.Item className="u-paddingTopExtraSmall u-paddingBottomExtraSmall">
+                  <div
+                    data-testid="signOutButton"
+                    onClick={() => handleSignOut()}
+                  >
+                    <Icon
+                      name="power"
+                      size="small"
+                      className="u-textNegative"
+                    />
+                    <span className="u-marginLeftExtraSmall u-textNegative">
+                      Sign out
+                    </span>
+                  </div>
+                </Dropdown.Item>
+              </Dropdown.Container>
+            </Dropdown>
           ) : (
             <ButtonItem
               data-testid="signInButton"

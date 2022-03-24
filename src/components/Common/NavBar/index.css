@@ -5,3 +5,7 @@
   height: 70px;
   padding: 0px 24px;
 }
+
+.Dropdown-item {
+  cursor: pointer;
+}

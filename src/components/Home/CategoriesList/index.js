@@ -6,6 +6,7 @@ import { viewCategoriesListAction } from "actions/categories";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { limitCategories } from "constants/pagination";
 import { Icon } from "@ahaui/react";
+import "./index.css";
 
 const CategoriesList = () => {
   const categoriesPaginationTotal = useSelector(
@@ -68,27 +69,32 @@ const CategoriesList = () => {
 
 const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
   return (
-    <>
-      <div>Categories List</div>
-      <PaginationItem {...categoryPagination}></PaginationItem>
-      <Link to={`/categories/add`}>
-        <Icon size="medium" name="create" data-testid="createCategoryButton" />
-      </Link>
+    <div class="categoriesList">
+      <div class="categoriesListWrapper">
+        <PaginationItem {...categoryPagination}></PaginationItem>
+        <Link to={`/categories/add`}>
+          <Icon
+            size="medium"
+            name="create"
+            data-testid="createCategoryButton"
+          />
+        </Link>
 
-      {categoriesList.length && (
-        <ul>
-          {categoriesList.map((category) => (
-            <li key={category.id}>
-              <Link to={`/categories/${category.id}`}>
-                <h1>{category.name}</h1>
-                <div>{category.description}</div>
-                <img src={category.imageUrl} alt={category.name} />
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
-    </>
+        {categoriesList.length && (
+          <ul>
+            {categoriesList.map((category) => (
+              <li key={category.id}>
+                <Link to={`/categories/${category.id}`}>
+                  <h1>{category.name}</h1>
+                  <div>{category.description}</div>
+                  <img src={category.imageUrl} alt={category.name} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
   );
 };
 
