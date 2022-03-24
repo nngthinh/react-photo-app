@@ -70,8 +70,8 @@ const CategoriesList = () => {
 const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
   return (
     <div className="categoriesList container">
-      <div className="categoriesListWrapper">
-        <h2>The best topic for you</h2>
+      <div className="categoriesListWrapper ">
+        <h1 className="u-text1200 u-textCenter u-marginBottomLarge">Topics</h1>
         <PaginationItem {...categoryPagination}></PaginationItem>
         <Link to={`/categories/add`}>
           <Icon
@@ -81,13 +81,13 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
           />
         </Link>
         {categoriesList.length && (
-          <ul>
+          <ul className="categoriesListSection">
             {categoriesList.map((category) => (
-              <li key={category.id}>
+              <li key={category.id} className="u-shadowMedium">
                 <Link to={`/categories/${category.id}`}>
-                  <h1>{category.name}</h1>
-                  <div>{category.description}</div>
                   <img src={category.imageUrl} alt={category.name} />
+                  <h5>{category.name}</h5>
+                  <div>{category.description}</div>
                 </Link>
               </li>
             ))}

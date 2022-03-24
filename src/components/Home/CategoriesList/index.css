@@ -3,14 +3,27 @@
 }
 
 .categoriesListWrapper {
-  margin: 32px 0px;
+  margin-top: 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-a {
-  text-decoration: none;
+.categoriesListSection a {
+  display: inline-block;
+  width: 100%;
   color: #000000;
 }
 
-ul {
+.categoriesListSection ul {
   list-style-type: none;
+}
+
+.categoriesListSection li {
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.categoriesListSection .img {
+  border-radius: 7px;
 }
