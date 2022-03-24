@@ -94,11 +94,13 @@ const PaginationItem = ({
   );
 
   return (
-    <Pagination sizeControl={size}>
-      {generateHeadPagination()}
-      {generateMiddlePagination()}
-      {generateTailPagination()}
-    </Pagination>
+    <div className="u-flex u-justifyContentCenter u-alignItemsCenter">
+      <Pagination sizeControl={size}>
+        {generateHeadPagination()}
+        {generateMiddlePagination()}
+        {generateTailPagination()}
+      </Pagination>
+    </div>
   );
 };
 
