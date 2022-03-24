@@ -74,52 +74,63 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
   // Dark mode state
   const [isDark, setIsDark] = useState(false);
 
+  // Greeting (just for fun)
+  const greeting = (username) => {
+    const hour = new Date().getHours();
+    return `Good ${
+      5 <= hour && hour < 12
+        ? "morning"
+        : 12 <= hour && hour < 17
+        ? "afternoon"
+        : 17 <= hour && hour < 21
+        ? "evening"
+        : "night"
+    }, ${String(username)}!`;
+  };
+
   // Return view
   return (
     <div className="navbar u-shadowSmall">
       <div className="navbarWrapper">
-        <div className="left Brown500">
-          <div>
-            {isLoggedIn
-              ? `Hi ${user.info?.name ?? ""}!`
-              : "Welcome to Photo app!"}
-          </div>
+        <div className="left Brown500 u-flex u-alignItemsCenter">
+          <span className="u-fontBold u-text500">PHOTOAPP</span>
         </div>
         <div className="right">
+          <div
+            className="setDarkModeButton u-marginRightMedium"
+            data-testid="setDarkModeButton"
+            onClick={() => setIsDark(!isDark)}
+          >
+            <Toggle
+              checked={isDark}
+              textLabelOn={"Dark mode"}
+              textLabelOff={"Light mode"}
+            />
+          </div>
           {isLoggedIn ? (
             <Dropdown alignRight className="profile">
               <Dropdown.Toggle className="u-lineHeightNone">
                 <div>
                   <Avatar
-                    className="u-backgroundPrimaryLight u-text200"
+                    className="u-backgroundPrimaryLight u-text400"
                     text={user.info?.name[0].toUpperCase()}
+                    size="medium"
                   />
                 </div>
               </Dropdown.Toggle>
               <Dropdown.Container className="u-paddingVerticalExtraSmall">
-                <Dropdown.Item className="u-paddingTopExtraSmall u-paddingBottomExtraSmall">
-                  <Toggle
-                    className="u-marginRightSmall"
-                    checked={isDark}
-                    onClick={() => setIsDark(!isDark)}
-                    textLabelOn={"Dark mode"}
-                    textLabelOff={"Light mode"}
-                  />
-                </Dropdown.Item>
-                <Dropdown.Item className="u-paddingTopExtraSmall u-paddingBottomExtraSmall">
-                  <div
-                    data-testid="signOutButton"
-                    onClick={() => handleSignOut()}
-                  >
-                    <Icon
-                      name="power"
-                      size="small"
-                      className="u-textNegative"
-                    />
-                    <span className="u-marginLeftExtraSmall u-textNegative">
-                      Sign out
-                    </span>
-                  </div>
+                <div className="u-paddingHorizontalSmall u-paddingVerticalMedium u-flex u-justifyContentCenter">
+                  {greeting(user.info?.name)}
+                </div>
+                <Dropdown.Item
+                  className="u-paddingVerticalExtraSmall"
+                  data-testid="signOutButton"
+                  onClick={() => handleSignOut()}
+                >
+                  <Icon name="power" size="small" className="u-textNegative" />
+                  <span className="u-marginLeftExtraSmall u-textNegative">
+                    Sign out
+                  </span>
                 </Dropdown.Item>
               </Dropdown.Container>
             </Dropdown>

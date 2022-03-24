@@ -6,6 +6,12 @@
   padding: 0px 24px;
 }
 
-.Dropdown-item {
+.left,
+.right {
+  display: flex;
+}
+
+.Dropdown-item,
+.setDarkModeButton {
   cursor: pointer;
 }

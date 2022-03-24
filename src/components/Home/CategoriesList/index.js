@@ -79,7 +79,6 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
             data-testid="createCategoryButton"
           />
         </Link>
-
         {categoriesList.length && (
           <ul>
             {categoriesList.map((category) => (
