@@ -27,7 +27,7 @@ const ItemsList = ({ categoryId }) => {
   // Clear search param
   useEffect(() => {
     if (page === 0) {
-      // Not valid param
+      // Navigate to default url
       navigate(`/categories/${categoryId}`, { replace: true });
     }
   });

@@ -30,7 +30,7 @@ const CategoriesList = () => {
   // Clear search param
   useEffect(() => {
     if (page === 0) {
-      // Not valid param
+      // Navigate to default url
       navigate("/category");
     }
   });
@@ -69,8 +69,9 @@ const CategoriesList = () => {
 
 const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
   return (
-    <div class="categoriesList">
-      <div class="categoriesListWrapper">
+    <div className="categoriesList container">
+      <div className="categoriesListWrapper">
+        <h2>The best topic for you</h2>
         <PaginationItem {...categoryPagination}></PaginationItem>
         <Link to={`/categories/add`}>
           <Icon

@@ -91,7 +91,7 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
   // Return view
   return (
     <div className="navbar u-shadowSmall">
-      <div className="navbarWrapper">
+      <div className="navbarWrapper container">
         <div className="left Brown500 u-flex u-alignItemsCenter">
           <span className="u-fontBold u-text500">PHOTOAPP</span>
         </div>

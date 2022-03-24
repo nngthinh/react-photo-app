@@ -1,7 +1,9 @@
 .categoriesList {
+  margin-top: 32px;
 }
 
 .categoriesListWrapper {
+  margin: 32px 0px;
 }
 
 a {
