@@ -8,6 +8,7 @@ import { clearModalAction, showModalAction } from "actions/modal";
 
 const ItemDetail = () => {
   const { categoryId, itemId } = useParams();
+  const userInfo = useSelector((state) => state.user.info);
   const itemDetail = useSelector((state) => state.items.detail);
   const dispatch = useDispatch();
   const dispatchShowModal = (content, props) =>
@@ -30,6 +31,7 @@ const ItemDetail = () => {
 
   return (
     <ItemDetailView
+      userInfo={userInfo}
       categoryId={categoryId}
       itemId={itemId}
       itemDetail={itemDetail}
@@ -41,6 +43,7 @@ const ItemDetail = () => {
 };
 
 const ItemDetailView = ({
+  userInfo,
   categoryId,
   itemId,
   itemDetail,
@@ -48,7 +51,7 @@ const ItemDetailView = ({
   onShowModal,
   onClearModal,
 }) => {
-  const { description, imageUrl } = itemDetail;
+  const { description, imageUrl, author } = itemDetail;
 
   const navigate = useNavigate();
 
@@ -94,12 +97,18 @@ const ItemDetailView = ({
         <div className="itemDetailWrapper">
           <div>{description}</div>
           <img src={imageUrl} alt={description} />
-          <Link to={`/categories/${categoryId}/items/${itemId}/edit`}>
-            <Icon size="small" name="edit" />
-          </Link>
-          <button onClick={() => handleDeleteItem()}>
-            <Icon size="medium" name="trash" />
-          </button>
+          {userInfo?.id === author?.id ? (
+            <>
+              <Link to={`/categories/${categoryId}/items/${itemId}/edit`}>
+                <Icon size="small" name="edit" />
+              </Link>
+              <button onClick={() => handleDeleteItem()}>
+                <Icon size="medium" name="trash" />
+              </button>
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </>
