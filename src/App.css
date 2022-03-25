@@ -2,15 +2,20 @@ body {
   color: #000000;
 }
 
-.container {
-  padding: 0px 16px;
-}
-
+/* Remove unnecessary decoration*/
 a:link,
 a:visited,
 a:hover,
 a:active {
   text-decoration: none;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.container {
+  padding: 0px 20px;
 }
 
 /* Extra small devices (portrait phones, less than 576px) */

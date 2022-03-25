@@ -5,7 +5,7 @@ import { notifyNegative } from "components/Common/Toast";
 import { viewCategoriesListAction } from "actions/categories";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { limitCategories } from "constants/pagination";
-import { Icon } from "@ahaui/react";
+import { Icon, Skeleton } from "@ahaui/react";
 import "./index.css";
 
 const CategoriesList = () => {
@@ -55,15 +55,13 @@ const CategoriesList = () => {
   }, [dispatch, page]);
 
   return (
-    page > 0 && (
-      <CategoriesListView
-        categoryPagination={{
-          maxIndex: categoriesPaginationTotal ?? 0,
-          currentIndex: page,
-        }}
-        categoriesList={categoriesList}
-      />
-    )
+    <CategoriesListView
+      categoryPagination={{
+        maxIndex: categoriesPaginationTotal ?? 0,
+        currentIndex: page,
+      }}
+      categoriesList={categoriesList}
+    />
   );
 };
 
@@ -71,28 +69,57 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
   return (
     <div className="categoriesList container">
       <div className="categoriesListWrapper ">
-        <h1 className="u-text1200 u-textCenter u-marginBottomLarge">Topics</h1>
-        <PaginationItem {...categoryPagination}></PaginationItem>
-        <Link to={`/categories/add`}>
+        <h1 className="u-text1200 u-textCenter">Topics</h1>
+        <div className="u-text500 u-textCenter u-marginBottomExtraLarge">
+          What's your favorite one today?
+        </div>
+        <Link className="createCategory" to={`/categories/add`}>
           <Icon
             size="medium"
             name="create"
             data-testid="createCategoryButton"
           />
         </Link>
-        {categoriesList.length && (
-          <ul className="categoriesListSection">
-            {categoriesList.map((category) => (
-              <li key={category.id} className="u-shadowMedium">
-                <Link to={`/categories/${category.id}`}>
-                  <img src={category.imageUrl} alt={category.name} />
-                  <h5>{category.name}</h5>
-                  <div>{category.description}</div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
+
+        <div className="Grid categoriesListSection u-marginTopMedium">
+          {categoriesList.length
+            ? categoriesList.map((category) => (
+                <div
+                  key={category.id}
+                  className="categoriesListItem u-sizeFull md:u-size4of12 lg:u-size3of12 u-marginBottomLarge "
+                >
+                  <Link to={`/categories/${category.id}`}>
+                    <img
+                      src={category.imageUrl}
+                      alt={category.name}
+                      className="u-widthFull u-marginBottomSmall"
+                    />
+                    <div className="u-fontBold u-textCenter">
+                      {category.name}
+                    </div>
+                    <div className="u-textCenter u-textGray">
+                      {category.description}
+                    </div>
+                  </Link>
+                </div>
+              ))
+            : [...Array(limitCategories).keys()].map((id) => (
+                <div
+                  key={id}
+                  className="categoriesListItem u-sizeFull md:u-size4of12 lg:u-size3of12 u-marginBottomLarge "
+                >
+                  <div className="categoryImg u-marginBottomSmall">
+                    <Skeleton width="100%" height="100%"></Skeleton>
+                  </div>
+
+                  <Skeleton width="60%"></Skeleton>
+                  <Skeleton></Skeleton>
+                </div>
+              ))}
+        </div>
+        <div className="u-marginVerticalExtraLarge">
+          <PaginationItem {...categoryPagination}></PaginationItem>
+        </div>
       </div>
     </div>
   );

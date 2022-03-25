@@ -93,11 +93,14 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
     <div className="navbar u-shadowSmall">
       <div className="navbarWrapper container">
         <div className="left Brown500 u-flex u-alignItemsCenter">
-          <span className="u-fontBold u-text300">PHOTOAPP</span>
+          <span className="u-fontBold u-text400">PhotoApp</span>
         </div>
-        <div className="right">
+        <div className="right u-flex u-alignItemsCenter ">
+          <div className="u-marginRightSmall">
+            {isLoggedIn ? greeting(user.info?.name) : "Welcome to PhotoApp!"}
+          </div>
           <Dropdown alignRight className="profile">
-            <Dropdown.Toggle className="u-lineHeightNone">
+            <Dropdown.Toggle className="u-lineHeightNone" data-testid="avatar">
               <div>
                 {isLoggedIn ? (
                   <Avatar
@@ -110,12 +113,7 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
                 )}
               </div>
             </Dropdown.Toggle>
-            <Dropdown.Container className="u-paddingVerticalExtraSmall">
-              <div className="u-paddingHorizontalSmall u-paddingVerticalExtraLarge u-flex u-justifyContentCenter">
-                {isLoggedIn
-                  ? greeting(user.info?.name)
-                  : "Welcome to PhotoApp!"}
-              </div>
+            <Dropdown.Container className="u-paddingVerticalExtraSmall u-marginTopExtraSmall">
               {/* <Separator variant="lighter" /> */}
               <Dropdown.Item
                 data-testid="setDarkModeButton"
