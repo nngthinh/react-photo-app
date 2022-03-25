@@ -3,7 +3,7 @@ import { limitItemsPagination } from "constants/limit";
 
 const initialState = {
   pagination: {},
-  list: [],
+  list: null,
   detail: {},
 };
 

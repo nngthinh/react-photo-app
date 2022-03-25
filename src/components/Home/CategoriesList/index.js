@@ -100,7 +100,7 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
           </div>
         </div>
         <div className="Grid categoriesListSection u-marginBottomLarge">
-          {categoriesList.length
+          {categoriesList
             ? categoriesList.map((category) => (
                 <div
                   key={category.id}

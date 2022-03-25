@@ -97,7 +97,7 @@ const ItemsListView = ({
           <PaginationItem {...itemsPagination}></PaginationItem>
         </div>
       </div>
-      {itemsList.length ? (
+      {itemsList ? (
         <div className="u-flex u-flexColumn u-alignItemsStart itemsListSection">
           {itemsList.map((item) => (
             <div
