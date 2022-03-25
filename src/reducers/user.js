@@ -4,7 +4,6 @@ const initialState = {
   isLoggedIn: false,
   token: null,
   info: null,
-  laterUrl: null,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -34,15 +33,6 @@ const userReducer = (state = initialState, action) => {
     }
     case KUserActions.CLEAN_USER_INFO: {
       return { ...initialState };
-    }
-    case KUserActions.SET_URL_AFTER_LOGGED_IN: {
-      return {
-        ...state,
-        laterUrl: action.laterUrl,
-      };
-    }
-    case KUserActions.REMOVE_URL_AFTER_LOGGED_IN: {
-      return { ...state, laterUrl: null };
     }
     default:
       return state;

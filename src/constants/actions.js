@@ -16,8 +16,6 @@ class KUserActions {
   static GET_USER_INFO_FAILED = "GET_USER_INFO_FAILED";
 
   static CLEAN_USER_INFO = "REFRESH";
-  static SET_URL_AFTER_LOGGED_IN = "SET_LATER_URL";
-  static REMOVE_URL_AFTER_LOGGED_IN = "REMOVE_LATER_URL";
 }
 
 class KCategoriesAction {
