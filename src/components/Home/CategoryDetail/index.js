@@ -45,35 +45,58 @@ const CategoryDetailView = ({ categoryId, categoryDetail }) => {
       <div className="categoryDetail container">
         <div className="categoryDetailWrapper">
           <div className="u-marginBottomMedium">
-            <BreadcrumbItem
-              items={[
-                {
-                  id: 1,
-                  name: "Home",
-                  link: "./",
-                },
-                { id: 2, name, link: "./" },
-              ]}
-            ></BreadcrumbItem>
+            {name ? (
+              <BreadcrumbItem
+                items={[
+                  {
+                    id: 1,
+                    name: "Home",
+                    link: "./",
+                  },
+                  { id: 2, name, link: "./" },
+                ]}
+              ></BreadcrumbItem>
+            ) : (
+              <Skeleton width="200px"></Skeleton>
+            )}
           </div>
           <div className="Grid u-alignItemsStart u-marginBottomMedium">
             <div className="u-sizeFull sm:u-sizeFull md:u-size4of12 lg:u-size4of12 u-marginBottomMedium">
-              <img className="categoryImg" src={imageUrl} alt={name} />
+              {imageUrl ? (
+                <img className="categoryImg" src={imageUrl} alt={name} />
+              ) : (
+                <div className="categoryImg">
+                  <Skeleton width="100%" height="100%"></Skeleton>
+                </div>
+              )}
             </div>
             <div className="u-flex u-flexColumn u-sizeFull sm:u-sizeFull md:u-size8of12">
-              <h1 className="u-textLeft">{name}</h1>
-              <div className="u-textleft">{description}</div>
-              <div className="u-marginTopMedium ">
-                <ButtonItem
-                  size="medium"
-                  width="auto"
-                  value="Edit"
-                  variant="accent"
-                  icon="edit"
-                  sizeIcon="small"
-                  onClick={() => navigateEditCategory(categoryId)}
-                ></ButtonItem>
-              </div>
+              {name ? (
+                <>
+                  <h1 className="u-textLeft">{name}</h1>
+                  <div className="u-textleft">{description}</div>
+                  <div className="u-marginTopMedium ">
+                    <ButtonItem
+                      size="medium"
+                      width="auto"
+                      value="Edit"
+                      variant="accent"
+                      icon="edit"
+                      sizeIcon="small"
+                      onClick={() => navigateEditCategory(categoryId)}
+                    ></ButtonItem>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="u-marginBottomMedium">
+                    <Skeleton width="200px" height="44px"></Skeleton>
+                  </div>
+                  <Skeleton width="80%"></Skeleton>
+                  <Skeleton width="100%"></Skeleton>
+                  <Skeleton width="50%"></Skeleton>
+                </>
+              )}
             </div>
           </div>
           <div>

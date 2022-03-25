@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { shortenContent } from "utils/helpers/content";
+import { Skeleton } from "@ahaui/react";
 import "./index.css";
 
 const ItemsList = ({ categoryId }) => {
@@ -145,7 +146,25 @@ const ItemsListView = ({
           ))}
         </div>
       ) : (
-        <></>
+        [...Array(limitItemsPagination).keys()].map((id) => (
+          <div
+            key={id}
+            className="u-flex u-alignItemsCenter u-justifyContentBetween u-sizeFull u-marginBottomSmall"
+          >
+            <div className="u-flex u-alignItemsCenter u-justifyContentStart u-sizeFull">
+              <div className="itemImg u-marginRightSmall">
+                <Skeleton width="100%" height="100%"></Skeleton>
+              </div>
+              <div className="u-flex u-flexColumn u-marginRightSmall u-flexGrow1">
+                <Skeleton width="80%"></Skeleton>
+                <Skeleton width="100%"></Skeleton>
+                <div className="u-marginTopSmall">
+                  <Skeleton width="20%"></Skeleton>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))
       )}
     </div>
   );
