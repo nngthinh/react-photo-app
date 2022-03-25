@@ -1,4 +1,4 @@
-import { Button } from "@ahaui/react";
+import { Button, Icon } from "@ahaui/react";
 
 const ButtonItem = ({
   value,
@@ -6,19 +6,36 @@ const ButtonItem = ({
   size = "large",
   width = "full",
   disabled = false,
+  icon,
+  sizeIcon,
   ...rest
 } = {}) => {
   return (
     <div className="buttonItem">
-      <Button
-        variant={variant}
-        size={size}
-        width={width}
-        disabled={disabled}
-        {...rest}
-      >
-        {value}
-      </Button>
+      {icon ? (
+        <Button
+          variant={variant}
+          size={size}
+          width={width}
+          disabled={disabled}
+          {...rest}
+        >
+          <Button.Icon>
+            <Icon size={sizeIcon ?? size} name={icon} />
+          </Button.Icon>
+          <Button.Label>{value}</Button.Label>
+        </Button>
+      ) : (
+        <Button
+          variant={variant}
+          size={size}
+          width={width}
+          disabled={disabled}
+          {...rest}
+        >
+          {value}
+        </Button>
+      )}
     </div>
   );
 };

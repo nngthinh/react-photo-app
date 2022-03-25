@@ -10,7 +10,7 @@ const BreadcrumbItem = ({ items }) => {
 const BreadcrumbItemView = ({ items }) => {
   return (
     <Breadcrumb>
-      {items.map(([id, name, link]) => (
+      {items.map(({ id, name, link }) => (
         <Breadcrumb.Item key={id} href={link}>
           {name}
         </Breadcrumb.Item>

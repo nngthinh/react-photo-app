@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { viewCategoryAction } from "actions/categories";
 import { notifyNegative } from "components/Common/Toast";
-import { Icon } from "@ahaui/react";
-import ItemsList from "../ItemsList";
+import { Icon, Skeleton, Separator } from "@ahaui/react";
+import "./index.css";
+import ItemsList from "components/Home/ItemsList";
+import { BreadcrumbItem, ButtonItem } from "components/Common/Items";
 
 const CategoryDetail = () => {
   const { categoryId } = useParams();
@@ -33,19 +35,60 @@ const CategoryDetail = () => {
 
 const CategoryDetailView = ({ categoryId, categoryDetail }) => {
   const { name, description, imageUrl } = categoryDetail;
+  const navigate = useNavigate();
+  const navigateEditCategory = (categoryId) => {
+    navigate(`/categories/${categoryId}/edit`);
+  };
+
   return (
     <>
-      <div className="categoryDetail">
+      <div className="categoryDetail container">
         <div className="categoryDetailWrapper">
-          <h1>{name}</h1>
-          <div>{description}</div>
-          <img src={imageUrl} alt={name} />
-
-          <Link to={`/categories/${categoryId}/edit`}>
-            <Icon size="small" name="edit" />
-          </Link>
-
-          <ItemsList categoryId={categoryId}></ItemsList>
+          <div className="u-marginBottomMedium">
+            <BreadcrumbItem
+              items={[
+                {
+                  id: 1,
+                  name: "Home",
+                  link: "./",
+                },
+                { id: 2, name, link: "./" },
+              ]}
+            ></BreadcrumbItem>
+          </div>
+          <div className="Grid u-alignItemsStart u-marginBottomMedium">
+            <div className="u-sizeFull sm:u-sizeFull md:u-size4of12 lg:u-size4of12 u-marginBottomMedium">
+              <img className="categoryImg" src={imageUrl} alt={name} />
+            </div>
+            <div className="u-flex u-flexColumn u-sizeFull sm:u-sizeFull md:u-size8of12">
+              <h1 className="u-textLeft">{name}</h1>
+              <div className="u-textleft">{description}</div>
+              <div className="u-marginTopMedium ">
+                <ButtonItem
+                  size="medium"
+                  width="auto"
+                  value="Edit"
+                  variant="accent"
+                  icon="edit"
+                  sizeIcon="small"
+                  onClick={() => navigateEditCategory(categoryId)}
+                ></ButtonItem>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="Grid ">
+              <div className="u-sizeFull sm:u-size2of12"></div>
+              <div className="u-sizeFull sm:u-size8of12">
+                <div className="u-textCenter u-marginBottomMedium">
+                  Let's explore!
+                </div>
+                <Separator variant="lighter"></Separator>
+                <ItemsList categoryId={categoryId}></ItemsList>
+              </div>
+              <div className="u-sizeFull sm:u-size2of12"></div>
+            </div>
+          </div>
         </div>
       </div>
     </>

@@ -94,7 +94,7 @@ const PaginationItem = ({
   );
 
   return (
-    <div className="u-flex u-justifyContentCenter u-alignItemsCenter">
+    <div className="">
       <Pagination className="paginationItem" sizeControl={size}>
         {generateHeadPagination()}
         {generateMiddlePagination()}

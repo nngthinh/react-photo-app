@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { PaginationItem } from "components/Common/Items";
+import { ButtonItem, PaginationItem } from "components/Common/Items";
 import { notifyNegative } from "components/Common/Toast";
 import { viewCategoriesListAction } from "actions/categories";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { limitCategories } from "constants/pagination";
-import { Icon, Skeleton } from "@ahaui/react";
+import { Icon, Skeleton, Separator } from "@ahaui/react";
 import "./index.css";
 
 const CategoriesList = () => {
@@ -66,27 +66,41 @@ const CategoriesList = () => {
 };
 
 const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
+  const navigate = useNavigate();
+  const navigateCreateCategory = () => {
+    navigate("/categories/add");
+  };
+
   return (
     <div className="categoriesList container">
       <div className="categoriesListWrapper ">
-        <h1 className="u-textCenter">Topics</h1>
-        <div className=" u-textCenter u-marginBottomExtraLarge">
-          What's your favorite one today?
+        <div className="u-marginBottomExtraLarge">
+          <h1 className="u-textCenter">Topics</h1>
+          <div className=" u-textCenter">What's your favorite one today?</div>
         </div>
-        <Link className="createCategory" to={`/categories/add`}>
-          <Icon
-            size="medium"
-            name="create"
-            data-testid="createCategoryButton"
-          />
-        </Link>
-
-        <div className="Grid categoriesListSection u-marginTopMedium">
+        <Separator variant="lighter"></Separator>
+        <div className="u-flex u-justifyContentBetween u-alignItemsCenter">
+          <div className="createCategoryButton">
+            <ButtonItem
+              size="small"
+              width="auto"
+              value="New category"
+              variant="primary_outline"
+              icon="plus"
+              sizeIcon="extraSmall"
+              onClick={() => navigateCreateCategory()}
+            ></ButtonItem>
+          </div>
+          <div className="u-marginVerticalMedium">
+            <PaginationItem {...categoryPagination}></PaginationItem>
+          </div>
+        </div>
+        <div className="Grid categoriesListSection u-marginBottomLarge">
           {categoriesList.length
             ? categoriesList.map((category) => (
                 <div
                   key={category.id}
-                  className="categoriesListItem u-sizeFull md:u-size4of12 lg:u-size3of12 u-marginBottomLarge "
+                  className="categoriesListItem u-sizeFull md:u-size4of12 lg:u-size3of12 u-marginBottomLarge u-paddingVerticalSmall"
                 >
                   <Link to={`/categories/${category.id}`}>
                     <img
@@ -95,10 +109,8 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
                       src={category.imageUrl}
                       alt={category.name}
                     />
-                    <div className="u-fontBold u-textCenter">
-                      {category.name}
-                    </div>
-                    <div className="u-textCenter u-textGray">
+                    <div className="u-fontBold u-textLeft">{category.name}</div>
+                    <div className="u-textLeft u-textGray">
                       {category.description}
                     </div>
                   </Link>
@@ -116,9 +128,6 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
                   <Skeleton></Skeleton>
                 </div>
               ))}
-        </div>
-        <div className="u-marginVerticalExtraLarge">
-          <PaginationItem {...categoryPagination}></PaginationItem>
         </div>
       </div>
     </div>

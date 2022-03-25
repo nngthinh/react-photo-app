@@ -1,19 +1,11 @@
 .categoriesList {
-  margin-top: 32px;
+  margin-top: 64px;
 }
 
 .categoriesListWrapper {
-  position: relative;
-  margin-top: 64px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-.categoriesListWrapper .createCategory {
-  position: absolute;
-  top: 0;
-  right: 0;
 }
 
 .categoriesListSection a {
@@ -22,15 +14,27 @@
   color: #000000;
 }
 
-.categoriesListSection li {
+/* .categoriesListSection li {
   border-radius: 10px;
 }
 
 .categoriesListSection img {
   border-radius: 8px;
-}
+} */
 
 .categoryImg {
   width: 100%;
   aspect-ratio: 1;
+}
+
+/* .createCategoryButton {
+  position: absolute;
+  top: 24px;
+  right: 0px;
+} */
+
+.categoriesListItem:hover {
+  transform: translate(0px, -5px);
+  transition: 0.1s ease-out;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
