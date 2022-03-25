@@ -1,10 +1,11 @@
 import { viewItemsListAction } from "actions/items";
 import { ButtonItem, PaginationItem } from "components/Common/Items";
 import { notifyNegative } from "components/Common/Toast";
-import { limitItems } from "constants/pagination";
+import { limitItemDesc, limitItemsPagination } from "constants/limit";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { shortenContent } from "utils/helpers/content";
 import "./index.css";
 
 const ItemsList = ({ categoryId }) => {
@@ -34,7 +35,10 @@ const ItemsList = ({ categoryId }) => {
 
   useEffect(() => {
     const viewItemsList = async () => {
-      const [offset, limit] = [limitItems * (page - 1), limitItems];
+      const [offset, limit] = [
+        limitItemsPagination * (page - 1),
+        limitItemsPagination,
+      ];
       const viewItemsListResult = await dispatch(
         viewItemsListAction(categoryId, offset, limit)
       );
@@ -47,18 +51,18 @@ const ItemsList = ({ categoryId }) => {
     }
   }, [categoryId, dispatch, page]);
 
-  return (
-    page > 0 && (
-      <ItemsListView
-        categoryId={categoryId}
-        itemsList={itemsList}
-        itemsPagination={{
-          maxIndex: itemsPaginationTotal ?? 0,
-          currentIndex: page,
-        }}
-        userInfo={userInfo}
-      ></ItemsListView>
-    )
+  return page > 0 ? (
+    <ItemsListView
+      categoryId={categoryId}
+      itemsList={itemsList}
+      itemsPagination={{
+        maxIndex: itemsPaginationTotal ?? 0,
+        currentIndex: page,
+      }}
+      userInfo={userInfo}
+    ></ItemsListView>
+  ) : (
+    <></>
   );
 };
 
@@ -92,7 +96,7 @@ const ItemsListView = ({
           <PaginationItem {...itemsPagination}></PaginationItem>
         </div>
       </div>
-      {itemsList.length && (
+      {itemsList.length ? (
         <div className="u-flex u-flexColumn u-alignItemsStart itemsListSection">
           {itemsList.map((item) => (
             <div
@@ -109,8 +113,10 @@ const ItemsListView = ({
                   src={item.imageUrl}
                   alt={item.name}
                 />
-                <div className="u-flex u-flexColumn">
-                  <div>{item.description}</div>
+                <div className="u-flex u-flexColumn u-marginRightSmall">
+                  <div className="u-text200">
+                    {shortenContent(item.description, limitItemDesc)}
+                  </div>
                   <div className="u-marginTopSmall">
                     {userInfo?.id === item.author.id ? (
                       <div className="u-textAccent u-text200">By you</div>
@@ -120,7 +126,7 @@ const ItemsListView = ({
                   </div>
                 </div>
               </Link>
-              {userInfo?.id === item.author.id && (
+              {userInfo?.id === item.author.id ? (
                 <div>
                   <ButtonItem
                     size="small"
@@ -132,10 +138,14 @@ const ItemsListView = ({
                     onClick={() => navigateEditItem(categoryId, item.id)}
                   ></ButtonItem>
                 </div>
+              ) : (
+                <></>
               )}
             </div>
           ))}
         </div>
+      ) : (
+        <></>
       )}
     </div>
   );

@@ -4,9 +4,10 @@ import { ButtonItem, PaginationItem } from "components/Common/Items";
 import { notifyNegative } from "components/Common/Toast";
 import { viewCategoriesListAction } from "actions/categories";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { limitCategories } from "constants/pagination";
-import { Icon, Skeleton, Separator } from "@ahaui/react";
+import { limitCategoriesPagination, limitCategoryDesc } from "constants/limit";
+import { Skeleton, Separator } from "@ahaui/react";
 import "./index.css";
+import { shortenContent } from "utils/helpers/content";
 
 const CategoriesList = () => {
   const categoriesPaginationTotal = useSelector(
@@ -39,7 +40,10 @@ const CategoriesList = () => {
   useEffect(() => {
     // Get from server
     const getCategoriesList = async () => {
-      const [offset, limit] = [limitCategories * (page - 1), limitCategories];
+      const [offset, limit] = [
+        limitCategoriesPagination * (page - 1),
+        limitCategoriesPagination,
+      ];
       const viewCategoriesListResult = await dispatch(
         viewCategoriesListAction(offset, limit)
       );
@@ -111,12 +115,12 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
                     />
                     <div className="u-fontBold u-textLeft">{category.name}</div>
                     <div className="u-textLeft u-textGray">
-                      {category.description}
+                      {shortenContent(category.description, limitCategoryDesc)}
                     </div>
                   </Link>
                 </div>
               ))
-            : [...Array(limitCategories).keys()].map((id) => (
+            : [...Array(limitCategoriesPagination).keys()].map((id) => (
                 <div
                   key={id}
                   className="categoriesListItem u-sizeFull md:u-size4of12 lg:u-size3of12 u-marginBottomLarge "

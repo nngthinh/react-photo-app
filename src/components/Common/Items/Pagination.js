@@ -43,41 +43,43 @@ const PaginationItem = ({
       indexesArr.push(i);
     }
 
-    return (
-      isValid && (
-        <>
-          {
-            <Pagination.Item
-              onClick={() => setSearchParams({ page: minIndex })}
-              active={currentIndex === minIndex}
-              data-testid={`${minIndex}-tail`}
-            >
-              {minIndex}
-            </Pagination.Item>
-          }
-          {_lower - 1 > minIndex && <Pagination.Ellipsis />}
-          {indexesArr.map((index) => (
-            <Pagination.Item
-              onClick={() => setSearchParams({ page: index })}
-              active={index === currentIndex}
-              key={index}
-              data-testid={`${index}-middle`}
-            >
-              {index}
-            </Pagination.Item>
-          ))}
-          {_upper + 1 < maxIndex && <Pagination.Ellipsis />}
-          {minIndex !== maxIndex && (
-            <Pagination.Item
-              onClick={() => setSearchParams({ page: maxIndex })}
-              active={currentIndex === maxIndex}
-              data-testid={`${maxIndex}-tail`}
-            >
-              {maxIndex}
-            </Pagination.Item>
-          )}
-        </>
-      )
+    return isValid ? (
+      <>
+        {
+          <Pagination.Item
+            onClick={() => setSearchParams({ page: minIndex })}
+            active={currentIndex === minIndex}
+            data-testid={`${minIndex}-tail`}
+          >
+            {minIndex}
+          </Pagination.Item>
+        }
+        {_lower - 1 > minIndex && <Pagination.Ellipsis />}
+        {indexesArr.map((index) => (
+          <Pagination.Item
+            onClick={() => setSearchParams({ page: index })}
+            active={index === currentIndex}
+            key={index}
+            data-testid={`${index}-middle`}
+          >
+            {index}
+          </Pagination.Item>
+        ))}
+        {_upper + 1 < maxIndex && <Pagination.Ellipsis />}
+        {minIndex !== maxIndex ? (
+          <Pagination.Item
+            onClick={() => setSearchParams({ page: maxIndex })}
+            active={currentIndex === maxIndex}
+            data-testid={`${maxIndex}-tail`}
+          >
+            {maxIndex}
+          </Pagination.Item>
+        ) : (
+          <></>
+        )}
+      </>
+    ) : (
+      <></>
     );
   };
 

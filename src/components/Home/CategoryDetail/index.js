@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { viewCategoryAction } from "actions/categories";
 import { notifyNegative } from "components/Common/Toast";
@@ -78,8 +78,8 @@ const CategoryDetailView = ({ categoryId, categoryDetail }) => {
           </div>
           <div>
             <div className="Grid ">
-              <div className="u-sizeFull sm:u-size2of12"></div>
-              <div className="u-sizeFull sm:u-size8of12">
+              <div className="u-sizeFull md:u-size2of12"></div>
+              <div className="u-sizeFull md:u-size8of12">
                 <div className="u-textCenter u-marginBottomMedium">
                   Let's explore!
                 </div>
