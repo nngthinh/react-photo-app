@@ -15,6 +15,7 @@ import {
   updateItemAction,
 } from "actions/items";
 import base64 from "base-64";
+import "./index.css";
 
 const ItemAction = ({ type }) => {
   const { categoryId, itemId } = useParams();
@@ -216,7 +217,7 @@ const CategoryActionView = ({
   };
 
   return (
-    <div className="itemAction">
+    <div className="itemAction container">
       <div className="itemActionWrapper">
         <h1 className="u-marginBottomExtraLarge">
           {type === "add" ? "Create new item" : "Edit item"}
@@ -260,6 +261,7 @@ const CategoryActionView = ({
             data-testid="itemActionButton"
             className="u-marginBottomTiny"
             value={type === "add" ? "Create item" : "Update item"}
+            variant={type === "add" ? "primary" : "accent"}
             type="submit"
             form="itemActionForm"
           ></ButtonItem>

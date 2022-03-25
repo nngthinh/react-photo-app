@@ -299,6 +299,7 @@ const CategoryActionView = ({
             data-testid="categoryActionButton"
             className="u-marginBottomTiny"
             value={type === "add" ? "Create category" : "Update category"}
+            variant={type === "add" ? "primary" : "accent"}
             type="submit"
             form="categoryActionForm"
           ></ButtonItem>
