@@ -69,8 +69,8 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
   return (
     <div className="categoriesList container">
       <div className="categoriesListWrapper ">
-        <h1 className="u-text1200 u-textCenter">Topics</h1>
-        <div className="u-text500 u-textCenter u-marginBottomExtraLarge">
+        <h1 className="u-textCenter">Topics</h1>
+        <div className=" u-textCenter u-marginBottomExtraLarge">
           What's your favorite one today?
         </div>
         <Link className="createCategory" to={`/categories/add`}>
@@ -90,9 +90,10 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
                 >
                   <Link to={`/categories/${category.id}`}>
                     <img
+                      className="categoryImg u-marginBottomSmall"
+                      width="100%"
                       src={category.imageUrl}
                       alt={category.name}
-                      className="u-widthFull u-marginBottomSmall"
                     />
                     <div className="u-fontBold u-textCenter">
                       {category.name}
@@ -111,7 +112,6 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
                   <div className="categoryImg u-marginBottomSmall">
                     <Skeleton width="100%" height="100%"></Skeleton>
                   </div>
-
                   <Skeleton width="60%"></Skeleton>
                   <Skeleton></Skeleton>
                 </div>

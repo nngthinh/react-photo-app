@@ -140,8 +140,8 @@ const SignUpView = ({ onSignUp, onAutoSignIn }) => {
     <div className="signUp">
       <div className="signUpWrapper u-marginTopExtraLarge">
         <h1 className="u-marginBottomExtraLarge">Create new account</h1>
-        <form id="signUpForm" onSubmit={handleSubmit}>
-          <div className="inputSecion u-marginBottomLarge">
+        <div className="inputSecion u-marginBottomLarge">
+          <form id="signUpForm" onSubmit={handleSubmit}>
             <InputItem
               data-testid="name"
               className="u-marginBottomExtraSmall"
@@ -178,8 +178,8 @@ const SignUpView = ({ onSignUp, onAutoSignIn }) => {
               handleOnBlur={(e) => setPassword({ type: "ON_VALIDATE" })}
               error={password.error}
             ></InputItem>
-          </div>
-        </form>
+          </form>
+        </div>
         <div className="buttonSection">
           <ButtonItem
             data-testid="signUpButton"

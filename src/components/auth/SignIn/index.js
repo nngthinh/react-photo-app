@@ -93,8 +93,8 @@ const SignInView = ({ onSignIn }) => {
     <div className="signIn">
       <div className="signInWrapper u-marginTopExtraLarge">
         <h1 className="u-marginBottomExtraLarge">Sign in</h1>
-        <form id="signInForm" onSubmit={handleSubmit}>
-          <div className="inputSecion u-marginBottomLarge">
+        <div className="inputSecion u-marginBottomLarge">
+          <form id="signInForm" onSubmit={handleSubmit}>
             <InputItem
               data-testid="email"
               className="u-marginBottomExtraSmall"
@@ -119,8 +119,8 @@ const SignInView = ({ onSignIn }) => {
               handleOnBlur={(e) => setPassword({ type: "ON_VALIDATE" })}
               error={password.error}
             ></InputItem>
-          </div>
-        </form>
+          </form>
+        </div>
         <div className="buttonSection">
           <ButtonItem
             data-testid="signInButton"

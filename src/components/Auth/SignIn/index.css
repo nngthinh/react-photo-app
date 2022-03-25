@@ -4,6 +4,7 @@
 }
 
 .signInWrapper {
-  width: 400px;
-  padding-top: 64px;
+  max-width: 480px;
+  width: 100%;
+  padding: 64px 20px;
 }
