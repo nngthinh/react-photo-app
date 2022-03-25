@@ -140,18 +140,32 @@ const ItemDetailView = ({
 
           <div className="u-flex u-flexColumn u-alignItemsCenter u-marginBottomExtraLarge">
             <div className="u-sizeFull sm:u-sizeFull md:u-size4of12 lg:u-size4of12 u-marginBottomMedium">
-              <img
-                className="itemDetailImg"
-                width="100%"
-                src={imageUrl}
-                alt={description}
-              />
+              {imageUrl ? (
+                <img
+                  className="itemDetailImg"
+                  src={imageUrl}
+                  alt={description}
+                />
+              ) : (
+                <div className="itemDetailImg">
+                  <Skeleton width="100%" height="100%"></Skeleton>
+                </div>
+              )}
             </div>
-            <div className="u-marginBottomMedium">
-              <div className="u-textCenter">{description}</div>
+            <div className="u-sizeFull u-marginBottomLarge">
+              {description ? (
+                <div className="u-textCenter">{description}</div>
+              ) : (
+                <div className="u-flex u-alignItemsCenter u-flexColumn">
+                  <Skeleton width="80%"></Skeleton>
+                  <Skeleton width="100%"></Skeleton>
+                  <Skeleton width="60%"></Skeleton>
+                </div>
+              )}
             </div>
-            <div>
-              {userInfo?.id === author?.id ? (
+
+            {author ? (
+              userInfo?.id === author?.id ? (
                 <div className="u-flex">
                   <div className="u-marginRightExtraSmall">
                     <ButtonItem
@@ -178,8 +192,12 @@ const ItemDetailView = ({
                 </div>
               ) : (
                 <div className="u-textGray u-textCenter">By {author?.name}</div>
-              )}
-            </div>
+              )
+            ) : (
+              <div className="u-sizeFull u-flex u-justifyContentCenter">
+                <Skeleton width="20%"></Skeleton>
+              </div>
+            )}
           </div>
         </div>
       </div>
