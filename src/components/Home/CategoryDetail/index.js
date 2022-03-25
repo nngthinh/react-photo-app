@@ -17,9 +17,11 @@ const CategoryDetail = () => {
   useEffect(() => {
     const viewCategoryDetail = async () => {
       // get category detail
-      const viewCategoyResult = await dispatch(viewCategoryAction(categoryId));
-      if (!viewCategoyResult.success) {
-        notifyNegative(viewCategoyResult.error.message);
+      const viewCategoyDetailResult = await dispatch(
+        viewCategoryAction(categoryId)
+      );
+      if (!viewCategoyDetailResult.success) {
+        notifyNegative(viewCategoyDetailResult.error.message);
       }
     };
     viewCategoryDetail();
@@ -51,9 +53,9 @@ const CategoryDetailView = ({ categoryId, categoryDetail }) => {
                   {
                     id: 1,
                     name: "Home",
-                    link: "./",
+                    link: "/",
                   },
-                  { id: 2, name, link: "./" },
+                  { id: 2, name, link: "/" },
                 ]}
               ></BreadcrumbItem>
             ) : (
@@ -63,9 +65,9 @@ const CategoryDetailView = ({ categoryId, categoryDetail }) => {
           <div className="Grid u-alignItemsStart u-marginBottomMedium">
             <div className="u-sizeFull sm:u-sizeFull md:u-size4of12 lg:u-size4of12 u-marginBottomMedium">
               {imageUrl ? (
-                <img className="categoryImg" src={imageUrl} alt={name} />
+                <img className="categoryDetailImg" src={imageUrl} alt={name} />
               ) : (
-                <div className="categoryImg">
+                <div className="categoryDetailImg">
                   <Skeleton width="100%" height="100%"></Skeleton>
                 </div>
               )}

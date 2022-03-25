@@ -1,10 +1,13 @@
 import { deleteItemAction, viewItemAction } from "actions/items";
 import { notifyNegative, notifyPositive } from "components/Common/Toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { Icon } from "@ahaui/react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Skeleton } from "@ahaui/react";
 import { clearModalAction, showModalAction } from "actions/modal";
+import { BreadcrumbItem, ButtonItem } from "components/Common/Items";
+import "./index.css";
+import { viewCategoryAction } from "actions/categories";
 
 const ItemDetail = () => {
   const { categoryId, itemId } = useParams();
@@ -17,6 +20,8 @@ const ItemDetail = () => {
   const dispatchDeleteItem = (categoryId, itemId) =>
     dispatch(deleteItemAction(categoryId, itemId));
 
+  const [categoryDetail, setCategoryDetail] = useState(); // For breadcrumb
+
   useEffect(() => {
     const viewItemDetail = async () => {
       const viewItemDetailResult = await dispatch(
@@ -26,12 +31,23 @@ const ItemDetail = () => {
         notifyNegative(viewItemDetailResult.error.message);
       }
     };
+    const viewCategoryDetail = async () => {
+      const viewCategoryDetailResult = await dispatch(
+        viewCategoryAction(categoryId)
+      );
+      if (!viewCategoryDetailResult.success) {
+        notifyNegative(viewCategoryDetailResult.error.message);
+      }
+      setCategoryDetail(viewCategoryDetailResult.data);
+    };
     viewItemDetail();
-  }, [categoryId, dispatch, itemId]);
+    viewCategoryDetail();
+  }, [categoryId, dispatch, itemId, setCategoryDetail]);
 
   return (
     <ItemDetailView
       userInfo={userInfo}
+      categoryDetail={categoryDetail}
       categoryId={categoryId}
       itemId={itemId}
       itemDetail={itemDetail}
@@ -45,6 +61,7 @@ const ItemDetail = () => {
 const ItemDetailView = ({
   userInfo,
   categoryId,
+  categoryDetail,
   itemId,
   itemDetail,
   onDeleteItem,
@@ -91,24 +108,79 @@ const ItemDetailView = ({
     );
   };
 
+  const navigateEditItem = (categoryId, itemId) => {
+    navigate(`/categories/${categoryId}/items/${itemId}/edit`);
+  };
+
   return (
     <>
-      <div className="itemDetail">
+      <div className="itemDetail container">
         <div className="itemDetailWrapper">
-          <div>{description}</div>
-          <img src={imageUrl} alt={description} />
-          {userInfo?.id === author?.id ? (
-            <>
-              <Link to={`/categories/${categoryId}/items/${itemId}/edit`}>
-                <Icon size="small" name="edit" />
-              </Link>
-              <button onClick={() => handleDeleteItem()}>
-                <Icon size="medium" name="trash" />
-              </button>
-            </>
-          ) : (
-            <></>
-          )}
+          <div className="u-marginBottomMedium">
+            {itemDetail && categoryDetail ? (
+              <BreadcrumbItem
+                items={[
+                  {
+                    id: 1,
+                    name: "Home",
+                    link: "/",
+                  },
+                  {
+                    id: 2,
+                    name: categoryDetail.name,
+                    link: `/categories/${categoryId}`,
+                  },
+                  { id: 3, name: `Item ${itemDetail.id}`, link: "/" },
+                ]}
+              ></BreadcrumbItem>
+            ) : (
+              <Skeleton width="200px"></Skeleton>
+            )}
+          </div>
+
+          <div className="u-flex u-flexColumn u-alignItemsCenter u-marginBottomExtraLarge">
+            <div className="u-sizeFull sm:u-sizeFull md:u-size4of12 lg:u-size4of12 u-marginBottomMedium">
+              <img
+                className="itemDetailImg"
+                width="100%"
+                src={imageUrl}
+                alt={description}
+              />
+            </div>
+            <div className="u-marginBottomMedium">
+              <div className="u-textCenter">{description}</div>
+            </div>
+            <div>
+              {userInfo?.id === author?.id ? (
+                <div className="u-flex">
+                  <div className="u-marginRightExtraSmall">
+                    <ButtonItem
+                      size="medium"
+                      width="auto"
+                      value="Edit"
+                      variant="accent"
+                      icon="edit"
+                      sizeIcon="small"
+                      onClick={() => navigateEditItem(categoryId, itemId)}
+                    ></ButtonItem>
+                  </div>
+                  <div>
+                    <ButtonItem
+                      size="medium"
+                      width="auto"
+                      value="Delete"
+                      variant="negative_outline"
+                      icon="trash"
+                      sizeIcon="small"
+                      onClick={() => handleDeleteItem()}
+                    ></ButtonItem>
+                  </div>
+                </div>
+              ) : (
+                <div className="u-textGray u-textCenter">By {author?.name}</div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </>

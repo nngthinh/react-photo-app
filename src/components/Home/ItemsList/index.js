@@ -114,34 +114,27 @@ const ItemsListView = ({
                   src={item.imageUrl}
                   alt={item.name}
                 />
-                <div className="u-flex u-flexColumn u-marginRightSmall">
+                <div className="u-flex u-flexColumn">
                   <div className="u-text200">
                     {shortenContent(item.description, limitItemDesc)}
                   </div>
                   <div className="u-marginTopSmall u-text200">
                     {userInfo?.id === item.author.id ? (
-                      <div className="u-textAccent">By you</div>
+                      <ButtonItem
+                        size="small"
+                        width="auto"
+                        value="Edit"
+                        variant="accent_outline"
+                        icon="edit"
+                        sizeIcon="extraSmall"
+                        onClick={() => navigateEditItem(categoryId, item.id)}
+                      ></ButtonItem>
                     ) : (
                       <div className="u-textGray">By {item.author.name}</div>
                     )}
                   </div>
                 </div>
               </Link>
-              {userInfo?.id === item.author.id ? (
-                <div>
-                  <ButtonItem
-                    size="small"
-                    width="auto"
-                    value="Edit"
-                    variant="accent_outline"
-                    icon="edit"
-                    sizeIcon="extraSmall"
-                    onClick={() => navigateEditItem(categoryId, item.id)}
-                  ></ButtonItem>
-                </div>
-              ) : (
-                <></>
-              )}
             </div>
           ))}
         </div>
