@@ -249,49 +249,54 @@ const CategoryActionView = ({
           {type === "add" ? "Create new category" : "Edit category"}
         </h1>
         <form id="categoryActionForm" onSubmit={handleSubmit}>
-          <div className="inputSecion u-marginBottomLarge">
-            <InputItem
-              data-testid="name"
-              className="u-marginBottomExtraSmall"
-              type="text"
-              value={name.value}
-              placeholder={"Name"}
-              handleOnChange={(e) => {
-                setName({ type: "ON_CHANGE", value: e.target.value });
-              }}
-              handleOnBlur={(e) => setName({ type: "ON_VALIDATE" })}
-              error={name.error}
-            ></InputItem>
-            <InputItem
-              data-testid="description"
-              className="u-marginBottomExtraSmall"
-              type="text"
-              value={description.value}
-              placeholder={"Description"}
-              handleOnChange={(e) => {
-                setDescription({ type: "ON_CHANGE", value: e.target.value });
-              }}
-              handleOnBlur={(e) => setDescription({ type: "ON_VALIDATE" })}
-              error={description.error}
-            ></InputItem>
-            <InputItem
-              data-testid="password"
-              className="u-marginBottomExtraSmall"
-              type="text"
-              value={imageUrl.value}
-              placeholder={"Image URL"}
-              handleOnChange={(e) => {
-                setImageUrl({ type: "ON_CHANGE", value: e.target.value });
-              }}
-              handleOnBlur={(e) => {
-                setImageUrl({ type: "ON_VALIDATE" });
-              }}
-              error={imageUrl.error}
-            ></InputItem>
-            <img
-              src={imageUrl.value}
-              alt={imageUrl.error ? "Somethings went wrong" : "Waiting"}
-            ></img>
+          <div className="inputSecion u-marginBottomLarge Grid">
+            <div className="u-sizeFull sm:u-size9of12 u-marginBottomMedium">
+              <InputItem
+                data-testid="name"
+                className="u-marginBottomExtraSmall"
+                type="text"
+                value={name.value}
+                placeholder={"Name"}
+                handleOnChange={(e) => {
+                  setName({ type: "ON_CHANGE", value: e.target.value });
+                }}
+                handleOnBlur={(e) => setName({ type: "ON_VALIDATE" })}
+                error={name.error}
+              ></InputItem>
+              <InputItem
+                data-testid="description"
+                className="u-marginBottomExtraSmall"
+                type="text"
+                value={description.value}
+                placeholder={"Description"}
+                handleOnChange={(e) => {
+                  setDescription({ type: "ON_CHANGE", value: e.target.value });
+                }}
+                handleOnBlur={(e) => setDescription({ type: "ON_VALIDATE" })}
+                error={description.error}
+              ></InputItem>
+              <InputItem
+                data-testid="password"
+                className="u-marginBottomExtraSmall"
+                type="text"
+                value={imageUrl.value}
+                placeholder={"Image URL"}
+                handleOnChange={(e) => {
+                  setImageUrl({ type: "ON_CHANGE", value: e.target.value });
+                }}
+                handleOnBlur={(e) => {
+                  setImageUrl({ type: "ON_VALIDATE" });
+                }}
+                error={imageUrl.error}
+              ></InputItem>
+            </div>
+            <div className="u-sizeFull md:u-size3of12">
+              <img
+                className="categoryImgAction"
+                src={imageUrl.value}
+                alt={imageUrl.error ? "Somethings went wrong" : "Waiting"}
+              ></img>
+            </div>
           </div>
         </form>
         <div className="buttonSection">

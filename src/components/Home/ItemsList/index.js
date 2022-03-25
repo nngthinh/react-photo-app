@@ -102,7 +102,7 @@ const ItemsListView = ({
           {itemsList.map((item) => (
             <div
               key={item.id}
-              className="u-flex u-alignItemsCenter u-justifyContentBetween u-sizeFull u-marginBottomSmall"
+              className="itemsListItem u-flex u-alignItemsCenter u-justifyContentBetween u-sizeFull u-marginBottomSmall"
             >
               <Link
                 to={`/categories/${categoryId}/items/${item.id}`}

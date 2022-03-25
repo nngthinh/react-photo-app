@@ -3,3 +3,8 @@
   max-width: 100px;
   aspect-ratio: 1;
 }
+
+.itemsListItem:hover {
+  transform: translate(0px, -5px);
+  transition: 0.1s ease-out;
+}
