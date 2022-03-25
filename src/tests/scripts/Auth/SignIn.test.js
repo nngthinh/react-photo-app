@@ -1,15 +1,11 @@
 import axios from "axios";
 import App from "App";
-import {
-  render,
-  screen,
-  waitForElementToBeRemoved,
-} from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
 import createStoreSynchedWithLocalStorage from "stores";
-import { act } from "react-dom/test-utils";
+// import { act } from "react-dom/test-utils";
 
 // Global store with no user session
 const store = createStoreSynchedWithLocalStorage();

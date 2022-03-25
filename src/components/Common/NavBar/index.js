@@ -95,7 +95,10 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
     <div className="navbar u-shadowSmall">
       <div className="navbarWrapper container">
         <div className="left Brown500 u-flex u-alignItemsCenter">
-          <span className="home u-fontBold u-text400" onClick={() => navigateHome()}>
+          <span
+            className="home u-fontBold u-text400"
+            onClick={() => navigateHome()}
+          >
             PhotoApp
           </span>
         </div>
