@@ -118,9 +118,9 @@ const ItemsListView = ({
                   <div className="u-text200">
                     {shortenContent(item.description, limitItemDesc)}
                   </div>
-                  <div className="u-marginTopSmall">
+                  <div className="u-marginTopSmall u-text200">
                     {userInfo?.id === item.author.id ? (
-                      <div className="u-textAccent u-text200">By you</div>
+                      <div className="u-textAccent">By you</div>
                     ) : (
                       <div className="u-textGray">By {item.author.name}</div>
                     )}

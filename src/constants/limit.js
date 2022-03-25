@@ -1,5 +1,5 @@
-const limitCategoriesPagination = 8;
-const limitItemsPagination = 12;
+const limitCategoriesPagination = 4;
+const limitItemsPagination = 8;
 const limitCategoryDesc = 30;
 const limitItemDesc = 60;
 

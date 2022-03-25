@@ -123,7 +123,7 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
             : [...Array(limitCategoriesPagination).keys()].map((id) => (
                 <div
                   key={id}
-                  className="categoriesListItem u-sizeFull md:u-size4of12 lg:u-size3of12 u-marginBottomLarge "
+                  className="u-sizeFull md:u-size4of12 lg:u-size3of12 u-marginBottomLarge "
                 >
                   <div className="categoryImg u-marginBottomSmall">
                     <Skeleton width="100%" height="100%"></Skeleton>
