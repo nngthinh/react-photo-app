@@ -2,3 +2,8 @@
   margin-top: 64px;
   margin-bottom: 64px;
 }
+
+.itemActionImg {
+  width: 100%;
+  aspect-ratio: 1;
+}

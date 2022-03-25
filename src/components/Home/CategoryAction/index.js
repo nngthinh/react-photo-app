@@ -292,7 +292,7 @@ const CategoryActionView = ({
             </div>
             <div className="u-sizeFull md:u-size3of12">
               <img
-                className="categoryImgAction"
+                className="categoryActionImg"
                 src={imageUrl.value}
                 alt={imageUrl.error ? "Somethings went wrong" : "Waiting"}
               ></img>
