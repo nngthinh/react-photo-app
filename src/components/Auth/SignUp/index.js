@@ -8,9 +8,14 @@ import {
   validatePassword,
 } from "utils/validations/auth";
 import "./index.css";
-import { useNavigate } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { Separator } from "@ahaui/react";
 import { notifyNegative, notifyPositive } from "components/Common/Toast";
+import base64 from "base-64";
 
 // Components
 const SignUp = () => {
@@ -19,15 +24,21 @@ const SignUp = () => {
     dispatch(signUpAction(name, email, password));
   const dispatchSignIn = (email, password) =>
     dispatch(signInAction(email, password));
+
+  // pass next url to sign in page
+  const [searchParams] = useSearchParams();
+  const nextUrl = searchParams.get("next");
+
   return (
     <SignUpView
+      nextUrl={nextUrl}
       onSignUp={dispatchSignUp}
       onAutoSignIn={dispatchSignIn}
     ></SignUpView>
   );
 };
 
-const SignUpView = ({ onSignUp, onAutoSignIn }) => {
+const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
   // Input states
   const [name, setName] = useReducer(
     (name, nameAction) => {
@@ -91,8 +102,17 @@ const SignUpView = ({ onSignUp, onAutoSignIn }) => {
 
   // Navigators
   const navigate = useNavigate();
-  const navigateHome = () => navigate(`/home`);
-  const navigateSignIn = () => navigate(`/signin`);
+  const navigateHome = () =>
+    navigate(nextUrl ? base64.decode(nextUrl) : "/home");
+  const navigateSignIn = () =>
+    navigate(
+      nextUrl
+        ? {
+            pathname: "/signin",
+            search: createSearchParams({ next: nextUrl }).toString(),
+          }
+        : { pathname: "/signin" }
+    );
 
   // Handle submit
   const handleSubmit = async (e) => {

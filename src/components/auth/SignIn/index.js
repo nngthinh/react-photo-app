@@ -18,12 +18,14 @@ const SignIn = () => {
   const dispatchSignIn = (email, password) =>
     dispatch(signInAction(email, password));
 
+  // pass next url to sign up page
   const [searchParams] = useSearchParams();
-  const { next } = searchParams;
-  return <SignInView onSignIn={dispatchSignIn} nextUrl={next}></SignInView>;
+  const nextUrl = searchParams.get("next");
+
+  return <SignInView nextUrl={nextUrl} onSignIn={dispatchSignIn}></SignInView>;
 };
 
-const SignInView = ({ onSignIn, nextUrl }) => {
+const SignInView = ({ nextUrl, onSignIn }) => {
   // Input states
   const [email, setEmail] = useReducer(
     (email, emailAction) => {
@@ -73,10 +75,10 @@ const SignInView = ({ onSignIn, nextUrl }) => {
     navigate(
       nextUrl
         ? {
-            pathname: "signup",
-            params: createSearchParams({ next: nextUrl }).toString(),
+            pathname: "/signup",
+            search: createSearchParams({ next: nextUrl }).toString(),
           }
-        : { pathname: "signup" }
+        : { pathname: "/signup" }
     );
 
   // Handle submit
