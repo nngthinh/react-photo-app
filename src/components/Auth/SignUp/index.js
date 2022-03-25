@@ -158,7 +158,7 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
   // Return view
   return (
     <div className="signUp">
-      <div className="signUpWrapper u-marginTopExtraLarge">
+      <div className="signUpWrapper">
         <h1 className="u-marginBottomExtraLarge">Create new account</h1>
         <div className="inputSecion u-marginBottomLarge">
           <form id="signUpForm" onSubmit={handleSubmit}>

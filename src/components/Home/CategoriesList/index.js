@@ -99,7 +99,7 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
             <PaginationItem {...categoryPagination}></PaginationItem>
           </div>
         </div>
-        <div className="Grid categoriesListSection u-marginBottomLarge">
+        <div className="Grid categoriesListSection">
           {categoriesList
             ? categoriesList.map((category) => (
                 <div

@@ -2,7 +2,6 @@ import { showModalAction, clearModalAction } from "actions/modal";
 import { signOutAction } from "actions/user";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ButtonItem } from "../Items";
 import { notifyNegative, notifyPositive } from "../Toast";
 import { Avatar, Icon, Dropdown, Toggle, Separator } from "@ahaui/react";
 import "./index.css";
@@ -32,8 +31,11 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
   const navigate = useNavigate();
 
   // Button click
-  const handleSignIn = (e) => {
+  const navigateSignIn = (e) => {
     navigate(`/signin`);
+  };
+  const navigateHome = () => {
+    navigate(`/`);
   };
 
   const handleSignOut = (e) => {
@@ -93,7 +95,9 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
     <div className="navbar u-shadowSmall">
       <div className="navbarWrapper container">
         <div className="left Brown500 u-flex u-alignItemsCenter">
-          <span className="u-fontBold u-text400">PhotoApp</span>
+          <span className="home u-fontBold u-text400" onClick={() => navigateHome()}>
+            PhotoApp
+          </span>
         </div>
         <div className="right u-flex u-alignItemsCenter ">
           <div className="u-marginRightSmall">
@@ -142,7 +146,7 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
                 <Dropdown.Item
                   data-testid="signInButton"
                   className="u-flex u-justifyContentCenter u-alignItemsCenter u-paddingVerticalExtraSmall u-marginTopExtraSmall"
-                  onClick={() => handleSignIn()}
+                  onClick={() => navigateSignIn()}
                 >
                   <Icon
                     name="arrowForward"

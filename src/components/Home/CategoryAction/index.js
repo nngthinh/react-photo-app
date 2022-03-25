@@ -19,6 +19,7 @@ import {
 } from "utils/validations/categories";
 import { ButtonItem, InputItem } from "components/Common/Items";
 import base64 from "base-64";
+import "./index.css";
 
 const CategoryAction = ({ type }) => {
   const { categoryId } = useParams();
@@ -242,7 +243,7 @@ const CategoryActionView = ({
   };
 
   return (
-    <div className="categoryAction">
+    <div className="categoryAction container">
       <div className="categoryActionWrapper">
         <h1 className="u-marginBottomExtraLarge">
           {type === "add" ? "Create new category" : "Edit category"}

@@ -138,7 +138,7 @@ const ItemDetailView = ({
             )}
           </div>
 
-          <div className="u-flex u-flexColumn u-alignItemsCenter u-marginBottomExtraLarge">
+          <div className="u-flex u-flexColumn u-alignItemsCenter">
             <div className="u-sizeFull sm:u-sizeFull md:u-size4of12 lg:u-size4of12 u-marginBottomMedium">
               {imageUrl ? (
                 <img

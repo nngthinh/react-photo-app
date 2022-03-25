@@ -111,7 +111,7 @@ const SignInView = ({ nextUrl, onSignIn }) => {
   // Return view
   return (
     <div className="signIn">
-      <div className="signInWrapper u-marginTopExtraLarge">
+      <div className="signInWrapper">
         <h1 className="u-marginBottomExtraLarge">Sign in</h1>
         <div className="inputSecion u-marginBottomLarge">
           <form id="signInForm" onSubmit={handleSubmit}>
