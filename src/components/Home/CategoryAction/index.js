@@ -155,9 +155,12 @@ const CategoryActionView = ({
   );
 
   useEffect(() => {
-    setImageUrl({ type: "ON_CHANGE", value: categoryDetail?.imageUrl });
-    setDescription({ type: "ON_CHANGE", value: categoryDetail?.description });
-    setName({ type: "ON_CHANGE", value: categoryDetail?.name });
+    setImageUrl({ type: "ON_CHANGE", value: categoryDetail?.imageUrl ?? "" });
+    setDescription({
+      type: "ON_CHANGE",
+      value: categoryDetail?.description ?? "",
+    });
+    setName({ type: "ON_CHANGE", value: categoryDetail?.name ?? "" });
   }, [
     categoryDetail?.description,
     categoryDetail?.imageUrl,
@@ -250,7 +253,7 @@ const CategoryActionView = ({
         </h1>
         <form id="categoryActionForm" onSubmit={handleSubmit}>
           <div className="inputSecion u-marginBottomLarge Grid">
-            <div className="u-sizeFull sm:u-size9of12 u-marginBottomMedium">
+            <div className="u-sizeFull md:u-size9of12 u-marginBottomMedium">
               <InputItem
                 data-testid="name"
                 className="u-marginBottomExtraSmall"

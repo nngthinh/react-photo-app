@@ -104,7 +104,7 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
             ? categoriesList.map((category) => (
                 <div
                   key={category.id}
-                  className="categoriesListItem u-sizeFull md:u-size4of12 lg:u-size3of12 u-marginBottomLarge u-paddingVerticalSmall"
+                  className="categoriesListItem u-sizeFull md:u-size6of12 lg:u-size3of12 u-marginBottomLarge u-paddingVerticalSmall"
                 >
                   <Link to={`/categories/${category.id}`}>
                     <img
@@ -123,7 +123,7 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
             : [...Array(limitCategoriesPagination).keys()].map((id) => (
                 <div
                   key={id}
-                  className="u-sizeFull md:u-size4of12 lg:u-size3of12 u-marginBottomLarge "
+                  className="u-sizeFull md:u-size6of12 lg:u-size3of12 u-marginBottomLarge "
                 >
                   <div className="categoryImg u-marginBottomSmall">
                     <Skeleton width="100%" height="100%"></Skeleton>
