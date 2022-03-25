@@ -1,6 +1,11 @@
 import { useEffect, useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  createSearchParams,
+} from "react-router-dom";
 import {
   createCategoryAction,
   viewCategoryAction,
@@ -13,7 +18,7 @@ import {
   validateName,
 } from "utils/validations/categories";
 import { ButtonItem, InputItem } from "components/Common/Items";
-import { setLaterUrlAction } from "actions/user";
+import base64 from "base-64";
 
 const CategoryAction = ({ type }) => {
   const { categoryId } = useParams();
@@ -31,12 +36,17 @@ const CategoryAction = ({ type }) => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      dispatch(
-        setLaterUrlAction(
-          `${location.pathname}${location.search}${location.hash}` // Store current URL for later redirection
-        )
+      const nextUrl = base64.encode(
+        `${location.pathname}${location.search}${location.hash}`
       );
-      navigate("/signin", { replace: true });
+      console.log(createSearchParams({ next: nextUrl }).toString());
+      navigate(
+        {
+          pathname: "/signin",
+          search: createSearchParams({ next: nextUrl }).toString(),
+        },
+        { replace: true }
+      );
     }
   });
 

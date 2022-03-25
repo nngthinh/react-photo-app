@@ -1,6 +1,11 @@
 import { useEffect, useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  createSearchParams,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { notifyNegative, notifyPositive } from "components/Common/Toast";
 import { validateDescription, validateImageUrl } from "utils/validations/items";
 import { ButtonItem, InputItem } from "components/Common/Items";
@@ -9,7 +14,7 @@ import {
   viewItemAction,
   updateItemAction,
 } from "actions/items";
-import { setLaterUrlAction } from "actions/user";
+import base64 from "base-64";
 
 const ItemAction = ({ type }) => {
   const { categoryId, itemId } = useParams();
@@ -30,12 +35,17 @@ const ItemAction = ({ type }) => {
   // Auto navigate to sign in
   useEffect(() => {
     if (!isLoggedIn) {
-      dispatch(
-        setLaterUrlAction(
-          `${location.pathname}${location.search}${location.hash}` // Store current URL for later redirection
-        )
+      const nextUrl = base64.encode(
+        `${location.pathname}${location.search}${location.hash}`
       );
-      navigate("/signin", { replace: true });
+      console.log(createSearchParams({ next: nextUrl }).toString());
+      navigate(
+        {
+          pathname: "/signin",
+          search: createSearchParams({ next: nextUrl }).toString(),
+        },
+        { replace: true }
+      );
     }
   });
 

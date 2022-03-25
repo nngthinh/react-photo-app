@@ -1,14 +1,10 @@
 import SignUp from "components/Auth/SignUp";
 import SignIn from "components/Auth/SignIn";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import "@ahaui/css/dist/index.min.css";
-import {
-  getUserInfoAction,
-  removeLaterUrlAction,
-  signOutAction,
-} from "actions/user";
+import { getUserInfoAction, signOutAction } from "actions/user";
 import Home from "components/Home";
 import { useEffect } from "react";
 import Toast from "components/Common/Toast";
@@ -17,20 +13,10 @@ import CustomModal from "components/Common/Modal";
 const App = () => {
   // States
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const laterUrl = useSelector((state) => state.user.laterUrl);
   const modal = useSelector((state) => state.modal);
   const dispatch = useDispatch();
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isLoggedIn && laterUrl) {
-      dispatch(removeLaterUrlAction());
-      navigate(laterUrl);
-    }
-  });
-
-  // Auto sign in and later url navigation
+  // Auto sign in
   useEffect(() => {
     const autoSignIn = async (isLoggedIn) => {
       if (isLoggedIn) {

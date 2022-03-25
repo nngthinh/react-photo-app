@@ -1,6 +1,6 @@
 import { loadState, saveState } from "utils/services/localStorage";
 import configureStore from "stores/configureStore";
-import { throttle } from "lodash";
+// import { throttle } from "lodash";
 
 const createStoreSynchedWithLocalStorage = (initialState) => {
   // Create store with initial value
