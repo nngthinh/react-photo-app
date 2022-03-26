@@ -2,7 +2,7 @@ import * as axios from "axios";
 import {
   convertCamelToSnakeJSON,
   convertSnakeToCamelJSON,
-} from "utils/services/convertJson";
+} from "utils/helpers/convertJson";
 import { loadState } from "./localStorage";
 
 // Rest service with Beaer supported

@@ -10,6 +10,7 @@ const [baseGet, basePost, basePut, basePatch, baseDelete] = [
   "patch",
   "delete",
 ];
+
 // Mocked data
 const mockedBody = { id: 1, name: "Happy" };
 const mockedSuccessData = { data: "success" };
@@ -26,10 +27,23 @@ const combineConfig = (token = "", config) => {
     : config;
 };
 
+// Store user token in local storage
+const setUserMockedToken = () => {
+  global.localStorage.setItem(
+    "state",
+    JSON.stringify({ user: { token: mockedToken } })
+  );
+};
+
+// Clear all local storage's state
+afterAll(() => {
+  global.localStorage.clear();
+});
+
 jest.mock("axios");
 
 describe("get", () => {
-  test("get without token", () => {
+  it("without token", () => {
     const mockedUrl = `${baseUrl}/${baseGet}`;
     // Mock server
     axios.get.mockImplementation((url, config) =>
@@ -42,14 +56,16 @@ describe("get", () => {
       expect(data).toEqual(mockedSuccessData);
     });
   });
-  test("get with token", () => {
+
+  it("with token", () => {
     const mockedUrl = `${baseUrl}/${baseGet}`;
     // Mock server
     axios.get.mockImplementation((url, config) =>
       Promise.resolve(mockedSuccessData)
     );
+    setUserMockedToken();
     // Request
-    return RestService.get(mockedUrl, mockedToken).then((data) => {
+    return RestService.getWithToken(mockedUrl).then((data) => {
       expect(axios.get).toBeCalledTimes(1);
       expect(axios.get).toBeCalledWith(
         mockedUrl,
@@ -58,28 +74,31 @@ describe("get", () => {
       expect(data).toEqual(mockedSuccessData);
     });
   });
-  test("get with token and config", () => {
+
+  it("with token and config", () => {
     const mockedUrl = `${baseUrl}/${baseGet}`;
     // Mock server
     axios.get.mockImplementation((url, config) =>
       Promise.resolve(mockedSuccessData)
     );
+
+    // Save token
+    setUserMockedToken();
+
     // Request
-    return RestService.get(mockedUrl, mockedToken, mockedConfig).then(
-      (data) => {
-        expect(axios.get).toBeCalledTimes(1);
-        expect(axios.get).toBeCalledWith(
-          mockedUrl,
-          combineConfig(mockedToken, mockedConfig)
-        );
-        expect(data).toEqual(mockedSuccessData);
-      }
-    );
+    return RestService.getWithToken(mockedUrl, mockedConfig).then((data) => {
+      expect(axios.get).toBeCalledTimes(1);
+      expect(axios.get).toBeCalledWith(
+        mockedUrl,
+        combineConfig(mockedToken, mockedConfig)
+      );
+      expect(data).toEqual(mockedSuccessData);
+    });
   });
 });
 
 describe("post", () => {
-  test("post without token", () => {
+  it("without token", () => {
     const mockedUrl = `${baseUrl}/${basePost}`;
     // Mock server
     axios.post.mockImplementation((url, body, config) =>
@@ -92,14 +111,18 @@ describe("post", () => {
       expect(data).toEqual(mockedSuccessData);
     });
   });
-  test("post with token", () => {
+  it("with token", () => {
     const mockedUrl = `${baseUrl}/${basePost}`;
     // Mock server
     axios.post.mockImplementation((url, body, config) =>
       Promise.resolve(mockedSuccessData)
     );
+
+    // Save token
+    setUserMockedToken();
+
     // Request
-    return RestService.post(mockedUrl, mockedBody, mockedToken).then((data) => {
+    return RestService.postWithToken(mockedUrl, mockedBody).then((data) => {
       expect(axios.post).toBeCalledTimes(1);
       expect(axios.post).toBeCalledWith(
         mockedUrl,
@@ -109,52 +132,44 @@ describe("post", () => {
       expect(data).toEqual(mockedSuccessData);
     });
   });
-  test("post with token and config", () => {
+  it("with token and config", () => {
     const mockedUrl = `${baseUrl}/${basePost}`;
     // Mock server
     axios.post.mockImplementation((url, body, config) =>
       Promise.resolve(mockedSuccessData)
     );
+
+    // Save token
+    setUserMockedToken();
+
     // Request
-    return RestService.post(
-      mockedUrl,
-      mockedBody,
-      mockedToken,
-      mockedConfig
-    ).then((data) => {
-      expect(axios.post).toBeCalledTimes(1);
-      expect(axios.post).toBeCalledWith(
-        mockedUrl,
-        mockedBody,
-        combineConfig(mockedToken, mockedConfig)
-      );
-      expect(data).toEqual(mockedSuccessData);
-    });
+    return RestService.postWithToken(mockedUrl, mockedBody, mockedConfig).then(
+      (data) => {
+        expect(axios.post).toBeCalledTimes(1);
+        expect(axios.post).toBeCalledWith(
+          mockedUrl,
+          mockedBody,
+          combineConfig(mockedToken, mockedConfig)
+        );
+        expect(data).toEqual(mockedSuccessData);
+      }
+    );
   });
 });
 
 describe("put", () => {
-  test("put without token", () => {
+  it("with token", () => {
     const mockedUrl = `${baseUrl}/${basePut}`;
     // Mock server
     axios.put.mockImplementation((url, body, config) =>
       Promise.resolve(mockedSuccessData)
     );
+
+    // Save token
+    setUserMockedToken();
+
     // Request
-    return RestService.put(mockedUrl, mockedBody).then((data) => {
-      expect(axios.put).toBeCalledTimes(1);
-      expect(axios.put).toBeCalledWith(mockedUrl, mockedBody, {});
-      expect(data).toEqual(mockedSuccessData);
-    });
-  });
-  test("put with token", () => {
-    const mockedUrl = `${baseUrl}/${basePut}`;
-    // Mock server
-    axios.put.mockImplementation((url, body, config) =>
-      Promise.resolve(mockedSuccessData)
-    );
-    // Request
-    return RestService.put(mockedUrl, mockedBody, mockedToken).then((data) => {
+    return RestService.putWithToken(mockedUrl, mockedBody).then((data) => {
       expect(axios.put).toBeCalledTimes(1);
       expect(axios.put).toBeCalledWith(
         mockedUrl,
@@ -164,137 +179,67 @@ describe("put", () => {
       expect(data).toEqual(mockedSuccessData);
     });
   });
-  test("put with token and config", () => {
+  it("with token and config", () => {
     const mockedUrl = `${baseUrl}/${basePut}`;
     // Mock server
     axios.put.mockImplementation((url, body, config) =>
       Promise.resolve(mockedSuccessData)
     );
-    // Request
-    return RestService.put(
-      mockedUrl,
-      mockedBody,
-      mockedToken,
-      mockedConfig
-    ).then((data) => {
-      expect(axios.put).toBeCalledTimes(1);
-      expect(axios.put).toBeCalledWith(
-        mockedUrl,
-        mockedBody,
-        combineConfig(mockedToken, mockedConfig)
-      );
-      expect(data).toEqual(mockedSuccessData);
-    });
-  });
-});
 
-describe("patch", () => {
-  test("patch without token", () => {
-    const mockedUrl = `${baseUrl}/${basePatch}`;
-    // Mock server
-    axios.patch.mockImplementation((url, body, config) =>
-      Promise.resolve(mockedSuccessData)
-    );
+    // Save token
+    setUserMockedToken();
+
     // Request
-    return RestService.patch(mockedUrl, mockedBody).then((data) => {
-      expect(axios.patch).toBeCalledTimes(1);
-      expect(axios.patch).toBeCalledWith(mockedUrl, mockedBody, {});
-      expect(data).toEqual(mockedSuccessData);
-    });
-  });
-  test("patch with token", () => {
-    const mockedUrl = `${baseUrl}/${basePatch}`;
-    // Mock server
-    axios.patch.mockImplementation((url, body, config) =>
-      Promise.resolve(mockedSuccessData)
-    );
-    // Request
-    return RestService.patch(mockedUrl, mockedBody, mockedToken).then(
+    return RestService.putWithToken(mockedUrl, mockedBody, mockedConfig).then(
       (data) => {
-        expect(axios.patch).toBeCalledTimes(1);
-        expect(axios.patch).toBeCalledWith(
+        expect(axios.put).toBeCalledTimes(1);
+        expect(axios.put).toBeCalledWith(
           mockedUrl,
           mockedBody,
-          combineConfig(mockedToken, {})
+          combineConfig(mockedToken, mockedConfig)
         );
         expect(data).toEqual(mockedSuccessData);
       }
     );
-  });
-  test("patch with token adn config", () => {
-    const mockedUrl = `${baseUrl}/${basePatch}`;
-    // Mock server
-    axios.patch.mockImplementation((url, body, config) =>
-      Promise.resolve(mockedSuccessData)
-    );
-    // Request
-    return RestService.patch(
-      mockedUrl,
-      mockedBody,
-      mockedToken,
-      mockedConfig
-    ).then((data) => {
-      expect(axios.patch).toBeCalledTimes(1);
-      expect(axios.patch).toBeCalledWith(
-        mockedUrl,
-        mockedBody,
-        combineConfig(mockedToken, mockedConfig)
-      );
-      expect(data).toEqual(mockedSuccessData);
-    });
   });
 });
 
 describe("delete", () => {
-  test("delete without token", () => {
+  it("with token", () => {
     const mockedUrl = `${baseUrl}/${baseDelete}`;
     // Mock server
     axios.delete.mockImplementation((url, body, config) =>
       Promise.resolve(mockedSuccessData)
     );
+
+    // Save token
+    setUserMockedToken();
+
     // Request
-    return RestService.delete(mockedUrl, mockedBody).then((data) => {
-      expect(axios.delete).toBeCalledTimes(1);
-      expect(axios.delete).toBeCalledWith(mockedUrl, mockedBody, {});
-      expect(data).toEqual(mockedSuccessData);
-    });
-  });
-  test("delete with token", () => {
-    const mockedUrl = `${baseUrl}/${baseDelete}`;
-    // Mock server
-    axios.delete.mockImplementation((url, body, config) =>
-      Promise.resolve(mockedSuccessData)
-    );
-    // Request
-    return RestService.delete(mockedUrl, mockedBody, mockedToken).then(
-      (data) => {
-        expect(axios.delete).toBeCalledTimes(1);
-        expect(axios.delete).toBeCalledWith(
-          mockedUrl,
-          mockedBody,
-          combineConfig(mockedToken, {})
-        );
-        expect(data).toEqual(mockedSuccessData);
-      }
-    );
-  });
-  test("delete with token and config", () => {
-    const mockedUrl = `${baseUrl}/${baseDelete}`;
-    // Mock server
-    axios.delete.mockImplementation((url, body, config) =>
-      Promise.resolve(mockedSuccessData)
-    );
-    // Request
-    return RestService.delete(
-      mockedUrl,
-      mockedBody,
-      mockedToken,
-      mockedConfig
-    ).then((data) => {
+    return RestService.deleteWithToken(mockedUrl).then((data) => {
       expect(axios.delete).toBeCalledTimes(1);
       expect(axios.delete).toBeCalledWith(
         mockedUrl,
-        mockedBody,
+        combineConfig(mockedToken, {})
+      );
+      expect(data).toEqual(mockedSuccessData);
+    });
+  });
+  it("delete with token and config", () => {
+    const mockedUrl = `${baseUrl}/${baseDelete}`;
+    // Mock server
+    axios.delete.mockImplementation((url, body, config) =>
+      Promise.resolve(mockedSuccessData)
+    );
+
+    // Save token
+    setUserMockedToken();
+
+    // Request
+    return RestService.deleteWithToken(mockedUrl, mockedConfig).then((data) => {
+      expect(axios.delete).toBeCalledTimes(1);
+      expect(axios.delete).toBeCalledWith(
+        mockedUrl,
         combineConfig(mockedToken, mockedConfig)
       );
       expect(data).toEqual(mockedSuccessData);

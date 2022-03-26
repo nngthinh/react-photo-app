@@ -1,7 +1,7 @@
 import {
   convertCamelToSnakeJSON,
   convertSnakeToCamelJSON,
-} from "utils/services/convertJson.js";
+} from "utils/helpers/convertJson.js";
 
 const simpleCamelData = { userId: 123, name: "Happy", isLoggedIn: false };
 const simpleSnakeData = { user_id: 123, name: "Happy", is_logged_in: false };

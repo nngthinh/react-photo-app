@@ -1,4 +1,4 @@
-import { convertSnakeToCamelJSON } from "utils/services/convertJson";
+import { convertSnakeToCamelJSON } from "utils/helpers/convertJson";
 
 // Executes async query to the backend
 const clientMiddleware = (store) => (next) => async (action) => {
