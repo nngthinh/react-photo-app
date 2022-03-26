@@ -7,35 +7,36 @@ const ButtonItem = ({
   width = "full",
   disabled = false,
   icon,
+  iconComponent,
   sizeIcon,
   ...rest
 } = {}) => {
+  const isHavingIcon = iconComponent || icon;
+  const IconComponent = isHavingIcon ? (
+    <Button.Icon>
+      {iconComponent ?? <Icon size={sizeIcon ?? size} name={icon} />}
+    </Button.Icon>
+  ) : (
+    <></>
+  );
+  const LabelComponent = isHavingIcon ? (
+    <Button.Label>{value}</Button.Label>
+  ) : (
+    <>{value}</>
+  );
+
   return (
     <div className="buttonItem">
-      {icon ? (
-        <Button
-          variant={variant}
-          size={size}
-          width={width}
-          disabled={disabled}
-          {...rest}
-        >
-          <Button.Icon>
-            <Icon size={sizeIcon ?? size} name={icon} />
-          </Button.Icon>
-          <Button.Label>{value}</Button.Label>
-        </Button>
-      ) : (
-        <Button
-          variant={variant}
-          size={size}
-          width={width}
-          disabled={disabled}
-          {...rest}
-        >
-          {value}
-        </Button>
-      )}
+      <Button
+        variant={variant}
+        size={size}
+        width={width}
+        disabled={disabled}
+        {...rest}
+      >
+        {IconComponent}
+        {LabelComponent}
+      </Button>
     </div>
   );
 };
