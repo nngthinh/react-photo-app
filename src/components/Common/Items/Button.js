@@ -7,15 +7,15 @@ const ButtonItem = ({
   width = "full",
   disabled = false,
   icon,
-  isLoading,
+  isSubmitting = false,
   iconSize = "medium",
   ...rest
 } = {}) => {
-  const isHavingIcon = isLoading || icon ? true : false;
-  console.log(isLoading, disabled, isHavingIcon);
+  const isHavingIcon = isSubmitting || icon ? true : false;
+  console.log(isSubmitting, disabled, isHavingIcon);
   const IconComponent = isHavingIcon ? (
     <Button.Icon>
-      {isLoading ? (
+      {isSubmitting ? (
         <Loader size={iconSize ?? size} />
       ) : (
         <Icon size={iconSize ?? size} name={icon} />
@@ -24,7 +24,7 @@ const ButtonItem = ({
   ) : (
     <></>
   );
-  const LabelComponent = isLoading ? (
+  const LabelComponent = isSubmitting ? (
     <></>
   ) : isHavingIcon ? (
     <Button.Label>{value}</Button.Label>
@@ -38,7 +38,7 @@ const ButtonItem = ({
         variant={variant}
         size={size}
         width={width}
-        disabled={disabled}
+        disabled={isSubmitting || disabled}
         {...rest}
       >
         {IconComponent}

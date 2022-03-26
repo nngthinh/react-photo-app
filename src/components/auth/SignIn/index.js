@@ -127,6 +127,7 @@ const SignInView = ({ nextUrl, onSignIn }) => {
             }}
             handleOnBlur={(e) => setEmail({ type: "ON_VALIDATE" })}
             error={email.error}
+            readOnly={isSubmitting}
           ></InputItem>
           <InputItem
             data-testid="password"
@@ -139,6 +140,7 @@ const SignInView = ({ nextUrl, onSignIn }) => {
             }}
             handleOnBlur={(e) => setPassword({ type: "ON_VALIDATE" })}
             error={password.error}
+            readOnly={isSubmitting}
           ></InputItem>
         </div>
         <div className="buttonSection">
@@ -147,7 +149,7 @@ const SignInView = ({ nextUrl, onSignIn }) => {
             className="u-marginBottomTiny"
             value={"Sign In"}
             onClick={handleSubmit}
-            disabled={isSubmitting}
+            isSubmitting={isSubmitting}
           ></ButtonItem>
           <Separator
             className="u-marginTopLarge u-marginBottomSmall"

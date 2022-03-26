@@ -174,6 +174,7 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
             }}
             handleOnBlur={(e) => setName({ type: "ON_VALIDATE" })}
             error={name.error}
+            readOnly={isSubmitting}
           ></InputItem>
           <InputItem
             data-testid="email"
@@ -186,6 +187,7 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
             }}
             handleOnBlur={(e) => setEmail({ type: "ON_VALIDATE" })}
             error={email.error}
+            readOnly={isSubmitting}
           ></InputItem>
           <InputItem
             data-testid="password"
@@ -198,6 +200,7 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
             }}
             handleOnBlur={(e) => setPassword({ type: "ON_VALIDATE" })}
             error={password.error}
+            readOnly={isSubmitting}
           ></InputItem>
         </div>
         <div className="buttonSection">
@@ -206,7 +209,7 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
             className="u-marginBottomTiny"
             value={"Create account"}
             onClick={handleSubmit}
-            disabled={isSubmitting}
+            isSubmitting={isSubmitting}
           ></ButtonItem>
           <Separator
             className="u-marginTopLarge u-marginBottomSmall"

@@ -52,12 +52,7 @@ const HomeView = () => {
           path="/*"
           element={<Navigate to="/categories" replace={true} />}
         />
-        <Route
-          path="/categories/:categoryId/items/*"
-          element={
-            <Navigate to="/categories/:categoryId/items" replace={true} />
-          }
-        />
+        <Route path="/categories/:categoryId/*" element={<CategoryDetail />} />
       </Routes>
     </>
   );

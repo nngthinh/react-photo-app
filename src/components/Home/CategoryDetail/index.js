@@ -84,7 +84,7 @@ const CategoryDetailView = ({ categoryId, categoryDetail }) => {
                       value="Edit"
                       variant="accent"
                       icon="edit"
-                      sizeIcon="small"
+                      iconSize="small"
                       onClick={() => navigateEditCategory(categoryId)}
                     ></ButtonItem>
                   </div>

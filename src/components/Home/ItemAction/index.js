@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createSearchParams,
@@ -39,7 +39,6 @@ const ItemAction = ({ type }) => {
       const nextUrl = base64.encode(
         `${location.pathname}${location.search}${location.hash}`
       );
-      console.log(createSearchParams({ next: nextUrl }).toString());
       navigate(
         {
           pathname: "/signin",
@@ -67,26 +66,20 @@ const ItemAction = ({ type }) => {
   });
 
   return (
-    isLoggedIn &&
-    (type === "add" ? (
-      <CategoryActionView
-        type="add"
-        categoryId={categoryId}
-        onCreateItem={dispatchCreateItem}
-      ></CategoryActionView>
-    ) : (
-      <CategoryActionView
-        type="edit"
+    isLoggedIn && (
+      <ItemActionView
+        type={type}
         categoryId={categoryId}
         itemId={itemId}
         itemDetail={itemDetail}
+        onCreateItem={dispatchCreateItem}
         onUpdateItem={dispatchUpdateItem}
-      ></CategoryActionView>
-    ))
+      ></ItemActionView>
+    )
   );
 };
 
-const CategoryActionView = ({
+const ItemActionView = ({
   type,
   categoryId,
   itemId,
@@ -137,6 +130,8 @@ const CategoryActionView = ({
     { value: "", errors: null }
   );
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   useEffect(() => {
     setImageUrl({ type: "ON_CHANGE", value: itemDetail?.imageUrl ?? "" });
     setDescription({ type: "ON_CHANGE", value: itemDetail?.description ?? "" });
@@ -146,8 +141,6 @@ const CategoryActionView = ({
 
   // On action
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
     // Both two actions requires the same validations
     if (
       validateDescription(description.value) ||
@@ -157,6 +150,8 @@ const CategoryActionView = ({
       setImageUrl({ type: "ON_VALIDATE" });
       return;
     }
+
+    setIsSubmitting(true);
 
     // Add item
     if (type === "add") {
@@ -168,7 +163,7 @@ const CategoryActionView = ({
         );
         if (createItemResult.success) {
           notifyPositive("Create item successfully.");
-          navigate(-1);
+          navigate(`/categories/${categoryId}`);
         } else {
           if (createItemResult.error.data) {
             const errors = createItemResult.error;
@@ -182,8 +177,7 @@ const CategoryActionView = ({
           }
         }
       };
-
-      createItem();
+      await createItem();
     }
 
     // Update item
@@ -197,7 +191,7 @@ const CategoryActionView = ({
         );
         if (updateItemResult.success) {
           notifyPositive("Update item successfully.");
-          navigate(-1);
+          navigate(`/category/${categoryId}/items/${itemId}`);
         } else {
           if (updateItemResult.error.data) {
             const errors = updateItemResult.error;
@@ -211,9 +205,9 @@ const CategoryActionView = ({
           }
         }
       };
-
-      updateItem();
+      await updateItem();
     }
+    setIsSubmitting(false);
   };
 
   return (
@@ -222,53 +216,53 @@ const CategoryActionView = ({
         <h1 className="u-marginBottomExtraLarge">
           {type === "add" ? "Create new item" : "Edit item"}
         </h1>
-        <form id="itemActionForm" onSubmit={handleSubmit}>
-          <div className="inputSecion u-marginBottomLarge Grid">
-            <div className="u-sizeFull md:u-size9of12 u-marginBottomMedium">
-              <InputItem
-                data-testid="description"
-                className="u-marginBottomExtraSmall"
-                type="text"
-                value={description.value}
-                placeholder={"Description"}
-                handleOnChange={(e) => {
-                  setDescription({ type: "ON_CHANGE", value: e.target.value });
-                }}
-                handleOnBlur={(e) => setDescription({ type: "ON_VALIDATE" })}
-                error={description.error}
-              ></InputItem>
-              <InputItem
-                data-testid="password"
-                className="u-marginBottomExtraSmall"
-                type="text"
-                value={imageUrl.value}
-                placeholder={"Image URL"}
-                handleOnChange={(e) => {
-                  setImageUrl({ type: "ON_CHANGE", value: e.target.value });
-                }}
-                handleOnBlur={(e) => {
-                  setImageUrl({ type: "ON_VALIDATE" });
-                }}
-                error={imageUrl.error}
-              ></InputItem>
-            </div>
-            <div className="u-sizeFull md:u-size3of12">
-              <img
-                className="itemActionImg"
-                src={imageUrl.value}
-                alt={imageUrl.error ? "Somethings went wrong" : "Waiting"}
-              ></img>
-            </div>
+        <div className="inputSecion u-marginBottomLarge Grid">
+          <div className="u-sizeFull md:u-size9of12 u-marginBottomMedium">
+            <InputItem
+              data-testid="description"
+              className="u-marginBottomExtraSmall"
+              type="text"
+              value={description.value}
+              placeholder={"Description"}
+              handleOnChange={(e) => {
+                setDescription({ type: "ON_CHANGE", value: e.target.value });
+              }}
+              handleOnBlur={(e) => setDescription({ type: "ON_VALIDATE" })}
+              error={description.error}
+              readOnly={isSubmitting}
+            ></InputItem>
+            <InputItem
+              data-testid="password"
+              className="u-marginBottomExtraSmall"
+              type="text"
+              value={imageUrl.value}
+              placeholder={"Image URL"}
+              handleOnChange={(e) => {
+                setImageUrl({ type: "ON_CHANGE", value: e.target.value });
+              }}
+              handleOnBlur={(e) => {
+                setImageUrl({ type: "ON_VALIDATE" });
+              }}
+              error={imageUrl.error}
+              readOnly={isSubmitting}
+            ></InputItem>
           </div>
-        </form>
+          <div className="u-sizeFull md:u-size3of12">
+            <img
+              className="itemActionImg"
+              src={imageUrl.value}
+              alt={imageUrl.error ? "Somethings went wrong" : "Waiting"}
+            ></img>
+          </div>
+        </div>
         <div className="buttonSection">
           <ButtonItem
             data-testid="itemActionButton"
             className="u-marginBottomTiny"
             value={type === "add" ? "Create item" : "Update item"}
             variant={type === "add" ? "primary" : "accent"}
-            type="submit"
-            form="itemActionForm"
+            onClick={handleSubmit}
+            isSubmitting={isSubmitting}
           ></ButtonItem>
         </div>
       </div>

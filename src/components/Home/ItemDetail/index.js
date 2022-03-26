@@ -174,7 +174,7 @@ const ItemDetailView = ({
                       value="Edit"
                       variant="accent"
                       icon="edit"
-                      sizeIcon="small"
+                      iconSize="small"
                       onClick={() => navigateEditItem(categoryId, itemId)}
                     ></ButtonItem>
                   </div>
@@ -185,7 +185,7 @@ const ItemDetailView = ({
                       value="Delete"
                       variant="negative_outline"
                       icon="trash"
-                      sizeIcon="small"
+                      iconSize="small"
                       onClick={() => handleDeleteItem()}
                     ></ButtonItem>
                   </div>

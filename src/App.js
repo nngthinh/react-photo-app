@@ -22,6 +22,9 @@ const App = () => {
       if (isLoggedIn) {
         const getUserInfoResult = await dispatch(getUserInfoAction());
         if (!getUserInfoResult.success) {
+          if (String(getUserInfoResult.error.message).includes("Network Error"))
+            return;
+
           dispatch(signOutAction());
         }
       }

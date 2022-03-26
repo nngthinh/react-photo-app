@@ -90,7 +90,7 @@ const ItemsListView = ({
           value="New item"
           variant="primary_outline"
           icon="plus"
-          sizeIcon="extraSmall"
+          iconSize="extraSmall"
           onClick={() => navigateCreateItem(categoryId)}
         ></ButtonItem>
         <div className="u-marginVerticalMedium">
@@ -104,20 +104,24 @@ const ItemsListView = ({
               key={item.id}
               className="itemsListItem u-flex u-alignItemsCenter u-justifyContentBetween u-sizeFull u-marginBottomSmall"
             >
-              <Link
-                to={`/categories/${categoryId}/items/${item.id}`}
-                className="u-flex u-alignItemsCenter u-justifyContentStart u-flexGrow1"
-              >
-                <img
+              <div className="u-flex u-alignItemsCenter u-justifyContentStart u-flexGrow1">
+                <Link
+                  to={`/categories/${categoryId}/items/${item.id}`}
                   className="itemImg u-marginRightSmall"
-                  width="100%"
-                  src={item.imageUrl}
-                  alt={item.name}
-                />
+                >
+                  <img
+                    className="itemImg"
+                    width="100%"
+                    src={item.imageUrl}
+                    alt={item.name}
+                  />
+                </Link>
                 <div className="u-flex u-flexColumn">
-                  <div className="u-text200">
-                    {shortenContent(item.description, limitItemDesc)}
-                  </div>
+                  <Link to={`/categories/${categoryId}/items/${item.id}`}>
+                    <div className="u-text200">
+                      {shortenContent(item.description, limitItemDesc)}
+                    </div>
+                  </Link>
                   <div className="u-marginTopSmall u-text200">
                     {userInfo?.id === item.author.id ? (
                       <ButtonItem
@@ -126,7 +130,7 @@ const ItemsListView = ({
                         value="Edit"
                         variant="accent_outline"
                         icon="edit"
-                        sizeIcon="extraSmall"
+                        iconSize="extraSmall"
                         onClick={() => navigateEditItem(categoryId, item.id)}
                       ></ButtonItem>
                     ) : (
@@ -134,7 +138,7 @@ const ItemsListView = ({
                     )}
                   </div>
                 </div>
-              </Link>
+              </div>
             </div>
           ))}
         </div>

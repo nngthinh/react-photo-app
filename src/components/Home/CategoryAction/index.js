@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   useLocation,
@@ -154,6 +154,8 @@ const CategoryActionView = ({
     { value: "", errors: null }
   );
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   useEffect(() => {
     setImageUrl({ type: "ON_CHANGE", value: categoryDetail?.imageUrl ?? "" });
     setDescription({
@@ -171,8 +173,6 @@ const CategoryActionView = ({
 
   // On action
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
     // Both two actions requires the same validations
     if (
       validateName(name.value) ||
@@ -184,7 +184,7 @@ const CategoryActionView = ({
       setImageUrl({ type: "ON_VALIDATE" });
       return;
     }
-
+    setIsSubmitting(true);
     // Add category
     if (type === "add") {
       const createCategory = async () => {
@@ -195,7 +195,7 @@ const CategoryActionView = ({
         );
         if (createCategoryResult.success) {
           notifyPositive("Create category successfully.");
-          navigate(-1);
+          navigate("/categories");
         } else {
           if (createCategoryResult.error.data) {
             const errors = createCategoryResult.error;
@@ -211,7 +211,7 @@ const CategoryActionView = ({
         }
       };
 
-      createCategory();
+      await createCategory();
     }
 
     // Update category
@@ -225,7 +225,7 @@ const CategoryActionView = ({
         );
         if (updateCategoryResult.success) {
           notifyPositive("Update category successfully.");
-          navigate(-1);
+          navigate(`/categories/${categoryId}`);
         } else {
           if (updateCategoryResult.error.data) {
             const errors = updateCategoryResult.error;
@@ -241,8 +241,9 @@ const CategoryActionView = ({
         }
       };
 
-      updateCategory();
+      await updateCategory();
     }
+    setIsSubmitting(false);
   };
 
   return (
@@ -251,65 +252,66 @@ const CategoryActionView = ({
         <h1 className="u-marginBottomExtraLarge">
           {type === "add" ? "Create new category" : "Edit category"}
         </h1>
-        <form id="categoryActionForm" onSubmit={handleSubmit}>
-          <div className="inputSecion u-marginBottomLarge Grid">
-            <div className="u-sizeFull md:u-size9of12 u-marginBottomMedium">
-              <InputItem
-                data-testid="name"
-                className="u-marginBottomExtraSmall"
-                type="text"
-                value={name.value}
-                placeholder={"Name"}
-                handleOnChange={(e) => {
-                  setName({ type: "ON_CHANGE", value: e.target.value });
-                }}
-                handleOnBlur={(e) => setName({ type: "ON_VALIDATE" })}
-                error={name.error}
-              ></InputItem>
-              <InputItem
-                data-testid="description"
-                className="u-marginBottomExtraSmall"
-                type="text"
-                value={description.value}
-                placeholder={"Description"}
-                handleOnChange={(e) => {
-                  setDescription({ type: "ON_CHANGE", value: e.target.value });
-                }}
-                handleOnBlur={(e) => setDescription({ type: "ON_VALIDATE" })}
-                error={description.error}
-              ></InputItem>
-              <InputItem
-                data-testid="password"
-                className="u-marginBottomExtraSmall"
-                type="text"
-                value={imageUrl.value}
-                placeholder={"Image URL"}
-                handleOnChange={(e) => {
-                  setImageUrl({ type: "ON_CHANGE", value: e.target.value });
-                }}
-                handleOnBlur={(e) => {
-                  setImageUrl({ type: "ON_VALIDATE" });
-                }}
-                error={imageUrl.error}
-              ></InputItem>
-            </div>
-            <div className="u-sizeFull md:u-size3of12">
-              <img
-                className="categoryActionImg"
-                src={imageUrl.value}
-                alt={imageUrl.error ? "Somethings went wrong" : "Waiting"}
-              ></img>
-            </div>
+        <div className="inputSecion u-marginBottomLarge Grid">
+          <div className="u-sizeFull md:u-size9of12 u-marginBottomMedium">
+            <InputItem
+              data-testid="name"
+              className="u-marginBottomExtraSmall"
+              type="text"
+              value={name.value}
+              placeholder={"Name"}
+              handleOnChange={(e) => {
+                setName({ type: "ON_CHANGE", value: e.target.value });
+              }}
+              handleOnBlur={(e) => setName({ type: "ON_VALIDATE" })}
+              error={name.error}
+              readOnly={isSubmitting}
+            ></InputItem>
+            <InputItem
+              data-testid="description"
+              className="u-marginBottomExtraSmall"
+              type="text"
+              value={description.value}
+              placeholder={"Description"}
+              handleOnChange={(e) => {
+                setDescription({ type: "ON_CHANGE", value: e.target.value });
+              }}
+              handleOnBlur={(e) => setDescription({ type: "ON_VALIDATE" })}
+              error={description.error}
+              readOnly={isSubmitting}
+            ></InputItem>
+            <InputItem
+              data-testid="password"
+              className="u-marginBottomExtraSmall"
+              type="text"
+              value={imageUrl.value}
+              placeholder={"Image URL"}
+              handleOnChange={(e) => {
+                setImageUrl({ type: "ON_CHANGE", value: e.target.value });
+              }}
+              handleOnBlur={(e) => {
+                setImageUrl({ type: "ON_VALIDATE" });
+              }}
+              error={imageUrl.error}
+              readOnly={isSubmitting}
+            ></InputItem>
           </div>
-        </form>
+          <div className="u-sizeFull md:u-size3of12">
+            <img
+              className="categoryActionImg"
+              src={imageUrl.value}
+              alt={imageUrl.error ? "Somethings went wrong" : "Waiting"}
+            ></img>
+          </div>
+        </div>
         <div className="buttonSection">
           <ButtonItem
             data-testid="categoryActionButton"
             className="u-marginBottomTiny"
             value={type === "add" ? "Create category" : "Update category"}
             variant={type === "add" ? "primary" : "accent"}
-            type="submit"
-            form="categoryActionForm"
+            onClick={handleSubmit}
+            isSubmitting={isSubmitting}
           ></ButtonItem>
         </div>
       </div>

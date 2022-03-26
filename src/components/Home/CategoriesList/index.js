@@ -91,7 +91,7 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
               value="New category"
               variant="primary_outline"
               icon="plus"
-              sizeIcon="extraSmall"
+              iconSize="extraSmall"
               onClick={() => navigateCreateCategory()}
             ></ButtonItem>
           </div>
