@@ -1,4 +1,4 @@
-import { Button, Icon } from "@ahaui/react";
+import { Button, Icon, Loader } from "@ahaui/react";
 
 const ButtonItem = ({
   value,
@@ -7,19 +7,26 @@ const ButtonItem = ({
   width = "full",
   disabled = false,
   icon,
-  iconComponent,
-  sizeIcon,
+  isLoading,
+  iconSize = "medium",
   ...rest
 } = {}) => {
-  const isHavingIcon = iconComponent || icon;
+  const isHavingIcon = isLoading || icon ? true : false;
+  console.log(isLoading, disabled, isHavingIcon);
   const IconComponent = isHavingIcon ? (
     <Button.Icon>
-      {iconComponent ?? <Icon size={sizeIcon ?? size} name={icon} />}
+      {isLoading ? (
+        <Loader size={iconSize ?? size} />
+      ) : (
+        <Icon size={iconSize ?? size} name={icon} />
+      )}
     </Button.Icon>
   ) : (
     <></>
   );
-  const LabelComponent = isHavingIcon ? (
+  const LabelComponent = isLoading ? (
+    <></>
+  ) : isHavingIcon ? (
     <Button.Label>{value}</Button.Label>
   ) : (
     <>{value}</>
