@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useState, useReducer } from "react";
 import { signInAction } from "actions/user";
 import { ButtonItem, InputItem } from "components/Common/Items";
 import { useDispatch } from "react-redux";
@@ -67,6 +67,8 @@ const SignInView = ({ nextUrl, onSignIn }) => {
     { value: "", errors: null }
   );
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   // Navigators
   const navigate = useNavigate();
   const navigateHome = () =>
@@ -83,14 +85,13 @@ const SignInView = ({ nextUrl, onSignIn }) => {
 
   // Handle submit
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
     // Validate all fields before submitting
     if (validateEmail(email.value) || validatePassword(password.value)) {
       setEmail({ type: "ON_VALIDATE" });
       setPassword({ type: "ON_VALIDATE" });
       return;
     }
+    setIsSubmitting(true);
     // Sign up
     const signInResult = await onSignIn(email.value, password.value);
     if (signInResult.success) {
@@ -106,6 +107,7 @@ const SignInView = ({ nextUrl, onSignIn }) => {
         notifyNegative(String(messageError));
       }
     }
+    setIsSubmitting(false);
   };
 
   // Return view
@@ -114,40 +116,38 @@ const SignInView = ({ nextUrl, onSignIn }) => {
       <div className="signInWrapper">
         <h1 className="u-marginBottomExtraLarge">Sign in</h1>
         <div className="inputSecion u-marginBottomLarge">
-          <form id="signInForm" onSubmit={handleSubmit}>
-            <InputItem
-              data-testid="email"
-              className="u-marginBottomExtraSmall"
-              type="text"
-              value={email.value}
-              placeholder={"Email"}
-              handleOnChange={(e) => {
-                setEmail({ type: "ON_CHANGE", value: e.target.value });
-              }}
-              handleOnBlur={(e) => setEmail({ type: "ON_VALIDATE" })}
-              error={email.error}
-            ></InputItem>
-            <InputItem
-              data-testid="password"
-              className="u-marginBottomExtraSmall"
-              type="password"
-              value={password.value}
-              placeholder={"Password"}
-              handleOnChange={(e) => {
-                setPassword({ type: "ON_CHANGE", value: e.target.value });
-              }}
-              handleOnBlur={(e) => setPassword({ type: "ON_VALIDATE" })}
-              error={password.error}
-            ></InputItem>
-          </form>
+          <InputItem
+            data-testid="email"
+            className="u-marginBottomExtraSmall"
+            type="text"
+            value={email.value}
+            placeholder={"Email"}
+            handleOnChange={(e) => {
+              setEmail({ type: "ON_CHANGE", value: e.target.value });
+            }}
+            handleOnBlur={(e) => setEmail({ type: "ON_VALIDATE" })}
+            error={email.error}
+          ></InputItem>
+          <InputItem
+            data-testid="password"
+            className="u-marginBottomExtraSmall"
+            type="password"
+            value={password.value}
+            placeholder={"Password"}
+            handleOnChange={(e) => {
+              setPassword({ type: "ON_CHANGE", value: e.target.value });
+            }}
+            handleOnBlur={(e) => setPassword({ type: "ON_VALIDATE" })}
+            error={password.error}
+          ></InputItem>
         </div>
         <div className="buttonSection">
           <ButtonItem
             data-testid="signInButton"
             className="u-marginBottomTiny"
             value={"Sign In"}
-            type="submit"
-            form="signInForm"
+            onClick={handleSubmit}
+            disabled={isSubmitting}
           ></ButtonItem>
           <Separator
             className="u-marginTopLarge u-marginBottomSmall"
