@@ -1,4 +1,4 @@
-const categories = {
+const categoriesFixtrue = {
   1: {
     name: "category 1",
     description: "description 1",
@@ -41,4 +41,4 @@ const categories = {
   },
 };
 
-export default categories;
+export default categoriesFixtrue;

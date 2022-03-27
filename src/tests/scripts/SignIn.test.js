@@ -6,17 +6,15 @@ import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
 import createStoreSynchedWithLocalStorage from "stores";
 import { MemoryRouter } from "react-router-dom";
-// import { act } from "react-dom/test-utils";
+import usersFixture from "tests/fixtures/users";
 
 // Global store with no user session
 let store;
 
 // Mock data
-const mockedUser = {
-  name: "Admin",
-  email: "admin@gmail.com",
-  password: "123abC#ef",
-};
+const mockedUser = usersFixture.info[1];
+const wrongEmail = "hehe" + mockedUser.email;
+const wrongPassword = "hehe" + mockedUser.password;
 
 jest.mock("utils/services/rest", () => ({
   getWithToken: jest.fn(),
@@ -27,7 +25,7 @@ jest.mock("utils/services/rest", () => ({
 beforeEach(() => {
   // Mock server
   RestService.getWithToken.mockImplementation(async (url, config) => {
-    Promise.resolve({ data: { name: mockedUser.name, id: 1 } });
+    Promise.resolve({ data: { name: mockedUser.name, id: mockedUser.id } });
   });
   RestService.post.mockImplementation(async (url, body, config) => {
     // Sign in
@@ -43,7 +41,7 @@ beforeEach(() => {
     }
     return Promise.resolve({
       data: {
-        accessToken: "sampleAccessToken",
+        accessToken: mockedUser.token,
       },
     });
   });
@@ -153,21 +151,19 @@ describe("sign in failed", () => {
     );
 
     // Wrong email
-    userEvent.type(screen.getByTestId("email"), "noise" + mockedUser.email);
+    userEvent.type(screen.getByTestId("email"), wrongEmail);
     userEvent.type(screen.getByTestId("password"), mockedUser.password);
     userEvent.click(screen.getByTestId("signInButton"));
     // Wait for calling all api
     await waitFor(() => expect(RestService.post.mock.calls.length).toEqual(1));
     // Wait for toast message
     await screen.findByText(/invalid email or password/i);
-    // Wrong password
+    // Clean input
     userEvent.clear(screen.getByTestId("email"));
     userEvent.clear(screen.getByTestId("password"));
+    // Wrong password
     userEvent.type(screen.getByTestId("email"), mockedUser.email);
-    userEvent.type(
-      screen.getByTestId("password"),
-      mockedUser.password + "noise"
-    );
+    userEvent.type(screen.getByTestId("password"), wrongPassword);
 
     // await waitForElementToBeRemoved(() =>
     //   screen.queryByText(/invalid email or password/i)

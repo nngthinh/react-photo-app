@@ -1,4 +1,4 @@
-const items = {
+const itemsFixture = {
   1: {
     description: "item description 1",
     image_url: "https://picsum.photos/200",
@@ -109,4 +109,4 @@ const items = {
   },
 };
 
-export default items;
+export default itemsFixture;

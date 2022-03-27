@@ -6,18 +6,14 @@ import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
 import createStoreSynchedWithLocalStorage from "stores";
 import { MemoryRouter } from "react-router-dom";
-import user from "tests/fixtures/users";
+import usersFixture from "tests/fixtures/users";
 
 // Global store with no user session
 const store = createStoreSynchedWithLocalStorage();
 
 // Mock data
-const mockedUser = {
-  name: "Admin",
-  email: "admin@gmail.com",
-  password: "123abC#ef",
-};
-const duplicatedEmail = "admin2@gmail.com";
+const mockedUser = usersFixture.info[1]; // get the first user info
+const duplicatedEmail = usersFixture.info[2].email;
 
 jest.mock("utils/services/rest", () => ({
   getWithToken: jest.fn(),
@@ -27,7 +23,7 @@ jest.mock("utils/services/rest", () => ({
 // Setup
 beforeEach(() => {
   RestService.getWithToken.mockImplementation(async (url, config) => {
-    Promise.resolve({ data: { name: mockedUser.name, id: 1 } });
+    Promise.resolve({ data: { name: mockedUser.name, id: mockedUser.id } });
   });
   RestService.post.mockImplementation(async (url, body, config) => {
     const { pathname } = new URL(url);
@@ -91,6 +87,8 @@ describe("sign up success", () => {
     await waitFor(() =>
       expect(RestService.getWithToken.mock.calls.length).toEqual(1)
     );
+    // Navigate to home
+    await screen.findByTestId("home");
     // Wait for toast message
     await screen.findByText(/create account successfully\./i);
   });
