@@ -1,4 +1,4 @@
-const usersFixture = {
+const usersData = {
   // For storing info
   info: {
     1: {
@@ -28,4 +28,4 @@ const usersFixture = {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im90aGVyQWRtaW5AbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjJ9.E7sTxzyNPW_ZtxaxGUufbsc7cNsVe0J4NIFUnAAvnhE": 2,
   },
 };
-export default usersFixture;
+export default usersData;
