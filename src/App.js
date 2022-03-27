@@ -52,13 +52,11 @@ const NotiView = ({ modal }) => {
 const MainAppView = () => {
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path="/signin" element={<SignIn />}></Route>
-          <Route path="/signup" element={<SignUp />}></Route>
-          <Route path="/*" element={<Home />}></Route>
-        </Routes>
-      </Router>
+      <Routes>
+        <Route path="/signin" element={<SignIn />}></Route>
+        <Route path="/signup" element={<SignUp />}></Route>
+        <Route path="/*" element={<Home />}></Route>
+      </Routes>
     </>
   );
 };
