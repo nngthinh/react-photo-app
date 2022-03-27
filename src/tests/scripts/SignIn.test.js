@@ -2,10 +2,10 @@ import RestService from "utils/services/rest";
 import App from "App";
 import { render, screen, waitFor } from "tests/utils/rtl";
 import userEvent from "@testing-library/user-event";
-import usersFixture from "tests/fixtures/users";
+import { usersData } from "tests/fixtures/database";
 
 // Mock data
-const mockedUser = usersFixture.info[1];
+const mockedUser = usersData.info[1];
 const wrongEmail = "hehe" + mockedUser.email;
 const wrongPassword = "hehe" + mockedUser.password;
 
