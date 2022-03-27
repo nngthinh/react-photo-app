@@ -1,21 +1,41 @@
 import App from "App";
 import { render, screen, waitFor } from "tests/utils/rtl";
-import usersFixture from "tests/fixtures/users";
+import { createMockedState } from "tests/fixtures/state";
 import userEvent from "@testing-library/user-event";
+import RestService from "utils/services/rest";
+import { usersData } from "tests/fixtures/database";
+import { loadState } from "utils/services/localStorage";
 
-const mockedUser = usersFixture.info[1];
-const mockedLoggedInStore = {
-  user: {
-    isLoggedIn: true,
-    token: mockedUser.token,
-    info: {
-      name: mockedUser.name,
-      id: mockedUser.id,
-    },
-  },
-  categories: {},
-  items: {},
-};
+jest.mock("utils/services/rest", () => ({
+  get: jest.fn(),
+  getWithToken: jest.fn(),
+}));
+
+// Mocked data
+const userId = 1;
+const userState = createMockedState(userId);
+
+beforeEach(() => {
+  RestService.get.mockImplementation(async (url, configs) => {});
+  RestService.getWithToken.mockImplementation(async (url, configs) => {
+    const token = loadState()?.user.token;
+    if (usersData.token[token] === "undefined") {
+      return Promise.reject({
+        response: {
+          data: {
+            message: "Missing access token",
+          },
+        },
+      });
+    }
+    return Promise.resolve({
+      data: {
+        name: usersData.info[userId].name,
+        id: userId,
+      },
+    });
+  });
+});
 
 describe("navbar", () => {
   describe("navigation", () => {
@@ -38,8 +58,23 @@ describe("navbar", () => {
     });
   });
   describe("sign out", () => {
-    it("able to sign out for logged user", () => {
-      render(<App />);
+    it.only("able to sign out for logged in user", async () => {
+      render(<App />, {}, { initialState: userState });
+      // Cancel signing out
+      userEvent.click(screen.getByTestId("avatar"));
+      userEvent.click(await screen.findByTestId("signOutButton"));
+      userEvent.click(await screen.findByText(/cancel/i));
+      // Confirm signing out
+      userEvent.click(screen.getByTestId("avatar"));
+      userEvent.click(await screen.findByTestId("signOutButton"));
+      userEvent.click(await screen.findByText(/yes/i));
+      // Assertion
+      await screen.findByText(/sign out successfully\./i);
+      expect(loadState()?.user).toEqual({
+        isLoggedIn: false,
+        token: null,
+        info: null,
+      });
     });
   });
 });
