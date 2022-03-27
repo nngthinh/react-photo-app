@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import createStoreSynchedWithLocalStorage from "stores";
 import { MemoryRouter } from "react-router-dom";
 import usersFixture from "tests/fixtures/users";
+import { Search } from "history";
 
 // Global store with no user session
 let store;
@@ -56,19 +57,29 @@ afterEach(() => {
   global.localStorage.clear();
 });
 
-describe("sign in success", () => {
-  it("should return no error", async () => {
+describe("navigation", () => {
+  it("can navigate to sign up page", async () => {
     render(
       <Provider store={store}>
-        <MemoryRouter initialEntries={["/"]}>
+        <MemoryRouter initialEntries={["/signin"]}>
           <App />
         </MemoryRouter>
       </Provider>
     );
-    // Go to sign in page
-    userEvent.click(screen.getByTestId("avatar"));
-    userEvent.click(await screen.findByTestId("signInButton"));
-    userEvent.click(screen.getByTestId("signInButton"));
+    userEvent.click(screen.getByTestId("navigateSignUpButton"));
+    await screen.findByTestId("signUpButton");
+  });
+});
+
+describe("sign in success", () => {
+  it("should return no error", async () => {
+    render(
+      <Provider store={store}>
+        <MemoryRouter initialEntries={["/signin"]}>
+          <App />
+        </MemoryRouter>
+      </Provider>
+    );
 
     // Type fields
     userEvent.type(screen.getByTestId("email"), mockedUser.email);

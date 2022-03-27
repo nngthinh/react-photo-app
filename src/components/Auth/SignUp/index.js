@@ -219,7 +219,7 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
             variant="lighter"
           />
           <ButtonItem
-            data-testid="signInButton"
+            data-testid="navigateSignInButton"
             variant="secondary"
             className="u-marginBottomTiny"
             value={"Sign In"}

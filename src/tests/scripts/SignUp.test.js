@@ -63,6 +63,20 @@ afterEach(() => {
   global.localStorage.clear();
 });
 
+describe("navigation", () => {
+  it("can navigate to sign in page", async () => {
+    render(
+      <Provider store={store}>
+        <MemoryRouter initialEntries={["/signup"]}>
+          <App />
+        </MemoryRouter>
+      </Provider>
+    );
+    userEvent.click(screen.getByTestId("navigateSignInButton"));
+    await screen.findByTestId("signInButton");
+  });
+});
+
 describe("sign up success", () => {
   it("should return no error", async () => {
     render(
