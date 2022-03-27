@@ -5,6 +5,7 @@ import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
 import createStoreSynchedWithLocalStorage from "stores";
+import { MemoryRouter } from "react-router-dom";
 // import { act } from "react-dom/test-utils";
 
 // Global store with no user session
@@ -61,7 +62,9 @@ describe("sign in success", () => {
   it("should return no error", async () => {
     render(
       <Provider store={store}>
-        <App />
+        <MemoryRouter initialEntries={["/"]}>
+          <App />
+        </MemoryRouter>
       </Provider>
     );
     // Go to sign in page
@@ -90,14 +93,11 @@ describe("sign in failed", () => {
   it("should return email field error", async () => {
     render(
       <Provider store={store}>
-        <App />
+        <MemoryRouter initialEntries={["/signin"]}>
+          <App />
+        </MemoryRouter>
       </Provider>
     );
-
-    // Go to sign in page
-    userEvent.click(screen.getByTestId("avatar"));
-    userEvent.click(await screen.findByTestId("signInButton"));
-    userEvent.click(screen.getByTestId("signInButton"));
 
     // Missing email
     userEvent.click(screen.getByTestId("signInButton"));
@@ -122,13 +122,11 @@ describe("sign in failed", () => {
   it("should return password field error", async () => {
     render(
       <Provider store={store}>
-        <App />
+        <MemoryRouter initialEntries={["/signin"]}>
+          <App />
+        </MemoryRouter>
       </Provider>
     );
-    // Go to sign in page
-    // userEvent.click(screen.getByTestId("avatar"));
-    // userEvent.click(await screen.findByTestId("signInButton"));
-    // userEvent.click(screen.getByTestId("signInButton"));
 
     // Missing password
     userEvent.click(screen.getByTestId("signInButton"));
@@ -148,13 +146,11 @@ describe("sign in failed", () => {
   it("should return invalid email or password error", async () => {
     render(
       <Provider store={store}>
-        <App />
+        <MemoryRouter initialEntries={["/signin"]}>
+          <App />
+        </MemoryRouter>
       </Provider>
     );
-    // Go to sign in page
-    // userEvent.click(screen.getByTestId("avatar"));
-    // userEvent.click(await screen.findByTestId("signInButton"));
-    // userEvent.click(screen.getByTestId("signInButton"));
 
     // Wrong email
     userEvent.type(screen.getByTestId("email"), "noise" + mockedUser.email);
