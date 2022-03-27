@@ -5,6 +5,8 @@ import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
 import createStoreSynchedWithLocalStorage from "stores";
+import { MemoryRouter } from "react-router-dom";
+import user from "tests/fixtures/users";
 
 // Global store with no user session
 const store = createStoreSynchedWithLocalStorage();
@@ -69,7 +71,9 @@ describe("sign up success", () => {
   it("should return no error", async () => {
     render(
       <Provider store={store}>
-        <App />
+        <MemoryRouter initialEntries={["/"]}>
+          <App />
+        </MemoryRouter>
       </Provider>
     );
     // Go to sign up page
@@ -96,13 +100,11 @@ describe("sign up failed", () => {
   it("should return name field error", async () => {
     render(
       <Provider store={store}>
-        <App />
+        <MemoryRouter initialEntries={["/signup"]}>
+          <App />
+        </MemoryRouter>
       </Provider>
     );
-    // Go to sign up page
-    userEvent.click(screen.getByTestId("avatar"));
-    userEvent.click(await screen.findByTestId("signInButton"));
-    userEvent.click(screen.getByTestId("signUpButton"));
     // Missing name
     userEvent.click(screen.getByTestId("signUpButton"));
     expect(
@@ -124,13 +126,11 @@ describe("sign up failed", () => {
   it("should return email field error", async () => {
     render(
       <Provider store={store}>
-        <App />
+        <MemoryRouter initialEntries={["/signup"]}>
+          <App />
+        </MemoryRouter>
       </Provider>
     );
-    // Go to sign up page
-    userEvent.click(screen.getByTestId("avatar"));
-    userEvent.click(await screen.findByTestId("signInButton"));
-    userEvent.click(screen.getByTestId("signUpButton"));
     // Missing email
     userEvent.click(screen.getByTestId("signUpButton"));
     expect(
@@ -152,13 +152,11 @@ describe("sign up failed", () => {
   it("should return password field error", async () => {
     render(
       <Provider store={store}>
-        <App />
+        <MemoryRouter initialEntries={["/signup"]}>
+          <App />
+        </MemoryRouter>
       </Provider>
     );
-    // Go to sign up page
-    userEvent.click(screen.getByTestId("avatar"));
-    userEvent.click(await screen.findByTestId("signInButton"));
-    userEvent.click(screen.getByTestId("signUpButton"));
     // Missing password
     userEvent.click(screen.getByTestId("signUpButton"));
     await screen.findByText(/shorter than minimum length 6\./i);
@@ -175,13 +173,11 @@ describe("sign up failed", () => {
   it("should return duplicated email error", async () => {
     render(
       <Provider store={store}>
-        <App />
+        <MemoryRouter initialEntries={["/signup"]}>
+          <App />
+        </MemoryRouter>
       </Provider>
     );
-    // Go to sign up page
-    userEvent.click(screen.getByTestId("avatar"));
-    userEvent.click(await screen.findByTestId("signInButton"));
-    userEvent.click(screen.getByTestId("signUpButton"));
     // Type fields
     userEvent.type(screen.getByTestId("name"), mockedUser.name);
     userEvent.type(screen.getByTestId("email"), duplicatedEmail);
