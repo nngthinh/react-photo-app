@@ -1,5 +1,4 @@
 import App from "App";
-import { MemoryRouter } from "react-router-dom";
 import { render, screen, waitFor } from "tests/utils/rtl";
 import usersFixture from "tests/fixtures/users";
 import userEvent from "@testing-library/user-event";
@@ -26,7 +25,16 @@ describe("navbar", () => {
       userEvent.click(screen.getByTestId("avatar"));
       userEvent.click(await screen.findByTestId("navigateSignInButton"));
       expect(screen.getByTestId("signInButton")).toBeInTheDocument();
-      expect(window.location.pathname).toBe("1");
+      expect(window.location.pathname).toBe("/signin");
+    });
+    it("able to go home", async () => {
+      render(<App />);
+      // Click to home button
+      userEvent.click(screen.getByTestId("home"));
+      // await waitFor(() =>
+      //   expect(screen.queryByTestId("home")).not.toBeInTheDocument()
+      // );
+      await waitFor(() => expect(window.location.pathname).toBe("/categories"));
     });
   });
   describe("sign out", () => {
