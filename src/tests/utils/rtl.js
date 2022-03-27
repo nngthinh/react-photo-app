@@ -7,8 +7,8 @@ const customRender = (
   ui,
   { route = "/" } = {},
   {
-    initalState,
-    store = createStoreSynchedWithLocalStorage(initalState),
+    initialState,
+    store = createStoreSynchedWithLocalStorage(initialState),
     ...renderOptions
   } = {}
 ) => {
