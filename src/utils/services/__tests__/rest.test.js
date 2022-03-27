@@ -1,5 +1,5 @@
 import * as axios from "axios";
-import { RestService } from "utils/services/rest";
+import RestService from "utils/services/rest";
 
 // Base url
 const baseUrl = "https://localhost:5000";
