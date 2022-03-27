@@ -1,15 +1,10 @@
 import RestService from "utils/services/rest";
 import App from "App";
-import { render, screen } from "@testing-library/react";
-import { waitFor } from "@testing-library/dom";
+import { render, screen, waitFor } from "tests/utils/rtl";
 import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
-import createStoreSynchedWithLocalStorage from "stores";
 import { MemoryRouter } from "react-router-dom";
 import usersFixture from "tests/fixtures/users";
-
-// Global store with no user session
-const store = createStoreSynchedWithLocalStorage();
 
 // Mock data
 const mockedUser = usersFixture.info[1]; // get the first user info
@@ -66,11 +61,9 @@ afterEach(() => {
 describe("navigation", () => {
   it("can navigate to sign in page", async () => {
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/signup"]}>
-          <App />
-        </MemoryRouter>
-      </Provider>
+      <MemoryRouter initialEntries={["/signup"]}>
+        <App />
+      </MemoryRouter>
     );
     userEvent.click(screen.getByTestId("navigateSignInButton"));
     await screen.findByTestId("signInButton");
@@ -80,16 +73,10 @@ describe("navigation", () => {
 describe("sign up success", () => {
   it("should return no error", async () => {
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/"]}>
-          <App />
-        </MemoryRouter>
-      </Provider>
+      <MemoryRouter initialEntries={["/signup"]}>
+        <App />
+      </MemoryRouter>
     );
-    // Go to sign up page
-    userEvent.click(screen.getByTestId("avatar"));
-    userEvent.click(await screen.findByTestId("signInButton"));
-    userEvent.click(screen.getByTestId("signUpButton"));
     // Type fields
     userEvent.type(screen.getByTestId("name"), mockedUser.name);
     userEvent.type(screen.getByTestId("email"), mockedUser.email);
@@ -111,11 +98,9 @@ describe("sign up success", () => {
 describe("sign up failed", () => {
   it("should return name field error", async () => {
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/signup"]}>
-          <App />
-        </MemoryRouter>
-      </Provider>
+      <MemoryRouter initialEntries={["/signup"]}>
+        <App />
+      </MemoryRouter>
     );
     // Missing name
     userEvent.click(screen.getByTestId("signUpButton"));
@@ -137,11 +122,9 @@ describe("sign up failed", () => {
 
   it("should return email field error", async () => {
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/signup"]}>
-          <App />
-        </MemoryRouter>
-      </Provider>
+      <MemoryRouter initialEntries={["/signup"]}>
+        <App />
+      </MemoryRouter>
     );
     // Missing email
     userEvent.click(screen.getByTestId("signUpButton"));
@@ -163,11 +146,9 @@ describe("sign up failed", () => {
 
   it("should return password field error", async () => {
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/signup"]}>
-          <App />
-        </MemoryRouter>
-      </Provider>
+      <MemoryRouter initialEntries={["/signup"]}>
+        <App />
+      </MemoryRouter>
     );
     // Missing password
     userEvent.click(screen.getByTestId("signUpButton"));
@@ -184,11 +165,9 @@ describe("sign up failed", () => {
 
   it("should return duplicated email error", async () => {
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/signup"]}>
-          <App />
-        </MemoryRouter>
-      </Provider>
+      <MemoryRouter initialEntries={["/signup"]}>
+        <App />
+      </MemoryRouter>
     );
     // Type fields
     userEvent.type(screen.getByTestId("name"), mockedUser.name);

@@ -1,16 +1,9 @@
 import RestService from "utils/services/rest";
 import App from "App";
-import { render, screen } from "@testing-library/react";
-import { waitFor } from "@testing-library/dom";
+import { render, screen, waitFor } from "tests/utils/rtl";
 import userEvent from "@testing-library/user-event";
-import { Provider } from "react-redux";
-import createStoreSynchedWithLocalStorage from "stores";
 import { MemoryRouter } from "react-router-dom";
 import usersFixture from "tests/fixtures/users";
-import { Search } from "history";
-
-// Global store with no user session
-let store;
 
 // Mock data
 const mockedUser = usersFixture.info[1];
@@ -46,9 +39,6 @@ beforeEach(() => {
       },
     });
   });
-
-  // Create store
-  store = createStoreSynchedWithLocalStorage();
 });
 
 // Clean the environment
@@ -60,11 +50,9 @@ afterEach(() => {
 describe("navigation", () => {
   it("can navigate to sign up page", async () => {
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/signin"]}>
-          <App />
-        </MemoryRouter>
-      </Provider>
+      <MemoryRouter initialEntries={["/signin"]}>
+        <App />
+      </MemoryRouter>
     );
     userEvent.click(screen.getByTestId("navigateSignUpButton"));
     await screen.findByTestId("signUpButton");
@@ -74,11 +62,9 @@ describe("navigation", () => {
 describe("sign in success", () => {
   it("should return no error", async () => {
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/signin"]}>
-          <App />
-        </MemoryRouter>
-      </Provider>
+      <MemoryRouter initialEntries={["/signin"]}>
+        <App />
+      </MemoryRouter>
     );
 
     // Type fields
@@ -101,11 +87,9 @@ describe("sign in success", () => {
 describe("sign in failed", () => {
   it("should return email field error", async () => {
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/signin"]}>
-          <App />
-        </MemoryRouter>
-      </Provider>
+      <MemoryRouter initialEntries={["/signin"]}>
+        <App />
+      </MemoryRouter>
     );
 
     // Missing email
@@ -130,11 +114,9 @@ describe("sign in failed", () => {
 
   it("should return password field error", async () => {
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/signin"]}>
-          <App />
-        </MemoryRouter>
-      </Provider>
+      <MemoryRouter initialEntries={["/signin"]}>
+        <App />
+      </MemoryRouter>
     );
 
     // Missing password
@@ -154,11 +136,9 @@ describe("sign in failed", () => {
 
   it("should return invalid email or password error", async () => {
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/signin"]}>
-          <App />
-        </MemoryRouter>
-      </Provider>
+      <MemoryRouter initialEntries={["/signin"]}>
+        <App />
+      </MemoryRouter>
     );
 
     // Wrong email

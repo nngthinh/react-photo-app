@@ -16,4 +16,5 @@ const customRender = (
   return render(ui, { wrapper: AllProviders, ...renderOptions });
 };
 
+export * from "@testing-library/react";
 export { customRender as render };
