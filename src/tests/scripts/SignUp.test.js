@@ -69,6 +69,7 @@ describe("sign up success", () => {
       </Provider>
     );
     // Go to sign up page
+    userEvent.click(screen.getByTestId("avatar"));
     userEvent.click(screen.getByTestId("signInButton"));
     userEvent.click(screen.getByTestId("signUpButton"));
     // Type fields
@@ -93,6 +94,7 @@ describe("sign up failed", () => {
       </Provider>
     );
     // Go to sign up page
+    userEvent.click(screen.getByTestId("avatar"));
     userEvent.click(screen.getByTestId("signInButton"));
     userEvent.click(screen.getByTestId("signUpButton"));
     // Missing name
@@ -120,6 +122,7 @@ describe("sign up failed", () => {
       </Provider>
     );
     // Go to sign up page
+    userEvent.click(screen.getByTestId("avatar"));
     userEvent.click(screen.getByTestId("signInButton"));
     userEvent.click(screen.getByTestId("signUpButton"));
     // Missing email
@@ -147,6 +150,7 @@ describe("sign up failed", () => {
       </Provider>
     );
     // Go to sign up page
+    userEvent.click(screen.getByTestId("avatar"));
     userEvent.click(screen.getByTestId("signInButton"));
     userEvent.click(screen.getByTestId("signUpButton"));
     // Missing password
@@ -169,6 +173,7 @@ describe("sign up failed", () => {
       </Provider>
     );
     // Go to sign up page
+    userEvent.click(screen.getByTestId("avatar"));
     userEvent.click(screen.getByTestId("signInButton"));
     userEvent.click(screen.getByTestId("signUpButton"));
     // Type fields

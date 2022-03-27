@@ -12,7 +12,6 @@ const ButtonItem = ({
   ...rest
 } = {}) => {
   const isHavingIcon = isSubmitting || icon ? true : false;
-  console.log(isSubmitting, disabled, isHavingIcon);
   const IconComponent = isHavingIcon ? (
     <Button.Icon>
       {isSubmitting ? (

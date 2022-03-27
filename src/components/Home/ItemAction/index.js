@@ -151,16 +151,16 @@ const ItemActionView = ({
       return;
     }
 
-    setIsSubmitting(true);
-
     // Add item
     if (type === "add") {
       const createItem = async () => {
+        setIsSubmitting(true);
         const createItemResult = await onCreateItem(
           categoryId,
           description.value,
           imageUrl.value
         );
+        setIsSubmitting(false);
         if (createItemResult.success) {
           notifyPositive("Create item successfully.");
           navigate(`/categories/${categoryId}`);
@@ -183,12 +183,14 @@ const ItemActionView = ({
     // Update item
     else {
       const updateItem = async () => {
+        setIsSubmitting(true);
         const updateItemResult = await onUpdateItem(
           categoryId,
           itemId,
           description.value,
           imageUrl.value
         );
+        setIsSubmitting(false);
         if (updateItemResult.success) {
           notifyPositive("Update item successfully.");
           navigate(`/category/${categoryId}/items/${itemId}`);
@@ -207,7 +209,6 @@ const ItemActionView = ({
       };
       await updateItem();
     }
-    setIsSubmitting(false);
   };
 
   return (

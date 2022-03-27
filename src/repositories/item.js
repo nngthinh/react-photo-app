@@ -1,5 +1,5 @@
 import { baseUrl } from "constants/apiUrl";
-const { RestService } = require("utils/services/rest");
+import RestService from "utils/services/rest";
 
 class ItemsRepository {
   static async viewItems(categoryId, offset, limit) {

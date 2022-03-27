@@ -96,6 +96,7 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
       <div className="navbarWrapper container">
         <div className="left Brown500 u-flex u-alignItemsCenter">
           <span
+            data-testid="home"
             className="home u-fontBold u-text400"
             onClick={() => navigateHome()}
           >
@@ -107,23 +108,28 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
             {isLoggedIn ? greeting(user.info?.name) : "Welcome to PhotoApp!"}
           </div>
           <Dropdown alignRight className="profile">
-            <Dropdown.Toggle className="u-lineHeightNone" data-testid="avatar">
+            <Dropdown.Toggle className="u-lineHeightNone">
               <div>
                 {isLoggedIn ? (
                   <Avatar
+                    data-testid="avatar"
                     className="u-backgroundPrimaryLight"
                     text={user.info?.name[0].toUpperCase()}
                     size="medium"
                   />
                 ) : (
-                  <Icon size="medium" name="contact" className="u-textGray" />
+                  <Icon
+                    data-testid="avatar"
+                    size="medium"
+                    name="contact"
+                    className="u-textGray"
+                  />
                 )}
               </div>
             </Dropdown.Toggle>
             <Dropdown.Container className="u-paddingVerticalExtraSmall u-marginTopExtraSmall">
               {/* <Separator variant="lighter" /> */}
               <Dropdown.Item
-                data-testid="setDarkModeButton"
                 className="u-flex u-justifyContentCenter u-alignItemsCenter u-paddingVerticalExtraSmall"
                 onClick={() => setIsDark(!isDark)}
               >

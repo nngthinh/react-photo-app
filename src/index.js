@@ -5,7 +5,6 @@ import "@ahaui/css/dist/index.min.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import { BrowserRouter as Router } from "react-router-dom";
 import createStoreSynchedWithLocalStorage from "stores";
 
 const store = createStoreSynchedWithLocalStorage();
@@ -13,9 +12,7 @@ const store = createStoreSynchedWithLocalStorage();
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Router>
-        <App />
-      </Router>
+      <App />
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

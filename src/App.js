@@ -1,7 +1,7 @@
 import SignUp from "components/Auth/SignUp";
 import SignIn from "components/Auth/SignIn";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import "@ahaui/css/dist/index.min.css";
 import { getUserInfoAction, signOutAction } from "actions/user";
@@ -52,11 +52,13 @@ const NotiView = ({ modal }) => {
 const MainAppView = () => {
   return (
     <>
-      <Routes>
-        <Route path="/signin" element={<SignIn />}></Route>
-        <Route path="/signup" element={<SignUp />}></Route>
-        <Route path="/*" element={<Home />}></Route>
-      </Routes>
+      <Router>
+        <Routes>
+          <Route path="/signin" element={<SignIn />}></Route>
+          <Route path="/signup" element={<SignUp />}></Route>
+          <Route path="/*" element={<Home />}></Route>
+        </Routes>
+      </Router>
     </>
   );
 };

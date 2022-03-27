@@ -100,7 +100,7 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
     { value: "", errors: null }
   );
 
-  const [isSubmitting, setSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Navigators
   const navigate = useNavigate();
@@ -129,13 +129,16 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
       setPassword({ type: "ON_VALIDATE" });
       return;
     }
-    setSubmitting(true);
+    setIsSubmitting(true);
     // Sign up
     const signUpResult = await onSignUp(
       name.value,
       email.value,
       password.value
     );
+
+    setIsSubmitting(false);
+
     if (signUpResult.success) {
       notifyPositive("Create account successfully.");
       // Sign in and get token
@@ -154,7 +157,6 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
       const messageError = signUpResult.error.message;
       notifyNegative(String(messageError));
     }
-    setSubmitting(false);
   };
 
   // Return view

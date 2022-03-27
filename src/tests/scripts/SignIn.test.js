@@ -1,14 +1,15 @@
-import axios from "axios";
+import RestService from "utils/services/rest";
 import App from "App";
 import { render, screen } from "@testing-library/react";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
+import { waitForElementToBeRemoved } from "@testing-library/react";
 import { Provider } from "react-redux";
 import createStoreSynchedWithLocalStorage from "stores";
 // import { act } from "react-dom/test-utils";
 
 // Global store with no user session
-const store = createStoreSynchedWithLocalStorage();
+let store;
 
 // Mock data
 const mockedUser = {
@@ -17,14 +18,18 @@ const mockedUser = {
   password: "123abC#ef",
 };
 
-jest.mock("axios");
+jest.mock("utils/services/rest", () => ({
+  getWithToken: jest.fn(),
+  post: jest.fn(),
+}));
 
 // Setup
 beforeEach(() => {
-  axios.get.mockImplementation(async (url, config) => {
+  // Mock server
+  RestService.getWithToken.mockImplementation(async (url, config) => {
     Promise.resolve({ data: { name: mockedUser.name, id: 1 } });
   });
-  axios.post.mockImplementation(async (url, body, config) => {
+  RestService.post.mockImplementation(async (url, body, config) => {
     // Sign in
     if (
       body.email !== mockedUser.email ||
@@ -42,11 +47,15 @@ beforeEach(() => {
       },
     });
   });
+
+  // Create store
+  store = createStoreSynchedWithLocalStorage();
 });
 
-// Clean storage
 afterEach(() => {
-  localStorage.clear();
+  // Clean the environment
+  document.body.textContent = "";
+  global.localStorage.clear();
 });
 
 describe("sign in success", () => {
@@ -57,6 +66,8 @@ describe("sign in success", () => {
       </Provider>
     );
     // Go to sign in page
+    userEvent.click(screen.getByTestId("avatar"));
+    userEvent.click(await screen.findByTestId("signInButton"));
     userEvent.click(screen.getByTestId("signInButton"));
 
     // Type fields
@@ -66,8 +77,11 @@ describe("sign in success", () => {
     userEvent.click(screen.getByTestId("signInButton"));
 
     // Wait for calling all api
-    await waitFor(() => expect(axios.post.mock.calls.length).toEqual(1));
-    await waitFor(() => expect(axios.get.mock.calls.length).toEqual(1));
+    await waitFor(() => expect(RestService.post.mock.calls.length).toEqual(1)); // Sign in
+    await screen.findByTestId("home");
+    await waitFor(() =>
+      expect(RestService.getWithToken.mock.calls.length).toEqual(1)
+    ); // Auto sign in check
     // Wait for toast message
     await screen.findByText(/sign in successfully\./i);
   });
@@ -81,6 +95,8 @@ describe("sign in failed", () => {
       </Provider>
     );
     // Go to sign in page
+    userEvent.click(screen.getByTestId("avatar"));
+    userEvent.click(await screen.findByTestId("signInButton"));
     userEvent.click(screen.getByTestId("signInButton"));
 
     // Missing email
@@ -100,7 +116,7 @@ describe("sign in failed", () => {
     ).toBeInTheDocument();
 
     // Ensures there's no post request
-    expect(axios.post.mock.calls.length).toEqual(0);
+    expect(RestService.post.mock.calls.length).toEqual(0);
   });
 
   it("should return password field error", async () => {
@@ -110,7 +126,9 @@ describe("sign in failed", () => {
       </Provider>
     );
     // Go to sign in page
-    userEvent.click(screen.getByTestId("signInButton"));
+    // userEvent.click(screen.getByTestId("avatar"));
+    // userEvent.click(await screen.findByTestId("signInButton"));
+    // userEvent.click(screen.getByTestId("signInButton"));
 
     // Missing password
     userEvent.click(screen.getByTestId("signInButton"));
@@ -124,7 +142,7 @@ describe("sign in failed", () => {
     );
 
     // Ensures there's no post request
-    expect(axios.post.mock.calls.length).toEqual(0);
+    expect(RestService.post.mock.calls.length).toEqual(0);
   });
 
   it("should return invalid email or password error", async () => {
@@ -134,14 +152,16 @@ describe("sign in failed", () => {
       </Provider>
     );
     // Go to sign in page
-    userEvent.click(screen.getByTestId("signInButton"));
+    // userEvent.click(screen.getByTestId("avatar"));
+    // userEvent.click(await screen.findByTestId("signInButton"));
+    // userEvent.click(screen.getByTestId("signInButton"));
 
     // Wrong email
     userEvent.type(screen.getByTestId("email"), "noise" + mockedUser.email);
     userEvent.type(screen.getByTestId("password"), mockedUser.password);
     userEvent.click(screen.getByTestId("signInButton"));
     // Wait for calling all api
-    await waitFor(() => expect(axios.post.mock.calls.length).toEqual(1));
+    await waitFor(() => expect(RestService.post.mock.calls.length).toEqual(1));
     // Wait for toast message
     await screen.findByText(/invalid email or password/i);
     // Wrong password
@@ -152,9 +172,15 @@ describe("sign in failed", () => {
       screen.getByTestId("password"),
       mockedUser.password + "noise"
     );
+    expect(
+      await screen.findByText(/invalid email or password/i)
+    ).not.toBeInTheDocument();
+    // await waitForElementToBeRemoved(() =>
+    //   screen.queryByText(/invalid email or password/i)
+    // );
     userEvent.click(screen.getByTestId("signInButton"));
     // Wait for calling all api
-    await waitFor(() => expect(axios.post.mock.calls.length).toEqual(2));
+    await waitFor(() => expect(RestService.post.mock.calls.length).toEqual(2));
     // Wait for toast message
     await screen.findByText(/invalid email or password/i);
   });

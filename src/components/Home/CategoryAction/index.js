@@ -40,7 +40,6 @@ const CategoryAction = ({ type }) => {
       const nextUrl = base64.encode(
         `${location.pathname}${location.search}${location.hash}`
       );
-      console.log(createSearchParams({ next: nextUrl }).toString());
       navigate(
         {
           pathname: "/signin",
@@ -184,15 +183,17 @@ const CategoryActionView = ({
       setImageUrl({ type: "ON_VALIDATE" });
       return;
     }
-    setIsSubmitting(true);
+
     // Add category
     if (type === "add") {
       const createCategory = async () => {
+        setIsSubmitting(true);
         const createCategoryResult = await onCreateCategory(
           name.value,
           description.value,
           imageUrl.value
         );
+        setIsSubmitting(false);
         if (createCategoryResult.success) {
           notifyPositive("Create category successfully.");
           navigate("/categories");
@@ -217,12 +218,14 @@ const CategoryActionView = ({
     // Update category
     else {
       const updateCategory = async () => {
+        setIsSubmitting(true);
         const updateCategoryResult = await onUpdateCategory(
           categoryId,
           name.value,
           description.value,
           imageUrl.value
         );
+        setIsSubmitting(false);
         if (updateCategoryResult.success) {
           notifyPositive("Update category successfully.");
           navigate(`/categories/${categoryId}`);
@@ -243,7 +246,6 @@ const CategoryActionView = ({
 
       await updateCategory();
     }
-    setIsSubmitting(false);
   };
 
   return (

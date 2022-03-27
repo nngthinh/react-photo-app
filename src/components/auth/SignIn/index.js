@@ -84,7 +84,7 @@ const SignInView = ({ nextUrl, onSignIn }) => {
     );
 
   // Handle submit
-  const handleSubmit = async (e) => {
+  const handleSubmit = async () => {
     // Validate all fields before submitting
     if (validateEmail(email.value) || validatePassword(password.value)) {
       setEmail({ type: "ON_VALIDATE" });
@@ -94,6 +94,7 @@ const SignInView = ({ nextUrl, onSignIn }) => {
     setIsSubmitting(true);
     // Sign up
     const signInResult = await onSignIn(email.value, password.value);
+    setIsSubmitting(false);
     if (signInResult.success) {
       notifyPositive("Sign in successfully.");
       navigateHome();
@@ -107,7 +108,6 @@ const SignInView = ({ nextUrl, onSignIn }) => {
         notifyNegative(String(messageError));
       }
     }
-    setIsSubmitting(false);
   };
 
   // Return view
@@ -161,7 +161,7 @@ const SignInView = ({ nextUrl, onSignIn }) => {
             variant="secondary"
             className="u-marginBottomTiny"
             value={"Create account"}
-            onClick={() => navigateSignUp()}
+            onClick={navigateSignUp}
           ></ButtonItem>
         </div>
       </div>

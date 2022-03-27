@@ -6,7 +6,7 @@ import {
 import { loadState } from "./localStorage";
 
 // Rest service with Beaer supported
-export class RestService {
+export default class RestService {
   // Generate the new config with bearer token in the header field
   static #addTokenToConfigs = (config = {}, token) => {
     if (typeof token === "string" && token.length > 0) {
