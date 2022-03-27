@@ -2,8 +2,6 @@ import RestService from "utils/services/rest";
 import App from "App";
 import { render, screen, waitFor } from "tests/utils/rtl";
 import userEvent from "@testing-library/user-event";
-import { Provider } from "react-redux";
-import { MemoryRouter } from "react-router-dom";
 import usersFixture from "tests/fixtures/users";
 
 // Mock data
@@ -60,23 +58,16 @@ afterEach(() => {
 
 describe("navigation", () => {
   it("can navigate to sign in page", async () => {
-    render(
-      <MemoryRouter initialEntries={["/signup"]}>
-        <App />
-      </MemoryRouter>
-    );
+    render(<App />, { route: "/signup" });
     userEvent.click(screen.getByTestId("navigateSignInButton"));
     await screen.findByTestId("signInButton");
+    expect(window.location.pathname).toBe("/signin");
   });
 });
 
 describe("sign up success", () => {
   it("should return no error", async () => {
-    render(
-      <MemoryRouter initialEntries={["/signup"]}>
-        <App />
-      </MemoryRouter>
-    );
+    render(<App />, { route: "/signup" });
     // Type fields
     userEvent.type(screen.getByTestId("name"), mockedUser.name);
     userEvent.type(screen.getByTestId("email"), mockedUser.email);
@@ -97,11 +88,7 @@ describe("sign up success", () => {
 
 describe("sign up failed", () => {
   it("should return name field error", async () => {
-    render(
-      <MemoryRouter initialEntries={["/signup"]}>
-        <App />
-      </MemoryRouter>
-    );
+    render(<App />, { route: "/signup" });
     // Missing name
     userEvent.click(screen.getByTestId("signUpButton"));
     expect(
@@ -121,11 +108,7 @@ describe("sign up failed", () => {
   });
 
   it("should return email field error", async () => {
-    render(
-      <MemoryRouter initialEntries={["/signup"]}>
-        <App />
-      </MemoryRouter>
-    );
+    render(<App />, { route: "/signup" });
     // Missing email
     userEvent.click(screen.getByTestId("signUpButton"));
     expect(
@@ -145,11 +128,7 @@ describe("sign up failed", () => {
   });
 
   it("should return password field error", async () => {
-    render(
-      <MemoryRouter initialEntries={["/signup"]}>
-        <App />
-      </MemoryRouter>
-    );
+    render(<App />, { route: "/signup" });
     // Missing password
     userEvent.click(screen.getByTestId("signUpButton"));
     await screen.findByText(/shorter than minimum length 6\./i);
@@ -164,11 +143,7 @@ describe("sign up failed", () => {
   });
 
   it("should return duplicated email error", async () => {
-    render(
-      <MemoryRouter initialEntries={["/signup"]}>
-        <App />
-      </MemoryRouter>
-    );
+    render(<App />, { route: "/signup" });
     // Type fields
     userEvent.type(screen.getByTestId("name"), mockedUser.name);
     userEvent.type(screen.getByTestId("email"), duplicatedEmail);

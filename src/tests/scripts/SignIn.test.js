@@ -2,7 +2,6 @@ import RestService from "utils/services/rest";
 import App from "App";
 import { render, screen, waitFor } from "tests/utils/rtl";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router-dom";
 import usersFixture from "tests/fixtures/users";
 
 // Mock data
@@ -49,23 +48,16 @@ afterEach(() => {
 
 describe("navigation", () => {
   it("can navigate to sign up page", async () => {
-    render(
-      <MemoryRouter initialEntries={["/signin"]}>
-        <App />
-      </MemoryRouter>
-    );
+    render(<App />, { route: "/signin" });
     userEvent.click(screen.getByTestId("navigateSignUpButton"));
     await screen.findByTestId("signUpButton");
+    expect(window.location.pathname).toBe("/signup");
   });
 });
 
 describe("sign in success", () => {
   it("should return no error", async () => {
-    render(
-      <MemoryRouter initialEntries={["/signin"]}>
-        <App />
-      </MemoryRouter>
-    );
+    render(<App />, { route: "/signin" });
 
     // Type fields
     userEvent.type(screen.getByTestId("email"), mockedUser.email);
@@ -86,11 +78,7 @@ describe("sign in success", () => {
 
 describe("sign in failed", () => {
   it("should return email field error", async () => {
-    render(
-      <MemoryRouter initialEntries={["/signin"]}>
-        <App />
-      </MemoryRouter>
-    );
+    render(<App />, { route: "/signin" });
 
     // Missing email
     userEvent.click(screen.getByTestId("signInButton"));
@@ -113,11 +101,7 @@ describe("sign in failed", () => {
   });
 
   it("should return password field error", async () => {
-    render(
-      <MemoryRouter initialEntries={["/signin"]}>
-        <App />
-      </MemoryRouter>
-    );
+    render(<App />, { route: "/signin" });
 
     // Missing password
     userEvent.click(screen.getByTestId("signInButton"));
@@ -135,11 +119,7 @@ describe("sign in failed", () => {
   });
 
   it("should return invalid email or password error", async () => {
-    render(
-      <MemoryRouter initialEntries={["/signin"]}>
-        <App />
-      </MemoryRouter>
-    );
+    render(<App />, { route: "/signin" });
 
     // Wrong email
     userEvent.type(screen.getByTestId("email"), wrongEmail);

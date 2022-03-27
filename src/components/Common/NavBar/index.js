@@ -153,7 +153,7 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
                 </Dropdown.Item>
               ) : (
                 <Dropdown.Item
-                  data-testid="signInButton"
+                  data-testid="navigateSignInButton"
                   className="u-flex u-justifyContentCenter u-alignItemsCenter u-paddingVerticalExtraSmall u-marginTopExtraSmall"
                   onClick={() => navigateSignIn()}
                 >
