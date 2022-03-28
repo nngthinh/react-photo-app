@@ -12,9 +12,10 @@ const [baseGet, basePost, basePut, basePatch, baseDelete] = [
 ];
 
 // Mocked data
+const mockedEmptyUrl = "";
 const mockedBody = { id: 1, name: "Happy" };
-const mockedSuccessData = { data: "success" };
-const mockedFailedData = { error: "not authorized" };
+const mockedSuccessData = { data: {message: "success"} };
+const mockedFailedData = { error: {message: "not authorized"} };
 const mockedToken =
   "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MywiaWF0IjoxNjQ3MjM1NzQ3LCJleHAiOjE2NDczMjIxNDd9.01yuTZgLzz61L3aHnbqkczy9fB0tuTKTwd_39iRqkLQ";
 const mockedConfig = { "Content-Type": "application/x-www-form-urlencoded" };
@@ -43,11 +44,11 @@ afterAll(() => {
 jest.mock("axios");
 
 describe("get", () => {
-  it("without token", () => {
+  it("without token", async () => {
     const mockedUrl = `${baseUrl}/${baseGet}`;
     // Mock server
     axios.get.mockImplementation((url, config) =>
-      Promise.resolve(mockedSuccessData)
+      url ? Promise.resolve(mockedSuccessData) : Promise.reject(mockedFailedData)
     );
     // Request
     return RestService.get(mockedUrl).then((data) => {
