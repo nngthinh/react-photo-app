@@ -21,29 +21,50 @@ export default class RestService {
     return config;
   };
 
-  // Authorized token
+  // Get authorization token
   static #getToken = () => loadState()?.user?.token ?? "";
+
+  // Format body, response, error
+  static #formatBody = (body) => {
+    return convertCamelToSnakeJSON(body);
+  };
+
+  static #formatResponse = (response) => {
+    return convertSnakeToCamelJSON(response);
+  };
+
+  static #formatError = (error) => {
+    // Response from server
+    if (error.response) {
+      const errorData = error.response.data;
+      return convertSnakeToCamelJSON(errorData);
+    }
+    // Other error (e.g undefined data)
+    else {
+      return { message: error };
+    }
+  };
 
   // All RESTful APIs
   static async get(url, config = {}) {
     try {
-      const result = await axios.get(url, config);
-      return convertSnakeToCamelJSON(result);
+      const response = await axios.get(url, config);
+      return RestService.#formatResponse(response);
     } catch (error) {
-      throw error;
+      throw RestService.#formatError(error);
     }
   }
 
   static async post(url, body, config = {}) {
     try {
-      const result = await axios.post(
+      const response = await axios.post(
         url,
         convertCamelToSnakeJSON(body),
         config
       );
-      return convertSnakeToCamelJSON(result);
+      return RestService.#formatResponse(response);
     } catch (error) {
-      throw error;
+      throw RestService.#formatError(error);
     }
   }
 
@@ -51,10 +72,10 @@ export default class RestService {
     try {
       const token = RestService.#getToken();
       const finalConfig = RestService.#addTokenToConfigs(config, token);
-      const result = await axios.get(url, finalConfig);
-      return convertSnakeToCamelJSON(result);
+      const response = await axios.get(url, finalConfig);
+      return RestService.#formatResponse(response);
     } catch (error) {
-      throw error;
+      throw RestService.#formatError(error);
     }
   }
 
@@ -62,14 +83,14 @@ export default class RestService {
     try {
       const token = RestService.#getToken();
       const finalConfig = RestService.#addTokenToConfigs(config, token);
-      const result = await axios.post(
+      const response = await axios.post(
         url,
         convertCamelToSnakeJSON(body),
         finalConfig
       );
-      return convertSnakeToCamelJSON(result);
+      return RestService.#formatResponse(response);
     } catch (error) {
-      throw error;
+      throw RestService.#formatError(error);
     }
   }
 
@@ -77,14 +98,14 @@ export default class RestService {
     try {
       const token = RestService.#getToken();
       const finalConfig = RestService.#addTokenToConfigs(config, token);
-      const result = await axios.put(
+      const response = await axios.put(
         url,
         convertCamelToSnakeJSON(body),
         finalConfig
       );
-      return convertSnakeToCamelJSON(result);
+      return RestService.#formatResponse(response);
     } catch (error) {
-      throw error;
+      throw RestService.#formatError(error);
     }
   }
 
@@ -92,10 +113,10 @@ export default class RestService {
     try {
       const token = RestService.#getToken();
       const finalConfig = RestService.#addTokenToConfigs(config, token);
-      const result = await axios.delete(url, finalConfig);
-      return convertSnakeToCamelJSON(result);
+      const response = await axios.delete(url, finalConfig);
+      return RestService.#formatResponse(response);
     } catch (error) {
-      throw error;
+      throw RestService.#formatError(error);
     }
   }
 }

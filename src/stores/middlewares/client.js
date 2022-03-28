@@ -1,5 +1,3 @@
-import { convertSnakeToCamelJSON } from "utils/helpers/convertJson";
-
 // Executes async query to the backend
 const clientMiddleware = (store) => (next) => async (action) => {
   if (!action.pendingActionType) {
@@ -23,29 +21,14 @@ const clientMiddleware = (store) => (next) => async (action) => {
       data: data,
     };
   } catch (error) {
-    // Response from server
-    if (error.response) {
-      const errorData = error.response.data;
-      nextAction = {
-        type: `${type}_FAILED`,
-        error: convertSnakeToCamelJSON(errorData),
-      };
-      returnValue = {
-        success: false,
-        error: convertSnakeToCamelJSON(errorData),
-      };
-    }
-    // Other error (e.g undefined data)
-    else {
-      nextAction = {
-        type: `${type}_FAILED`,
-        error: { message: error },
-      };
-      returnValue = {
-        success: false,
-        error: { message: error },
-      };
-    }
+    nextAction = {
+      type: `${type}_FAILED`,
+      error,
+    };
+    returnValue = {
+      success: false,
+      error,
+    };
   }
 
   next(nextAction);
