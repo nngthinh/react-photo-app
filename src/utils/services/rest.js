@@ -30,7 +30,7 @@ export default class RestService {
   };
 
   static #formatResponse = (response) => {
-    return convertSnakeToCamelJSON(response);
+    return convertSnakeToCamelJSON(response).data;
   };
 
   static #formatError = (error) => {
@@ -40,9 +40,7 @@ export default class RestService {
       return convertSnakeToCamelJSON(errorData);
     }
     // Other error (e.g undefined data)
-    else {
-      return { message: error };
-    }
+    return { message: error };
   };
 
   // All RESTful APIs
@@ -59,7 +57,7 @@ export default class RestService {
     try {
       const response = await axios.post(
         url,
-        convertCamelToSnakeJSON(body),
+        RestService.#formatBody(body),
         config
       );
       return RestService.#formatResponse(response);
@@ -85,7 +83,7 @@ export default class RestService {
       const finalConfig = RestService.#addTokenToConfigs(config, token);
       const response = await axios.post(
         url,
-        convertCamelToSnakeJSON(body),
+        RestService.#formatBody(body),
         finalConfig
       );
       return RestService.#formatResponse(response);
@@ -100,7 +98,7 @@ export default class RestService {
       const finalConfig = RestService.#addTokenToConfigs(config, token);
       const response = await axios.put(
         url,
-        convertCamelToSnakeJSON(body),
+        RestService.#formatBody(body),
         finalConfig
       );
       return RestService.#formatResponse(response);

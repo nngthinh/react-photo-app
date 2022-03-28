@@ -96,9 +96,7 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
               onClick={() => navigateCreateCategory()}
             ></ButtonItem>
           </div>
-          <div
-            className="u-marginVerticalMedium"
-          >
+          <div className="u-marginVerticalMedium">
             <PaginationItem {...categoryPagination}></PaginationItem>
           </div>
         </div>
@@ -109,7 +107,10 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
                   key={category.id}
                   className="categoriesListItem u-sizeFull md:u-size6of12 lg:u-size3of12 u-marginBottomLarge u-paddingVerticalSmall"
                 >
-                  <Link to={`/categories/${category.id}`}>
+                  <Link
+                    to={`/categories/${category.id}`}
+                    data-testid={`categoryDetail-${category.id}`}
+                  >
                     <img
                       className="categoryImg u-marginBottomSmall"
                       width="100%"

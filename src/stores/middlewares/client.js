@@ -10,28 +10,18 @@ const clientMiddleware = (store) => (next) => async (action) => {
   // Execute async dispatch
   let nextAction, returnValue;
   try {
-    const result = await promise();
-    const data = result.data;
-    nextAction = {
-      type: `${type}_SUCCESS`,
-      data: data,
-    };
-    returnValue = {
-      success: true,
-      data: data,
-    };
+    const data = await promise();
+    nextAction = { type: `${type}_SUCCESS`, data };
+    returnValue = { success: true, data };
   } catch (error) {
-    nextAction = {
-      type: `${type}_FAILED`,
-      error,
-    };
-    returnValue = {
-      success: false,
-      error,
-    };
+    nextAction = { type: `${type}_FAILED`, error };
+    returnValue = { success: false, error };
   }
 
+  // Run next action
   next(nextAction);
+
+  // Return async result
   return returnValue;
 };
 

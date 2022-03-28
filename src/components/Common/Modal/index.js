@@ -13,8 +13,16 @@ const CustomModalView = ({ contents, props }) => {
       </Modal.Header>
       <Modal.Body>{contents.body}</Modal.Body>
       <Modal.Footer>
-        <ButtonItem {...props.button1} value={contents.button1} />
-        <ButtonItem {...props.button2} value={contents.button2} />
+        <ButtonItem
+          data-testid="button1"
+          {...props.button1}
+          value={contents.button1}
+        />
+        <ButtonItem
+          data-testid="button2"
+          {...props.button2}
+          value={contents.button2}
+        />
       </Modal.Footer>
     </Modal>
   );
