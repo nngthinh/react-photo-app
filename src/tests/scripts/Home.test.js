@@ -80,7 +80,7 @@ describe("navbar", () => {
 });
 
 describe("categories list", () => {
-  it("should diplay categories", () => {});
+  it("should diplay categories list", () => {});
   it("able to use pagination", () => {});
   it("should navigate to category detail", () => {});
 });

@@ -86,6 +86,7 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
         <div className="u-flex u-justifyContentBetween u-alignItemsCenter">
           <div className="createCategoryButton">
             <ButtonItem
+              data-testid="navigateCreateCategoryButton"
               size="small"
               width="auto"
               value="New category"
@@ -95,7 +96,9 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
               onClick={() => navigateCreateCategory()}
             ></ButtonItem>
           </div>
-          <div className="u-marginVerticalMedium">
+          <div
+            className="u-marginVerticalMedium"
+          >
             <PaginationItem {...categoryPagination}></PaginationItem>
           </div>
         </div>
