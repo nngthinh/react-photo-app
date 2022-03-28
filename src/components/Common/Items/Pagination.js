@@ -15,9 +15,10 @@ const PaginationItem = ({
   const generateHeadPagination = () => (
     <>
       {!isValid || currentIndex <= minIndex ? (
-        <Pagination.Prev disabled />
+        <Pagination.Prev disabled data-testid="pag-prev" />
       ) : (
         <Pagination.Prev
+          data-testid="pag-prev"
           onClick={() => setSearchParams({ page: currentIndex - 1 })}
         />
       )}
@@ -49,7 +50,7 @@ const PaginationItem = ({
           <Pagination.Item
             onClick={() => setSearchParams({ page: minIndex })}
             active={currentIndex === minIndex}
-            data-testid={`${minIndex}-tail`}
+            data-testid={`pag-${minIndex}`}
           >
             {minIndex}
           </Pagination.Item>
@@ -60,7 +61,7 @@ const PaginationItem = ({
             onClick={() => setSearchParams({ page: index })}
             active={index === currentIndex}
             key={index}
-            data-testid={`${index}-middle`}
+            data-testid={`pag-${index}`}
           >
             {index}
           </Pagination.Item>
@@ -70,7 +71,7 @@ const PaginationItem = ({
           <Pagination.Item
             onClick={() => setSearchParams({ page: maxIndex })}
             active={currentIndex === maxIndex}
-            data-testid={`${maxIndex}-tail`}
+            data-testid={`pag-${maxIndex}`}
           >
             {maxIndex}
           </Pagination.Item>
@@ -86,9 +87,10 @@ const PaginationItem = ({
   const generateTailPagination = () => (
     <>
       {!isValid || currentIndex >= maxIndex ? (
-        <Pagination.Next disabled />
+        <Pagination.Next disabled data-testid="pag-next" />
       ) : (
         <Pagination.Next
+          data-testid="pag-next"
           onClick={() => setSearchParams({ page: currentIndex + 1 })}
         />
       )}
