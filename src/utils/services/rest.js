@@ -34,13 +34,13 @@ export default class RestService {
   };
 
   static #formatError = (error) => {
-    // Response from server
+    // Reject from server: Promise.reject
     if (error.response) {
       const errorData = error.response.data;
       return convertSnakeToCamelJSON(errorData);
     }
-    // Other error (e.g undefined data)
-    return { message: error };
+    // Other error e.g undefined data: Error
+    return error;
   };
 
   // All RESTful APIs
