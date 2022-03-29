@@ -45,16 +45,16 @@ afterEach(() => {
 });
 
 // Testing
-describe("navigation", () => {
+describe("sign up", () => {
+  // Navigation
   it("able to go to sign in page", async () => {
     render(<App />, { route: "/signup" });
     userEvent.click(screen.getByTestId("navigateSignInButton"));
     await screen.findByTestId("signInButton");
     expect(window.location.pathname).toBe("/signin");
   });
-});
 
-describe("sign up success", () => {
+  // SIgn up successfully
   it("should return no error", async () => {
     render(<App />, { route: "/signup" });
     // Type fields
@@ -73,9 +73,8 @@ describe("sign up success", () => {
     // Wait for toast message
     await screen.findByText(/create account successfully\./i);
   });
-});
 
-describe("sign up failed", () => {
+  // SIgn up failed
   it("should return name field error", async () => {
     render(<App />, { route: "/signup" });
     // Missing name

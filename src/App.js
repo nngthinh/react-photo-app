@@ -1,14 +1,14 @@
-import SignUp from "components/Auth/SignUp";
-import SignIn from "components/Auth/SignIn";
+import { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import "./App.css";
 import "@ahaui/css/dist/index.min.css";
 import { getUserInfoAction, signOutAction } from "actions/user";
+import SignIn from "components/Auth/SignIn";
+import SignUp from "components/Auth/SignUp";
 import Home from "components/Home";
-import { useEffect } from "react";
 import Toast from "components/Common/Toast";
 import CustomModal from "components/Common/Modal";
+import "./App.css";
 
 const App = () => {
   // States

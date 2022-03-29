@@ -96,6 +96,7 @@ afterEach(() => {
 
 // Testing
 describe("categories list", () => {
+  // Navigation
   it("able to go to create category page for guest", async () => {
     render(<App />);
     userEvent.click(screen.getByTestId("navigateCreateCategoryButton"));
@@ -126,6 +127,7 @@ describe("categories list", () => {
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(3)); // Get category detail + items list
   });
 
+  // Features
   it("should display categories list", async () => {
     render(<App />);
     // Wait for categories list request

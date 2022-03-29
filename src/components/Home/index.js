@@ -32,10 +32,6 @@ const HomeView = () => {
         ></Route>
         {/* Item */}
         <Route
-          path="/categories/:categoryId/items"
-          element={<ItemsList />}
-        ></Route>
-        <Route
           path="/categories/:categoryId/items/add"
           element={<ItemAction type="add" />}
         ></Route>

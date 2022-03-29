@@ -1,4 +1,5 @@
 import { Breadcrumb } from "@ahaui/react";
+import { useNavigate } from "react-router-dom";
 
 const BreadcrumbItem = ({ items }) => {
   return (
@@ -8,10 +9,16 @@ const BreadcrumbItem = ({ items }) => {
 };
 
 const BreadcrumbItemView = ({ items }) => {
+  const navigate = useNavigate();
   return (
     <Breadcrumb>
       {items.map(({ id, name, link }) => (
-        <Breadcrumb.Item key={id} href={link} data-testid={`breadcrumb-${id}`}>
+        // JSDom didn't support navigation. Use useNavigate hook instead
+        <Breadcrumb.Item
+          key={id}
+          onClick={() => navigate(link)}
+          data-testid={`breadcrumb-${id}`}
+        >
           {name}
         </Breadcrumb.Item>
       ))}

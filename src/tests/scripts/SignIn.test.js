@@ -37,16 +37,16 @@ afterEach(() => {
 });
 
 // Testing
-describe("navigation", () => {
+describe("sign in", () => {
+  // Navigation
   it("able to go to sign up page", async () => {
     render(<App />, { route: "/signin" });
     userEvent.click(screen.getByTestId("navigateSignUpButton"));
     await screen.findByTestId("signUpButton");
     expect(window.location.pathname).toBe("/signup");
   });
-});
 
-describe("sign in success", () => {
+  // Sign in successfully
   it("should return no error", async () => {
     render(<App />, { route: "/signin" });
 
@@ -65,9 +65,8 @@ describe("sign in success", () => {
     // Wait for toast message
     await screen.findByText(/sign in successfully\./i);
   });
-});
 
-describe("sign in failed", () => {
+  // Sign in failed
   it("should return email field error", async () => {
     render(<App />, { route: "/signin" });
 

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { viewCategoryAction } from "actions/categories";
 import { notifyNegative } from "components/Common/Toast";
@@ -27,6 +27,22 @@ const CategoryDetail = () => {
     viewCategoryDetail();
   }, [categoryId, dispatch]);
 
+  const [searchParams] = useSearchParams();
+  let page =
+    Array.from(searchParams).length === 0
+      ? 1
+      : parseInt(searchParams.get("page") ?? 0);
+
+  const navigate = useNavigate();
+
+  // Clear search param
+  useEffect(() => {
+    if (page === 0) {
+      // Navigate to default url
+      navigate(`/categories/${categoryId}`);
+    }
+  });
+
   return (
     <CategoryDetailView
       categoryId={categoryId}
@@ -46,7 +62,7 @@ const CategoryDetailView = ({ categoryId, categoryDetail }) => {
     <>
       <div className="categoryDetail container">
         <div className="categoryDetailWrapper">
-          <div className="u-marginBottomMedium">
+          <div className="u-marginVerticalMedium">
             {name ? (
               <BreadcrumbItem
                 items={[

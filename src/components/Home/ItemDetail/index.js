@@ -42,13 +42,9 @@ const ItemDetail = () => {
       if (!viewCategoryDetailResult.success) {
         notifyNegative(viewCategoryDetailResult.error.message);
       }
-      return viewCategoryDetailResult;
+      setCategoryDetail(viewCategoryDetail?.data);
     };
-    // ! Note: Why setstate outside executing async function but not inside
-    const categoryDetail = viewCategoryDetail();
-    if (categoryDetail) {
-      setCategoryDetail(categoryDetail.data);
-    }
+    viewCategoryDetail();
   }, [categoryId, dispatch]);
 
   return (
@@ -123,7 +119,7 @@ const ItemDetailView = ({
     <>
       <div className="itemDetail container">
         <div className="itemDetailWrapper">
-          <div className="u-marginBottomMedium">
+          <div className="u-marginVerticalMedium">
             {itemDetail && categoryDetail ? (
               <BreadcrumbItem
                 items={[

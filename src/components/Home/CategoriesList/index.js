@@ -32,7 +32,7 @@ const CategoriesList = () => {
   useEffect(() => {
     if (page === 0) {
       // Navigate to default url
-      navigate("/category");
+      navigate("/categories");
     }
   });
 
