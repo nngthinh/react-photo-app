@@ -107,10 +107,8 @@ describe("breadcrumb", () => {
   // Features
   it("should display from home to category detail", async () => {
     render(<App />, { route: "/categories/1" });
-    expect((await screen.findByTestId("breadcrumb-1")).textContent).toBe(
-      "Home"
-    );
-    expect((await screen.findByTestId("breadcrumb-2")).textContent).toBe(
+    expect(await screen.findByTestId("breadcrumb-1")).toHaveTextContent("Home");
+    expect(await screen.findByTestId("breadcrumb-2")).toHaveTextContent(
       "category 1"
     );
   });
@@ -149,10 +147,10 @@ describe("category detail", () => {
     render(<App />, { route: "/categories/1" });
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
     const categoryDetail = categoriesData.items[0];
-    expect((await screen.findByTestId("name")).textContent).toBe(
+    expect(await screen.findByTestId("name")).toHaveTextContent(
       categoryDetail.name
     );
-    expect((await screen.findByTestId("description")).textContent).toBe(
+    expect(await screen.findByTestId("description")).toHaveTextContent(
       categoryDetail.description
     );
     expect(await screen.findByTestId("image")).toHaveAttribute(
@@ -165,7 +163,7 @@ describe("category detail", () => {
 describe("items list", () => {
   // Navigation
   it("not able to go to edit item page for guest", async () => {
-    render(<App />, { route: "categories/1" });
+    render(<App />, { route: "/categories/1" });
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
     // Examine only 1 example item
     await screen.findByTestId("itemDetail-1-author");
@@ -177,7 +175,7 @@ describe("items list", () => {
   it("not able to go to edit item page for not author user", async () => {
     render(
       <App />,
-      { route: "categories/1" },
+      { route: "/categories/1" },
       { initialState: mockedUser2State }
     );
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
@@ -191,7 +189,7 @@ describe("items list", () => {
   it("able to go to edit item page for author user", async () => {
     render(
       <App />,
-      { route: "categories/1" },
+      { route: "/categories/1" },
       { initialState: mockedUser1State }
     );
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
@@ -201,7 +199,7 @@ describe("items list", () => {
   });
 
   it("able to go to item detail page", async () => {
-    render(<App />, { route: "categories/1" });
+    render(<App />, { route: "/categories/1" });
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
     userEvent.click(await screen.findByTestId("itemDetail-1"));
     await waitFor(() =>
@@ -215,15 +213,15 @@ describe("items list", () => {
     render(<App />, { route: "/categories/1" });
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
     expect(
-      (await screen.findByTestId("itemDetail-1-description")).textContent
-    ).toBe("item description 1");
+      await screen.findByTestId("itemDetail-1-description")
+    ).toHaveTextContent("item description 1");
     expect(await screen.findByTestId("itemDetail-1-image")).toHaveAttribute(
       "src",
       itemsList[0].imageUrl
     );
     expect(
-      (await screen.findByTestId("itemDetail-8-description")).textContent
-    ).toBe("item description 8");
+      await screen.findByTestId("itemDetail-8-description")
+    ).toHaveTextContent("item description 8");
     expect(await screen.findByTestId("itemDetail-8-image")).toHaveAttribute(
       "src",
       itemsList[7].imageUrl
@@ -241,8 +239,8 @@ describe("items list", () => {
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(3));
     await screen.findByTestId("itemDetail-9");
     expect(
-      (await screen.findByTestId("itemDetail-9-description")).textContent
-    ).toMatch(/item description 9/i);
+      await screen.findByTestId("itemDetail-9-description")
+    ).toHaveTextContent(/item description 9/i);
     expect(await screen.findByTestId("itemDetail-9-image")).toHaveAttribute(
       "src",
       itemsList[8].imageUrl
@@ -252,8 +250,8 @@ describe("items list", () => {
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(4));
     await screen.findByTestId("itemDetail-1");
     expect(
-      (await screen.findByTestId("itemDetail-1-description")).textContent
-    ).toMatch(/item description 1/i);
+      await screen.findByTestId("itemDetail-1-description")
+    ).toHaveTextContent(/item description 1/i);
     expect(await screen.findByTestId("itemDetail-1-image")).toHaveAttribute(
       "src",
       itemsList[0].imageUrl
@@ -262,8 +260,8 @@ describe("items list", () => {
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(5));
     await screen.findByTestId("itemDetail-9");
     expect(
-      (await screen.findByTestId("itemDetail-9-description")).textContent
-    ).toMatch(/item description 9/i);
+      await screen.findByTestId("itemDetail-9-description")
+    ).toHaveTextContent(/item description 9/i);
     expect(await screen.findByTestId("itemDetail-9-image")).toHaveAttribute(
       "src",
       itemsList[8].imageUrl

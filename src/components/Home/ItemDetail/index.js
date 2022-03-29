@@ -29,7 +29,7 @@ const ItemDetail = () => {
       if (!viewCategoryDetailResult.success) {
         notifyNegative(viewCategoryDetailResult.error.message);
       }
-      setCategoryDetail(viewCategoryDetailResult?.data);
+      setCategoryDetail(viewCategoryDetailResult.data);
     };
     const viewItemDetail = async () => {
       const viewItemDetailResult = await dispatch(
