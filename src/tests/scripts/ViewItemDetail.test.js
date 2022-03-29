@@ -1,5 +1,5 @@
 import App from "App";
-import { render, screen, waitFor } from "tests/utils/rtl";
+import { render, screen, waitFor, act } from "tests/utils/rtl";
 import { createMockedState } from "tests/fixtures/state";
 import userEvent from "@testing-library/user-event";
 import RestService from "utils/services/rest";
@@ -15,6 +15,7 @@ beforeEach(() => {
   // Mock rest api
   // - Category & item APIs
   RestService.get.mockImplementation(async (url, configs) => {
+    console.log(url);
     const urlObj = new URL(url);
     const paramsList = urlObj.pathname.split("/");
     // Item detail
@@ -94,19 +95,34 @@ afterEach(() => {
 // Testing
 describe("breadcrumb", () => {
   // Navigation
-  it("able to navigate between pages", () => {});
+  it("able to navigate between pages", async () => {
+    render(<App />, { route: "/categories/1/items/1" });
+
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+  });
   // Features
-  it("should display from home to item detail", () => {});
+  it("should display from home to item detail", async () => {
+    render(<App />, { route: "/categories/1/items/1" });
+    // Item detail + category detail
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+    expect(await screen.findByTestId("breadcrumb-1")).toHaveTextContent("Home");
+    expect(await screen.findByTestId("breadcrumb-2")).toHaveTextContent(
+      categoriesData.items[0].name
+    );
+    expect(await screen.findByTestId("breadcrumb-3")).toHaveTextContent(
+      "Item 1"
+    );
+  });
 });
 
 describe("item detail", () => {
   // Navigation
-  it("not able to go to edit item page for guest", () => {});
-  it("not able to go to edit item page for not author user", () => {});
-  it("able to go to edit item page for author user", () => {});
+  it("not able to go to edit item page for guest", async () => {});
+  it("not able to go to edit item page for not author user", async () => {});
+  it("able to go to edit item page for author user", async () => {});
   // Features
-  it("should display category detail", () => {});
-  it("not able to delete item for guest", () => {});
-  it("not able to delete item for not author user", () => {});
-  it("able to delete item for author user", () => {});
+  it("should display category detail", async () => {});
+  it("not able to delete item for guest", async () => {});
+  it("not able to delete item for not author user", async () => {});
+  it("able to delete item for author user", async () => {});
 });

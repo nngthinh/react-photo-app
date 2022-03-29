@@ -94,19 +94,19 @@ afterEach(() => {
 // Testing
 describe("breadcrumb", () => {
   // Navigation
-  it("able to navigate between pages", () => {});
+  it("able to navigate between pages", async () => {});
   // Features
-  it("should display from home to item detail", () => {});
+  it("should display from home to item detail", async () => {});
 });
 
 describe("item detail", () => {
   // Navigation
-  it("not able to go to edit item page for guest", () => {});
-  it("not able to go to edit item page for not author user", () => {});
-  it("able to go to edit item page for author user", () => {});
+  it("not able to go to edit item page for guest", async () => {});
+  it("not able to go to edit item page for not author user", async () => {});
+  it("able to go to edit item page for author user", async () => {});
   // Features
-  it("should display category detail", () => {});
-  it("not able to delete item for guest", () => {});
-  it("not able to delete item for not author user", () => {});
-  it("able to delete item for author user", () => {});
+  it("should display category detail", async () => {});
+  it("not able to delete item for guest", async () => {});
+  it("not able to delete item for not author user", async () => {});
+  it("able to delete item for author user", async () => {});
 });
