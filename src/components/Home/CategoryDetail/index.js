@@ -27,19 +27,21 @@ const CategoryDetail = () => {
     if (page === 0) {
       // Navigate to default url
       navigate(`/categories/${categoryId}`);
-    } else {
-      const viewCategoryDetail = async () => {
-        // get category detail
-        const viewCategoyDetailResult = await dispatch(
-          viewCategoryAction(categoryId)
-        );
-        if (!viewCategoyDetailResult.success) {
-          notifyNegative(viewCategoyDetailResult.error.message);
-        }
-      };
-      viewCategoryDetail();
     }
-  }, [categoryId, dispatch, navigate, page]);
+  }, [categoryId, navigate, page]);
+
+  useEffect(() => {
+    const viewCategoryDetail = async () => {
+      // get category detail
+      const viewCategoyDetailResult = await dispatch(
+        viewCategoryAction(categoryId)
+      );
+      if (!viewCategoyDetailResult.success) {
+        notifyNegative(viewCategoyDetailResult.error.message);
+      }
+    };
+    viewCategoryDetail();
+  }, [categoryId, dispatch]);
 
   return (
     <CategoryDetailView
@@ -79,7 +81,12 @@ const CategoryDetailView = ({ categoryId, categoryDetail }) => {
           <div className="Grid u-alignItemsStart u-marginBottomMedium">
             <div className="u-sizeFull sm:u-sizeFull md:u-size4of12 lg:u-size4of12 u-marginBottomMedium">
               {imageUrl ? (
-                <img className="categoryDetailImg" src={imageUrl} alt={name} />
+                <img
+                  className="categoryDetailImg"
+                  data-testid="image"
+                  src={imageUrl}
+                  alt={name}
+                />
               ) : (
                 <div className="categoryDetailImg">
                   <Skeleton width="100%" height="100%"></Skeleton>
@@ -89,8 +96,12 @@ const CategoryDetailView = ({ categoryId, categoryDetail }) => {
             <div className="u-flex u-flexColumn u-sizeFull sm:u-sizeFull md:u-size8of12">
               {name ? (
                 <>
-                  <h1 className="u-textLeft">{name}</h1>
-                  <div className="u-textleft">{description}</div>
+                  <h1 className="u-textLeft" data-testid="name">
+                    {name}
+                  </h1>
+                  <div className="u-textleft" data-testid="description">
+                    {description}
+                  </div>
                   <div className="u-marginTopMedium ">
                     <ButtonItem
                       size="medium"

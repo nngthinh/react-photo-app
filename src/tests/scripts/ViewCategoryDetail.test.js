@@ -4,12 +4,16 @@ import { createMockedState } from "tests/fixtures/state";
 import userEvent from "@testing-library/user-event";
 import RestService from "utils/services/rest";
 import { usersData, categoriesData, itemsData } from "tests/fixtures/database";
+import { loadState } from "utils/services/localStorage";
 
 jest.mock("utils/services/rest", () => ({
   get: jest.fn(),
   post: jest.fn(),
   getWithToken: jest.fn(),
 }));
+
+const mockedUser1State = createMockedState(1);
+const mockedUser2State = createMockedState(2);
 
 beforeEach(() => {
   // Mock rest api
@@ -40,7 +44,6 @@ beforeEach(() => {
     else if (urlObj.pathname.match(/\/categories\/[\d]*\/items/)) {
       const [offset, limit] = urlObj.searchParams.values();
       const [, , categoryId] = paramsList;
-
       // Get items list of specific category
       const itemsList = itemsData.items
         .filter((item) => item.categoryId === parseInt(categoryId))
@@ -78,7 +81,9 @@ beforeEach(() => {
 
   // - Get user information API
   RestService.getWithToken.mockImplementation(async (url, configs) => {
-    return Promise.resolve({ name: usersData.info[1].name, id: 1 });
+    const token = loadState()?.user.token;
+    const userId = usersData.token[token];
+    return Promise.resolve({ name: usersData.info[userId].name, id: userId });
   });
 
   // - User sign in
@@ -88,7 +93,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  global.localStorage.clear();
+  window.localStorage.clear();
 });
 
 // Testing
@@ -111,34 +116,157 @@ describe("breadcrumb", () => {
   });
 });
 
-describe.only("category detail", () => {
+describe("category detail", () => {
   // Navigation
   it("able to go to edit category page for guest", async () => {
     render(<App />, { route: "/categories/1" });
-    await(() => expect(RestService.get.mock.calls.length).toBe(2));
-    // userEvent.click(await screen.findByTestId("navigateEditCategoryButton"));
-    // // await waitFor(() => expect(window.location.pathname).toBe("/signin"));
-    // // Sign in first
-    // userEvent.type(screen.getByTestId("email"), usersData.info[1].email);
-    // userEvent.type(screen.getByTestId("password"), usersData.info[1].password);
-    // userEvent.click(screen.getByTestId("signInButton"));
-    // await waitFor(() => expect(RestService.post.mock.calls.length).toBe(1));
-    // await waitFor(() =>
-    //   expect(window.location.pathname).toBe("/categories/1/edit")
-    // );
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+    userEvent.click(await screen.findByTestId("navigateEditCategoryButton"));
+    await waitFor(() => expect(window.location.pathname).toBe("/signin"));
+    // Sign in first
+    userEvent.type(screen.getByTestId("email"), usersData.info[1].email);
+    userEvent.type(screen.getByTestId("password"), usersData.info[1].password);
+    userEvent.click(screen.getByTestId("signInButton"));
+    await waitFor(() => expect(RestService.post.mock.calls.length).toBe(1));
+    await waitFor(() =>
+      expect(window.location.pathname).toBe("/categories/1/edit")
+    );
   });
-  it("able to go to edit category page for user", () => {});
+  it("able to go to edit category page for user", async () => {
+    render(
+      <App />,
+      { route: "/categories/1" },
+      { initialState: mockedUser1State }
+    );
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+    userEvent.click(await screen.findByTestId("navigateEditCategoryButton"));
+    await waitFor(() =>
+      expect(window.location.pathname).toBe("/categories/1/edit")
+    );
+  });
   // Features
-  it("should display category detail", () => {});
+  it("should display category detail", async () => {
+    render(<App />, { route: "/categories/1" });
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+    const categoryDetail = categoriesData.items[0];
+    expect((await screen.findByTestId("name")).textContent).toBe(
+      categoryDetail.name
+    );
+    expect((await screen.findByTestId("description")).textContent).toBe(
+      categoryDetail.description
+    );
+    expect(await screen.findByTestId("image")).toHaveAttribute(
+      "src",
+      categoryDetail.imageUrl
+    );
+  });
 });
 
 describe("items list", () => {
   // Navigation
-  it("not able to go to edit item page for guest", () => {});
-  it("not able to go to edit item page for not author user", () => {});
-  it("able to go to edit item page for author user", () => {});
-  it("able to go to item detail page", () => {});
+  it("not able to go to edit item page for guest", async () => {
+    render(<App />, { route: "categories/1" });
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+    // Examine only 1 example item
+    await screen.findByTestId("itemDetail-1-author");
+    expect(
+      screen.queryByTestId("itemDetail-1-editItemButton")
+    ).not.toBeInTheDocument();
+  });
+
+  it("not able to go to edit item page for not author user", async () => {
+    render(
+      <App />,
+      { route: "categories/1" },
+      { initialState: mockedUser2State }
+    );
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+    // Examine only 1 example item
+    await screen.findByTestId("itemDetail-1-author");
+    expect(
+      screen.queryByTestId("itemDetail-1-editItemButton")
+    ).not.toBeInTheDocument();
+  });
+
+  it("able to go to edit item page for author user", async () => {
+    render(
+      <App />,
+      { route: "categories/1" },
+      { initialState: mockedUser1State }
+    );
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+    // Examine 2 example item2
+    expect(screen.queryByTestId("itemDetail-1-author")).not.toBeInTheDocument();
+    await screen.findByTestId("itemDetail-1-editItemButton");
+  });
+
+  it("able to go to item detail page", async () => {
+    render(<App />, { route: "categories/1" });
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+    userEvent.click(await screen.findByTestId("itemDetail-1"));
+    await waitFor(() =>
+      expect(window.location.pathname).toBe("/categories/1/items/1")
+    );
+  });
+
   // Features
-  it("should display items list", () => {});
-  it("able to use pagination for items list", () => {});
+  it("should display items list", async () => {
+    const itemsList = itemsData.items;
+    render(<App />, { route: "/categories/1" });
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+    expect(
+      (await screen.findByTestId("itemDetail-1-description")).textContent
+    ).toBe("item description 1");
+    expect(await screen.findByTestId("itemDetail-1-image")).toHaveAttribute(
+      "src",
+      itemsList[0].imageUrl
+    );
+    expect(
+      (await screen.findByTestId("itemDetail-8-description")).textContent
+    ).toBe("item description 8");
+    expect(await screen.findByTestId("itemDetail-8-image")).toHaveAttribute(
+      "src",
+      itemsList[7].imageUrl
+    );
+  });
+
+  it("able to use pagination for items list", async () => {
+    const itemsList = itemsData.items;
+    render(<App />, { route: "/categories/1" });
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+    await screen.findByTestId("pag-1");
+    await screen.findByTestId("pag-2");
+    // Navigate by page number
+    userEvent.click(screen.getByTestId("pag-2"));
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(3));
+    await screen.findByTestId("itemDetail-9");
+    expect(
+      (await screen.findByTestId("itemDetail-9-description")).textContent
+    ).toMatch(/item description 9/i);
+    expect(await screen.findByTestId("itemDetail-9-image")).toHaveAttribute(
+      "src",
+      itemsList[8].imageUrl
+    );
+    // Navigate relatively
+    userEvent.click(screen.getByTestId("pag-prev"));
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(4));
+    await screen.findByTestId("itemDetail-1");
+    expect(
+      (await screen.findByTestId("itemDetail-1-description")).textContent
+    ).toMatch(/item description 1/i);
+    expect(await screen.findByTestId("itemDetail-1-image")).toHaveAttribute(
+      "src",
+      itemsList[0].imageUrl
+    );
+    userEvent.click(screen.getByTestId("pag-next"));
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(5));
+    await screen.findByTestId("itemDetail-9");
+    expect(
+      (await screen.findByTestId("itemDetail-9-description")).textContent
+    ).toMatch(/item description 9/i);
+    expect(await screen.findByTestId("itemDetail-9-image")).toHaveAttribute(
+      "src",
+      itemsList[8].imageUrl
+    );
+  });
 });

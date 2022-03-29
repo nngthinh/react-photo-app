@@ -129,18 +129,36 @@ describe("categories list", () => {
 
   // Features
   it("should display categories list", async () => {
+    const categoriesList = categoriesData.items;
     render(<App />);
     // Wait for categories list request
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(1));
     await screen.findByTestId("categoryDetail-1");
-    await screen.findByText(/category 1/i);
-    await screen.findByText(/description 1/i);
+    expect(
+      (await screen.findByTestId("categoryDetail-1-name")).textContent
+    ).toMatch(/category 1/i);
+    expect(
+      (await screen.findByTestId("categoryDetail-1-description")).textContent
+    ).toMatch(/description 1/i);
+    expect(await screen.findByTestId("categoryDetail-1-image")).toHaveAttribute(
+      "src",
+      categoriesList[0].imageUrl
+    );
     await screen.findByTestId("categoryDetail-4");
-    await screen.findByText(/category 4/i);
-    await screen.findByText(/description 4/i);
+    expect(
+      (await screen.findByTestId("categoryDetail-4-name")).textContent
+    ).toMatch(/category 4/i);
+    expect(
+      (await screen.findByTestId("categoryDetail-4-description")).textContent
+    ).toMatch(/description 4/i);
+    expect(await screen.findByTestId("categoryDetail-4-image")).toHaveAttribute(
+      "src",
+      categoriesList[3].imageUrl
+    );
   });
 
   it("able to use pagination for category list", async () => {
+    const categoriesList = categoriesData.items;
     render(<App />);
     // Wait for categories list request
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(1));
@@ -151,27 +169,77 @@ describe("categories list", () => {
     userEvent.click(screen.getByTestId("pag-2"));
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
     await screen.findByTestId("categoryDetail-5");
-    await screen.findByText(/category 5/i);
-    await screen.findByText(/description 5/i);
+    expect(
+      (await screen.findByTestId("categoryDetail-5-name")).textContent
+    ).toMatch(/category 5/i);
+    expect(
+      (await screen.findByTestId("categoryDetail-5-description")).textContent
+    ).toMatch(/description 5/i);
+
+    expect(await screen.findByTestId("categoryDetail-5-image")).toHaveAttribute(
+      "src",
+      categoriesList[4].imageUrl
+    );
     await screen.findByTestId("categoryDetail-8");
-    await screen.findByText(/category 8/i);
-    await screen.findByText(/description 8/i);
+    expect(
+      (await screen.findByTestId("categoryDetail-8-name")).textContent
+    ).toMatch(/category 8/i);
+    expect(
+      (await screen.findByTestId("categoryDetail-8-description")).textContent
+    ).toMatch(/description 8/i);
+    expect(await screen.findByTestId("categoryDetail-8-image")).toHaveAttribute(
+      "src",
+      categoriesList[7].imageUrl
+    );
     // Navigate relatively
     userEvent.click(screen.getByTestId("pag-prev"));
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(3));
     await screen.findByTestId("categoryDetail-1");
-    await screen.findByText(/category 1/i);
-    await screen.findByText(/description 1/i);
+    expect(
+      (await screen.findByTestId("categoryDetail-1-name")).textContent
+    ).toMatch(/category 1/i);
+    expect(
+      (await screen.findByTestId("categoryDetail-1-description")).textContent
+    ).toMatch(/description 1/i);
+    expect(await screen.findByTestId("categoryDetail-1-image")).toHaveAttribute(
+      "src",
+      categoriesList[0].imageUrl
+    );
     await screen.findByTestId("categoryDetail-4");
-    await screen.findByText(/category 4/i);
-    await screen.findByText(/description 4/i);
+    expect(
+      (await screen.findByTestId("categoryDetail-4-name")).textContent
+    ).toMatch(/category 4/i);
+    expect(
+      (await screen.findByTestId("categoryDetail-4-description")).textContent
+    ).toMatch(/description 4/i);
+    expect(await screen.findByTestId("categoryDetail-4-image")).toHaveAttribute(
+      "src",
+      categoriesList[3].imageUrl
+    );
     userEvent.click(screen.getByTestId("pag-next"));
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(4));
     await screen.findByTestId("categoryDetail-5");
-    await screen.findByText(/category 5/i);
-    await screen.findByText(/description 5/i);
+    expect(
+      (await screen.findByTestId("categoryDetail-5-name")).textContent
+    ).toMatch(/category 5/i);
+    expect(
+      (await screen.findByTestId("categoryDetail-5-description")).textContent
+    ).toMatch(/description 5/i);
+
+    expect(await screen.findByTestId("categoryDetail-5-image")).toHaveAttribute(
+      "src",
+      categoriesList[4].imageUrl
+    );
     await screen.findByTestId("categoryDetail-8");
-    await screen.findByText(/category 8/i);
-    await screen.findByText(/description 8/i);
+    expect(
+      (await screen.findByTestId("categoryDetail-8-name")).textContent
+    ).toMatch(/category 8/i);
+    expect(
+      (await screen.findByTestId("categoryDetail-8-description")).textContent
+    ).toMatch(/description 8/i);
+    expect(await screen.findByTestId("categoryDetail-8-image")).toHaveAttribute(
+      "src",
+      categoriesList[7].imageUrl
+    );
   });
 });

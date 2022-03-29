@@ -108,17 +108,22 @@ const ItemsListView = ({
                 <Link
                   to={`/categories/${categoryId}/items/${item.id}`}
                   className="itemImg u-marginRightSmall"
+                  data-testid={`itemDetail-${item.id}`}
                 >
                   <img
                     className="itemImg"
                     width="100%"
                     src={item.imageUrl}
                     alt={item.name}
+                    data-testid={`itemDetail-${item.id}-image`}
                   />
                 </Link>
                 <div className="u-flex u-flexColumn">
                   <Link to={`/categories/${categoryId}/items/${item.id}`}>
-                    <div className="u-text200">
+                    <div
+                      className="u-text200"
+                      data-testid={`itemDetail-${item.id}-description`}
+                    >
                       {shortenContent(item.description, limitItemDesc)}
                     </div>
                   </Link>
@@ -132,9 +137,15 @@ const ItemsListView = ({
                         icon="edit"
                         iconSize="extraSmall"
                         onClick={() => navigateEditItem(categoryId, item.id)}
+                        data-testid={`itemDetail-${item.id}-editItemButton`}
                       ></ButtonItem>
                     ) : (
-                      <div className="u-textGray">By {item.author.name}</div>
+                      <div
+                        className="u-textGray"
+                        data-testid={`itemDetail-${item.id}-author`}
+                      >
+                        By {item.author.name}
+                      </div>
                     )}
                   </div>
                 </div>

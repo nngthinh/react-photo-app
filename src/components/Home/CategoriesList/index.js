@@ -33,24 +33,25 @@ const CategoriesList = () => {
     if (page === 0) {
       // Navigate to default url
       navigate("/categories");
-    } else {
-      // Get from server
-      const getCategoriesList = async () => {
-        const [offset, limit] = [
-          limitCategoriesPagination * (page - 1),
-          limitCategoriesPagination,
-        ];
-        const viewCategoriesListResult = await dispatch(
-          viewCategoriesListAction(offset, limit)
-        );
-
-        if (!viewCategoriesListResult.success) {
-          notifyNegative(viewCategoriesListResult.error.message);
-        }
-      };
-      getCategoriesList();
     }
-  }, [dispatch, navigate, page]);
+  }, [navigate, page]);
+
+  useEffect(() => {
+    const getCategoriesList = async () => {
+      const [offset, limit] = [
+        limitCategoriesPagination * (page - 1),
+        limitCategoriesPagination,
+      ];
+      const viewCategoriesListResult = await dispatch(
+        viewCategoriesListAction(offset, limit)
+      );
+
+      if (!viewCategoriesListResult.success) {
+        notifyNegative(viewCategoriesListResult.error.message);
+      }
+    };
+    getCategoriesList();
+  }, [dispatch, page]);
 
   return (
     <CategoriesListView
@@ -110,9 +111,18 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
                       width="100%"
                       src={category.imageUrl}
                       alt={category.name}
+                      data-testid={`categoryDetail-${category.id}-image`}
                     />
-                    <div className="u-fontBold u-textLeft">{category.name}</div>
-                    <div className="u-textLeft u-textGray">
+                    <div
+                      className="u-fontBold u-textLeft"
+                      data-testid={`categoryDetail-${category.id}-name`}
+                    >
+                      {category.name}
+                    </div>
+                    <div
+                      className="u-textLeft u-textGray"
+                      data-testid={`categoryDetail-${category.id}-description`}
+                    >
                       {shortenContent(category.description, limitCategoryDesc)}
                     </div>
                   </Link>

@@ -106,7 +106,7 @@ describe("item detail", () => {
   it("able to go to edit item page for author user", () => {});
   // Features
   it("should display category detail", () => {});
-  it("not able to delete item for guest");
-  it("not able to delete item for not author user");
-  it("able to delete item for author user");
+  it("not able to delete item for guest", () => {});
+  it("not able to delete item for not author user", () => {});
+  it("able to delete item for author user", () => {});
 });
