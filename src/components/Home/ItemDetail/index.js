@@ -31,6 +31,10 @@ const ItemDetail = () => {
         notifyNegative(viewItemDetailResult.error.message);
       }
     };
+    viewItemDetail();
+  }, [categoryId, dispatch, itemId]);
+
+  useEffect(() => {
     const viewCategoryDetail = async () => {
       const viewCategoryDetailResult = await dispatch(
         viewCategoryAction(categoryId)
@@ -38,11 +42,14 @@ const ItemDetail = () => {
       if (!viewCategoryDetailResult.success) {
         notifyNegative(viewCategoryDetailResult.error.message);
       }
-      setCategoryDetail(viewCategoryDetailResult.data);
+      return viewCategoryDetailResult;
     };
-    viewItemDetail();
-    viewCategoryDetail();
-  }, [categoryId, dispatch, itemId, setCategoryDetail]);
+    // ! Note: Why setstate outside executing async function but not inside
+    const categoryDetail = viewCategoryDetail();
+    if (categoryDetail) {
+      setCategoryDetail(categoryDetail.data);
+    }
+  }, [categoryId, dispatch]);
 
   return (
     <ItemDetailView
