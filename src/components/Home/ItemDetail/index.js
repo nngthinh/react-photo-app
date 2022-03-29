@@ -21,19 +21,6 @@ const ItemDetail = () => {
     dispatch(deleteItemAction(categoryId, itemId));
 
   const [categoryDetail, setCategoryDetail] = useState(); // For breadcrumb
-
-  useEffect(() => {
-    const viewItemDetail = async () => {
-      const viewItemDetailResult = await dispatch(
-        viewItemAction(categoryId, itemId)
-      );
-      if (!viewItemDetailResult.success) {
-        notifyNegative(viewItemDetailResult.error.message);
-      }
-    };
-    viewItemDetail();
-  }, [categoryId, dispatch, itemId]);
-
   useEffect(() => {
     const viewCategoryDetail = async () => {
       const viewCategoryDetailResult = await dispatch(
@@ -44,8 +31,17 @@ const ItemDetail = () => {
       }
       setCategoryDetail(viewCategoryDetail?.data);
     };
+    const viewItemDetail = async () => {
+      const viewItemDetailResult = await dispatch(
+        viewItemAction(categoryId, itemId)
+      );
+      if (!viewItemDetailResult.success) {
+        notifyNegative(viewItemDetailResult.error.message);
+      }
+    };
+    viewItemDetail();
     viewCategoryDetail();
-  }, [categoryId, dispatch]);
+  }, [categoryId, dispatch, itemId]);
 
   return (
     <ItemDetailView

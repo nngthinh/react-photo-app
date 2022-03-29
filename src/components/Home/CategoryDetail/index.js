@@ -14,19 +14,6 @@ const CategoryDetail = () => {
   const categoryDetail = useSelector((state) => state.categories.detail);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const viewCategoryDetail = async () => {
-      // get category detail
-      const viewCategoyDetailResult = await dispatch(
-        viewCategoryAction(categoryId)
-      );
-      if (!viewCategoyDetailResult.success) {
-        notifyNegative(viewCategoyDetailResult.error.message);
-      }
-    };
-    viewCategoryDetail();
-  }, [categoryId, dispatch]);
-
   const [searchParams] = useSearchParams();
   let page =
     Array.from(searchParams).length === 0
@@ -40,8 +27,19 @@ const CategoryDetail = () => {
     if (page === 0) {
       // Navigate to default url
       navigate(`/categories/${categoryId}`);
+    } else {
+      const viewCategoryDetail = async () => {
+        // get category detail
+        const viewCategoyDetailResult = await dispatch(
+          viewCategoryAction(categoryId)
+        );
+        if (!viewCategoyDetailResult.success) {
+          notifyNegative(viewCategoyDetailResult.error.message);
+        }
+      };
+      viewCategoryDetail();
     }
-  });
+  }, [categoryId, dispatch, navigate, page]);
 
   return (
     <CategoryDetailView
@@ -102,6 +100,7 @@ const CategoryDetailView = ({ categoryId, categoryDetail }) => {
                       icon="edit"
                       iconSize="small"
                       onClick={() => navigateEditCategory(categoryId)}
+                      data-testid="navigateEditCategoryButton"
                     ></ButtonItem>
                   </div>
                 </>

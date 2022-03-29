@@ -92,21 +92,41 @@ afterEach(() => {
 });
 
 // Testing
-describe.only("breadcrumb", () => {
+describe("breadcrumb", () => {
   // Navigation
   it("able to navigate between pages", async () => {
     render(<App />, { route: "/categories/1" });
-    // screen.debug(undefined, 300000);
     userEvent.click(await screen.findByTestId("breadcrumb-1"));
-    await waitFor(() => expect(window.location.pathname).toBe("/signin"));
+    await waitFor(() => expect(window.location.pathname).toBe("/categories"));
   });
   // Features
-  it("should display from home to category detail", () => {});
+  it("should display from home to category detail", async () => {
+    render(<App />, { route: "/categories/1" });
+    expect((await screen.findByTestId("breadcrumb-1")).textContent).toBe(
+      "Home"
+    );
+    expect((await screen.findByTestId("breadcrumb-2")).textContent).toBe(
+      "category 1"
+    );
+  });
 });
 
-describe("category detail", () => {
+describe.only("category detail", () => {
   // Navigation
-  it("able to go to edit category page for guest", () => {});
+  it("able to go to edit category page for guest", async () => {
+    render(<App />, { route: "/categories/1" });
+    await(() => expect(RestService.get.mock.calls.length).toBe(2));
+    // userEvent.click(await screen.findByTestId("navigateEditCategoryButton"));
+    // // await waitFor(() => expect(window.location.pathname).toBe("/signin"));
+    // // Sign in first
+    // userEvent.type(screen.getByTestId("email"), usersData.info[1].email);
+    // userEvent.type(screen.getByTestId("password"), usersData.info[1].password);
+    // userEvent.click(screen.getByTestId("signInButton"));
+    // await waitFor(() => expect(RestService.post.mock.calls.length).toBe(1));
+    // await waitFor(() =>
+    //   expect(window.location.pathname).toBe("/categories/1/edit")
+    // );
+  });
   it("able to go to edit category page for user", () => {});
   // Features
   it("should display category detail", () => {});

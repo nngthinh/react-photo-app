@@ -33,7 +33,8 @@ const ItemAction = ({ type }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Auto navigate to sign in
+  // In adding category, no operation is required in advance
+  // In editing category, we need to fetch it's data
   useEffect(() => {
     if (!isLoggedIn) {
       const nextUrl = base64.encode(
@@ -46,13 +47,7 @@ const ItemAction = ({ type }) => {
         },
         { replace: true }
       );
-    }
-  });
-
-  // In adding category, no operation is required in advance
-  // In editing category, we need to fetch it's data
-  useEffect(() => {
-    if (type === "edit") {
+    } else if (type === "edit") {
       const getItemInfo = async () => {
         const viewItemDetailResult = await dispatch(
           viewItemAction(categoryId, itemId)
@@ -63,7 +58,17 @@ const ItemAction = ({ type }) => {
       };
       getItemInfo();
     }
-  });
+  }, [
+    categoryId,
+    dispatch,
+    isLoggedIn,
+    itemId,
+    location.hash,
+    location.pathname,
+    location.search,
+    navigate,
+    type,
+  ]);
 
   return (
     isLoggedIn && (

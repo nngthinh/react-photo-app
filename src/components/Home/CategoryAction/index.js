@@ -35,6 +35,8 @@ const CategoryAction = ({ type }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // In adding category, no operation is required in advance
+  // In editing category, we need to fetch it's data
   useEffect(() => {
     if (!isLoggedIn) {
       const nextUrl = base64.encode(
@@ -47,13 +49,7 @@ const CategoryAction = ({ type }) => {
         },
         { replace: true }
       );
-    }
-  });
-
-  // In adding category, no operation is required in advance
-  // In editing category, we need to fetch it's data
-  useEffect(() => {
-    if (type === "edit") {
+    } else if (type === "edit") {
       const getCategoryInfo = async () => {
         const viewCategoryDetailResult = await dispatch(
           viewCategoryAction(categoryId)
@@ -64,7 +60,16 @@ const CategoryAction = ({ type }) => {
       };
       getCategoryInfo();
     }
-  });
+  }, [
+    categoryId,
+    dispatch,
+    isLoggedIn,
+    location.hash,
+    location.pathname,
+    location.search,
+    navigate,
+    type,
+  ]);
 
   return (
     isLoggedIn &&

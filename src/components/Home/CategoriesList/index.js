@@ -28,35 +28,29 @@ const CategoriesList = () => {
 
   const navigate = useNavigate();
 
-  // Clear search param
+  // Fetch the categories list
   useEffect(() => {
     if (page === 0) {
       // Navigate to default url
       navigate("/categories");
-    }
-  });
+    } else {
+      // Get from server
+      const getCategoriesList = async () => {
+        const [offset, limit] = [
+          limitCategoriesPagination * (page - 1),
+          limitCategoriesPagination,
+        ];
+        const viewCategoriesListResult = await dispatch(
+          viewCategoriesListAction(offset, limit)
+        );
 
-  // Fetch the categories list
-  useEffect(() => {
-    // Get from server
-    const getCategoriesList = async () => {
-      const [offset, limit] = [
-        limitCategoriesPagination * (page - 1),
-        limitCategoriesPagination,
-      ];
-      const viewCategoriesListResult = await dispatch(
-        viewCategoriesListAction(offset, limit)
-      );
-
-      if (!viewCategoriesListResult.success) {
-        notifyNegative(viewCategoriesListResult.error.message);
-      }
-    };
-
-    if (page > 0) {
+        if (!viewCategoriesListResult.success) {
+          notifyNegative(viewCategoriesListResult.error.message);
+        }
+      };
       getCategoriesList();
     }
-  }, [dispatch, page]);
+  }, [dispatch, navigate, page]);
 
   return (
     <CategoriesListView
