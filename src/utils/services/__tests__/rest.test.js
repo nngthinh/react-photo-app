@@ -58,7 +58,7 @@ const setUserMockedToken = () => {
 jest.mock("axios");
 
 // Clear all local storage's state
-afterAll(() => {
+afterEach(() => {
   global.localStorage.clear();
 });
 
