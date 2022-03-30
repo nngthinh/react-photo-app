@@ -10,11 +10,9 @@ import { usersData, categoriesData, itemsData } from "tests/fixtures/database";
 const mockedUser1State = createMockedState(1);
 const mockedItemDetail = {
   id: 999,
-  description: "item description 1",
+  description: "item description -1",
   imageUrl: "https://google.com",
 };
-
-const mockedDuplicatedItem = "duplicated item name";
 
 jest.mock("utils/services/rest", () => ({
   get: jest.fn(),
@@ -98,10 +96,7 @@ beforeEach(() => {
 
   // - User sign in
   RestService.postWithToken.mockImplementation(async (url, body, configs) => {
-    if (body.name === mockedDuplicatedCategoryName) {
-      return Promise.reject({ message: "Category name already exists." });
-    }
-    return Promise.resolve({ ...mockedCategoryDetail });
+    return Promise.resolve({ ...mockedItemDetail });
   });
 });
 
@@ -109,83 +104,44 @@ afterEach(() => {
   global.localStorage.clear();
 });
 
-describe("add category", () => {
+describe("add item", () => {
   it("should return no error", async () => {
     render(
       <App />,
-      { route: "/categories/add" },
+      { route: "/categories/1/items/add" },
       { initialState: mockedUser1State }
     );
     expect(RestService.get.mock.calls.length).toBe(0);
     // Type category detail
     userEvent.type(
-      await screen.findByTestId("name"),
-      mockedCategoryDetail.name
-    );
-    userEvent.type(
       await screen.findByTestId("description"),
-      mockedCategoryDetail.description
+      mockedItemDetail.description
     );
     userEvent.type(
       await screen.findByTestId("imageUrl"),
-      mockedCategoryDetail.imageUrl
+      mockedItemDetail.imageUrl
     );
-    userEvent.click(screen.getByTestId("addCategoryButton"));
+    userEvent.click(screen.getByTestId("addItemButton"));
     expect(RestService.postWithToken.mock.calls.length).toBe(1);
     // Wait for success result
-    await waitFor(() => expect(window.location.pathname).toBe("/categories"));
-    await screen.findByText(/Create category successfully./i);
-  });
-
-  it("should return name field error", async () => {
-    render(
-      <App />,
-      { route: "/categories/add" },
-      { initialState: mockedUser1State }
-    );
-    expect(RestService.get.mock.calls.length).toBe(0);
-    // Type other valid inputs
-    userEvent.type(
-      await screen.findByTestId("description"),
-      mockedCategoryDetail.description
-    );
-    userEvent.type(
-      await screen.findByTestId("imageUrl"),
-      mockedCategoryDetail.imageUrl
-    );
-    // Missing name
-    userEvent.click(screen.getByTestId("addCategoryButton"));
-    await screen.findByText(/Length must be between 1 and 30\./i);
-    // Name is exceed the limit
-    userEvent.clear(await screen.findByTestId("name"));
-    userEvent.type(
-      await screen.findByTestId("name"),
-      "longerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"
-    );
-    userEvent.click(screen.getByTestId("addCategoryButton"));
-    await screen.findByText(/Length must be between 1 and 30\./i);
-    // Expect there's no post request
-    expect(RestService.postWithToken.mock.calls.length).toBe(0);
+    await waitFor(() => expect(window.location.pathname).toBe("/categories/1"));
+    await screen.findByText(/Create item successfully./i);
   });
 
   it("should return description field error", async () => {
     render(
       <App />,
-      { route: "/categories/add" },
+      { route: "/categories/1/items/add" },
       { initialState: mockedUser1State }
     );
     expect(RestService.get.mock.calls.length).toBe(0);
     // Type other valid inputs
     userEvent.type(
-      await screen.findByTestId("name"),
-      mockedCategoryDetail.name
-    );
-    userEvent.type(
       await screen.findByTestId("imageUrl"),
-      mockedCategoryDetail.imageUrl
+      mockedItemDetail.imageUrl
     );
     // Missing description
-    userEvent.click(screen.getByTestId("addCategoryButton"));
+    userEvent.click(screen.getByTestId("addItemButton"));
     await screen.findByText(/Length must be between 1 and 200\./i);
     // Description is exceed the limit
     userEvent.clear(await screen.findByTestId("description"));
@@ -193,7 +149,7 @@ describe("add category", () => {
       await screen.findByTestId("description"),
       "longerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrlongerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrlongerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrlongerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"
     );
-    userEvent.click(screen.getByTestId("addCategoryButton"));
+    userEvent.click(screen.getByTestId("addItemButton"));
     await screen.findByText(/Length must be between 1 and 200\./i);
     // Expect there's no post request
     expect(RestService.postWithToken.mock.calls.length).toBe(0);
@@ -202,21 +158,17 @@ describe("add category", () => {
   it("should return image url field error", async () => {
     render(
       <App />,
-      { route: "/categories/add" },
+      { route: "/categories/1/items/add" },
       { initialState: mockedUser1State }
     );
     expect(RestService.get.mock.calls.length).toBe(0);
     // Type other valid inputs
     userEvent.type(
-      await screen.findByTestId("name"),
-      mockedCategoryDetail.name
-    );
-    userEvent.type(
       await screen.findByTestId("description"),
-      mockedCategoryDetail.description
+      mockedItemDetail.description
     );
     // Missing image url
-    userEvent.click(screen.getByTestId("addCategoryButton"));
+    userEvent.click(screen.getByTestId("addItemButton"));
     await screen.findByText(/Missing data for required field\./i);
     // Image url is exceed the limit
     userEvent.clear(await screen.findByTestId("imageUrl"));
@@ -224,43 +176,14 @@ describe("add category", () => {
       await screen.findByTestId("imageUrl"),
       "longerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr@mail.com"
     );
-    userEvent.click(screen.getByTestId("addCategoryButton"));
+    userEvent.click(screen.getByTestId("addItemButton"));
     await screen.findByText(/Longer than maximum length 200\./i);
     // Image url is invalid
     userEvent.clear(await screen.findByTestId("imageUrl"));
     userEvent.type(await screen.findByTestId("imageUrl"), "not an url");
-    userEvent.click(screen.getByTestId("addCategoryButton"));
+    userEvent.click(screen.getByTestId("addItemButton"));
     await screen.findByText(/Not a valid URL\./i);
     // Expect there's no post request
     expect(RestService.postWithToken.mock.calls.length).toBe(0);
-  });
-
-  it("should return duplicated name field error", async () => {
-    render(
-      <App />,
-      { route: "/categories/add" },
-      { initialState: mockedUser1State }
-    );
-    expect(RestService.get.mock.calls.length).toBe(0);
-    // Type category detail
-    userEvent.type(
-      await screen.findByTestId("name"),
-      mockedDuplicatedCategoryName
-    );
-    userEvent.type(
-      await screen.findByTestId("description"),
-      mockedCategoryDetail.description
-    );
-    userEvent.type(
-      await screen.findByTestId("imageUrl"),
-      mockedCategoryDetail.imageUrl
-    );
-    userEvent.click(screen.getByTestId("addCategoryButton"));
-    expect(RestService.postWithToken.mock.calls.length).toBe(1);
-    // Wait for failed result
-    await waitFor(() =>
-      expect(window.location.pathname).toBe("/categories/add")
-    );
-    await screen.findByText(/Category name already exists./i);
   });
 });
