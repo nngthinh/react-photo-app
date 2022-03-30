@@ -30,7 +30,7 @@ const App = () => {
       }
     };
     autoSignIn(isLoggedIn);
-  }, [dispatch, isLoggedIn]);
+  });
   // Route page
   return (
     <>

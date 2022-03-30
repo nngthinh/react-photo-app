@@ -4,11 +4,14 @@ import App from "App";
 import RestService from "utils/services/rest";
 import { usersData, itemsData, categoriesData } from "tests/fixtures/database";
 import { loadState } from "utils/services/localStorage";
+import { createMockedState } from "tests/fixtures/state";
 
 jest.mock("utils/services/rest", () => ({
   getWithToken: jest.fn(),
   get: jest.fn(),
 }));
+
+const mockedUser1State = createMockedState(1);
 
 beforeEach(() => {
   // Mock APIs
