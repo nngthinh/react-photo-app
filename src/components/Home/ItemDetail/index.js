@@ -144,6 +144,7 @@ const ItemDetailView = ({
                   className="itemDetailImg"
                   src={imageUrl}
                   alt={description}
+                  data-testid="image"
                 />
               ) : (
                 <div className="itemDetailImg">
@@ -153,7 +154,9 @@ const ItemDetailView = ({
             </div>
             <div className="u-sizeFull u-marginBottomLarge">
               {description ? (
-                <div className="u-textCenter">{description}</div>
+                <div className="u-textCenter" data-testid="description">
+                  {description}
+                </div>
               ) : (
                 <div className="u-flex u-alignItemsCenter u-flexColumn">
                   <Skeleton width="80%"></Skeleton>
@@ -175,6 +178,7 @@ const ItemDetailView = ({
                       icon="edit"
                       iconSize="small"
                       onClick={() => navigateEditItem(categoryId, itemId)}
+                      data-testid="navigateEditItemButton"
                     ></ButtonItem>
                   </div>
                   <div>
@@ -186,11 +190,14 @@ const ItemDetailView = ({
                       icon="trash"
                       iconSize="small"
                       onClick={() => handleDeleteItem()}
+                      data-testid="deleteItemButton"
                     ></ButtonItem>
                   </div>
                 </div>
               ) : (
-                <div className="u-textGray u-textCenter">By {author?.name}</div>
+                <div className="u-textGray u-textCenter" data-testid="author">
+                  By {author?.name}
+                </div>
               )
             ) : (
               <div className="u-sizeFull u-flex u-justifyContentCenter">

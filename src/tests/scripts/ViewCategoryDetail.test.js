@@ -83,7 +83,9 @@ beforeEach(() => {
   RestService.getWithToken.mockImplementation(async (url, configs) => {
     const token = loadState()?.user.token;
     const userId = usersData.token[token];
-    return Promise.resolve({ name: usersData.info[userId].name, id: userId });
+    return userId
+      ? Promise.resolve({ name: usersData.info[userId].name, id: userId })
+      : Promise.reject({});
   });
 
   // - User sign in

@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import App from "App";
 import RestService from "utils/services/rest";
 import { usersData, itemsData, categoriesData } from "tests/fixtures/database";
+import { loadState } from "utils/services/localStorage";
 
 jest.mock("utils/services/rest", () => ({
   getWithToken: jest.fn(),
@@ -76,7 +77,11 @@ beforeEach(() => {
 
   // - Get user information API
   RestService.getWithToken.mockImplementation(async (url, configs) => {
-    return Promise.resolve({ name: usersData.info[1].name, id: 1 });
+    const token = loadState()?.user.token;
+    const userId = usersData.token[token];
+    return userId
+      ? Promise.resolve({ name: usersData.info[userId].name, id: userId })
+      : Promise.reject({});
   });
 });
 
@@ -97,6 +102,14 @@ describe("navigation", () => {
   it("able to go home", async () => {
     // Assertion
     render(<App />, { route: "/categories/1/items/1" });
+    // Click to home button
+    userEvent.click(screen.getByTestId("home"));
+    await waitFor(() => expect(window.location.pathname).toBe("/categories"));
+  });
+
+  it("able to sign out for user", async () => {
+    // Assertion
+    render(<App />, {}, { initialState: mockedUser1State });
     // Click to home button
     userEvent.click(screen.getByTestId("home"));
     await waitFor(() => expect(window.location.pathname).toBe("/categories"));

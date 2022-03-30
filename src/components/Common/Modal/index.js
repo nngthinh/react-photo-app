@@ -7,19 +7,19 @@ const CustomModal = ({ contents, props }) => {
 
 const CustomModalView = ({ contents, props }) => {
   return (
-    <Modal {...props.modal}>
-      <Modal.Header {...props.header}>
+    <Modal {...props.modal} data-testid="modal">
+      <Modal.Header {...props.header} data-testid="modal-header">
         <Modal.Title>{contents.title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>{contents.body}</Modal.Body>
-      <Modal.Footer>
+      <Modal.Body data-testid="modal-body">{contents.body}</Modal.Body>
+      <Modal.Footer data-testid="modal-footer">
         <ButtonItem
-          data-testid="button1"
+          data-testid="modal-button1"
           {...props.button1}
           value={contents.button1}
         />
         <ButtonItem
-          data-testid="button2"
+          data-testid="modal-button2"
           {...props.button2}
           value={contents.button2}
         />

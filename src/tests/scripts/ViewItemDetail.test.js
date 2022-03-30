@@ -1,14 +1,19 @@
 import App from "App";
-import { render, screen, waitFor, act } from "tests/utils/rtl";
+import { render, screen, waitFor } from "tests/utils/rtl";
 import { createMockedState } from "tests/fixtures/state";
 import userEvent from "@testing-library/user-event";
 import RestService from "utils/services/rest";
+import { loadState } from "utils/services/localStorage";
 import { usersData, categoriesData, itemsData } from "tests/fixtures/database";
+
+const mockedUser1State = createMockedState(1);
+const mockedUser2State = createMockedState(2);
 
 jest.mock("utils/services/rest", () => ({
   get: jest.fn(),
   post: jest.fn(),
   getWithToken: jest.fn(),
+  deleteWithToken: jest.fn(),
 }));
 
 beforeEach(() => {
@@ -78,7 +83,11 @@ beforeEach(() => {
 
   // - Get user information API
   RestService.getWithToken.mockImplementation(async (url, configs) => {
-    return Promise.resolve({ name: usersData.info[1].name, id: 1 });
+    const token = loadState()?.user.token;
+    const userId = usersData.token[token];
+    return userId
+      ? Promise.resolve({ name: usersData.info[userId].name, id: userId })
+      : Promise.reject({});
   });
 
   // - User sign in
@@ -125,12 +134,104 @@ describe("breadcrumb", () => {
 
 describe("item detail", () => {
   // Navigation
-  it("not able to go to edit item page for guest", async () => {});
-  it("not able to go to edit item page for not author user", async () => {});
-  it("able to go to edit item page for author user", async () => {});
+  it("not able to go to edit item page for guest", async () => {
+    render(<App />, { route: "/categories/1/items/1" });
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+    expect(screen.queryByTestId("navigateEditButton")).not.toBeInTheDocument();
+    await screen.findByTestId("author");
+  });
+
+  it("not able to go to edit item page for not author user", async () => {
+    render(
+      <App />,
+      { route: "/categories/1/items/1" },
+      { initialState: mockedUser2State }
+    );
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+
+    expect(
+      screen.queryByTestId("navigateEditItemButton")
+    ).not.toBeInTheDocument();
+    await screen.findByTestId("author");
+  });
+
+  it("able to go to edit item page for author user", async () => {
+    render(
+      <App />,
+      { route: "/categories/1/items/1" },
+      { initialState: mockedUser1State }
+    );
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+    await screen.findByTestId("navigateEditItemButton");
+    expect(screen.queryByTestId("author")).not.toBeInTheDocument();
+    // Go to edit page
+    userEvent.click(await screen.findByTestId("navigateEditItemButton"));
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(3));
+    await waitFor(() =>
+      expect(window.location.pathname).toBe("/categories/1/items/1/edit")
+    );
+  });
+
   // Features
-  it("should display category detail", async () => {});
-  it("not able to delete item for guest", async () => {});
-  it("not able to delete item for not author user", async () => {});
-  it("able to delete item for author user", async () => {});
+  it("should display item detail", async () => {
+    render(<App />, { route: "/categories/1/items/1" });
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+    expect(screen.queryByTestId("description")).toHaveTextContent(
+      itemsData.items[0].description
+    );
+    expect(screen.queryByTestId("image")).toHaveAttribute(
+      "src",
+      itemsData.items[0].imageUrl
+    );
+  });
+
+  it("not able to delete item for guest", async () => {
+    render(<App />, { route: "/categories/1/items/1" });
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+    expect(screen.queryByTestId("deleteItemButton")).not.toBeInTheDocument();
+  });
+
+  it("not able to delete item for not author user", async () => {
+    render(
+      <App />,
+      { route: "/categories/1/items/1" },
+      { initialState: mockedUser2State }
+    );
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+    expect(screen.queryByTestId("deleteItemButton")).not.toBeInTheDocument();
+  });
+
+  it("able to delete item for author user", async () => {
+    render(
+      <App />,
+      { route: "/categories/1/items/1" },
+      { initialState: mockedUser1State }
+    );
+    await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
+    await screen.findByTestId("deleteItemButton");
+    // Delete item
+    userEvent.click(await screen.findByTestId("deleteItemButton"));
+    await screen.findByTestId("modal");
+    expect(await screen.findByTestId("modal-header")).toHaveTextContent(
+      /delete item/i
+    );
+    expect(await screen.findByTestId("modal-button1")).toHaveTextContent(
+      /cancel/i
+    );
+    expect(await screen.findByTestId("modal-button2")).toHaveTextContent(
+      /delete/i
+    );
+    // Cancel the action
+    userEvent.click(await screen.findByTestId("modal-button1"));
+    await waitFor(() =>
+      expect(RestService.deleteWithToken.mock.calls.length).toBe(0)
+    );
+    // Confirm the action
+    userEvent.click(await screen.findByTestId("deleteItemButton"));
+    userEvent.click(await screen.findByTestId("modal-button2"));
+    await waitFor(() =>
+      expect(RestService.deleteWithToken.mock.calls.length).toBe(1)
+    );
+    await waitFor(() => expect(window.location.pathname).toBe("/categories/1"));
+  });
 });

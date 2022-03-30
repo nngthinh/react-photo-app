@@ -5,7 +5,6 @@ import CategoryAction from "./CategoryAction";
 import CategoryDetail from "./CategoryDetail";
 import ItemAction from "./ItemAction";
 import ItemDetail from "./ItemDetail";
-import ItemsList from "./ItemsList";
 
 const Home = () => {
   return <HomeView />;
