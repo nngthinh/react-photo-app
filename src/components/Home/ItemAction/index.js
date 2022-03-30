@@ -58,7 +58,7 @@ const ItemAction = ({ type }) => {
           notifyNegative(viewItemDetailResult.error.message);
         } else {
           const itemDetail = viewItemDetailResult.data;
-          if (itemDetail.author.id !== userInfo.id) {
+          if (itemDetail.author.id !== userInfo?.id) {
             notifyNegative(
               "You are not allowed to perform that operation. Please try using another account."
             );

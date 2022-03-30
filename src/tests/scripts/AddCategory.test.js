@@ -19,6 +19,7 @@ const mockedDuplicatedCategoryName = "duplicated category name";
 
 jest.mock("utils/services/rest", () => ({
   get: jest.fn(),
+  post: jest.fn(),
   getWithToken: jest.fn(),
   postWithToken: jest.fn(),
 }));
@@ -98,6 +99,11 @@ beforeEach(() => {
   });
 
   // - User sign in
+  RestService.post.mockImplementation(async (url, body, configs) => {
+    return Promise.resolve({ accessToken: usersData.info[1].token });
+  });
+
+  // - Category action
   RestService.postWithToken.mockImplementation(async (url, body, configs) => {
     if (body.name === mockedDuplicatedCategoryName) {
       return Promise.reject({ message: "Category name already exists." });
@@ -111,6 +117,24 @@ afterEach(() => {
 });
 
 describe("add category", () => {
+  it("navigate to sign in page for guest", async () => {
+    render(<App />, { route: "/categories/add" });
+    expect(RestService.get.mock.calls.length).toBe(0);
+    await waitFor(() => {
+      expect(window.location.pathname).toBe("/signin");
+    });
+    userEvent.type(await screen.findByTestId("email"), usersData.info[1].email);
+    userEvent.type(
+      await screen.findByTestId("password"),
+      usersData.info[1].password
+    );
+    userEvent.click(screen.getByTestId("signInButton"));
+    expect(RestService.post.mock.calls.length).toBe(1);
+    await waitFor(() => {
+      expect(window.location.pathname).toBe("/categories/add");
+    });
+  });
+
   it("should return no error", async () => {
     render(
       <App />,

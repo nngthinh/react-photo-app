@@ -8,6 +8,7 @@ import { usersData, categoriesData, itemsData } from "tests/fixtures/database";
 
 // Mocked data
 const mockedUser1State = createMockedState(1);
+const mockedUser2State = createMockedState(2);
 const mockedItemDetail = {
   id: 999,
   description: "item description -1",
@@ -16,6 +17,7 @@ const mockedItemDetail = {
 
 jest.mock("utils/services/rest", () => ({
   get: jest.fn(),
+  post: jest.fn(),
   getWithToken: jest.fn(),
   putWithToken: jest.fn(),
 }));
@@ -95,6 +97,11 @@ beforeEach(() => {
   });
 
   // - User sign in
+  RestService.post.mockImplementation(async (url, body, configs) => {
+    return Promise.resolve({ accessToken: usersData.info[1].token });
+  });
+
+  // - Item action
   RestService.putWithToken.mockImplementation(async (url, body, configs) => {
     return Promise.resolve({ ...mockedItemDetail });
   });
@@ -104,7 +111,41 @@ afterEach(() => {
   global.localStorage.clear();
 });
 
-describe("add item", () => {
+describe("edit item", () => {
+  it("navigate to sign in page for guest", async () => {
+    render(<App />, { route: "/categories/1/items/1/edit" });
+    expect(RestService.get.mock.calls.length).toBe(0);
+    await waitFor(() => {
+      expect(window.location.pathname).toBe("/signin");
+    });
+    userEvent.type(await screen.findByTestId("email"), usersData.info[1].email);
+    userEvent.type(
+      await screen.findByTestId("password"),
+      usersData.info[1].password
+    );
+    userEvent.click(screen.getByTestId("signInButton"));
+    expect(RestService.post.mock.calls.length).toBe(1);
+    await waitFor(() => {
+      expect(window.location.pathname).toBe("/categories/1/items/1/edit");
+    });
+  });
+
+  it("discard edit action for not author user", async () => {
+    render(
+      <App />,
+      { route: "/categories/1/items/1/edit" },
+      { initialState: mockedUser2State }
+    );
+    // Get item data first, then check if the author id of that item is the same of the current user
+    expect(RestService.get.mock.calls.length).toBe(1);
+    await waitFor(() => {
+      expect(window.location.pathname).toBe("/categories/1/items/1");
+    });
+    await screen.findByText(
+      /you are not allowed to perform that operation. Please try using another account./i
+    );
+  });
+
   it("should return no error", async () => {
     render(
       <App />,
