@@ -288,7 +288,7 @@ const CategoryActionView = ({
               readOnly={isSubmitting}
             ></InputItem>
             <InputItem
-              data-testid="password"
+              data-testid="imageUrl"
               className="u-marginBottomExtraSmall"
               type="text"
               value={imageUrl.value}
