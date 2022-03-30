@@ -212,7 +212,7 @@ const ItemActionView = ({
         setIsSubmitting(false);
         if (updateItemResult.success) {
           notifyPositive("Update item successfully.");
-          navigate(`/category/${categoryId}/items/${itemId}`);
+          navigate(`/categories/${categoryId}/items/${itemId}`);
         } else {
           if (updateItemResult.error.data) {
             const errors = updateItemResult.error;
