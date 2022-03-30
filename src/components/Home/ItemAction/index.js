@@ -81,7 +81,7 @@ const ItemAction = ({ type }) => {
     location.search,
     navigate,
     type,
-    userInfo.id,
+    userInfo?.id, // Note
   ]);
 
   return (
