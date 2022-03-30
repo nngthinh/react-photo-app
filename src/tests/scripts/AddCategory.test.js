@@ -10,8 +10,8 @@ import { usersData, categoriesData, itemsData } from "tests/fixtures/database";
 const mockedUser1State = createMockedState(1);
 const mockedCategoryDetail = {
   id: 999,
-  name: "building -1",
-  description: "category 1",
+  name: "category -1",
+  description: "description 1",
   imageUrl: "https://google.com",
 };
 
