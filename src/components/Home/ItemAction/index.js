@@ -21,6 +21,7 @@ const ItemAction = ({ type }) => {
   const { categoryId, itemId } = useParams();
   // Logged in is required in this page
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const userInfo = useSelector((state) => state.user.info);
   const itemDetail = useSelector((state) => state.items.detail);
 
   const dispatch = useDispatch();
@@ -36,17 +37,18 @@ const ItemAction = ({ type }) => {
   // In adding category, no operation is required in advance
   // In editing category, we need to fetch it's data
   useEffect(() => {
-    if (!isLoggedIn) {
+    const navigateWithNextUrl = (pathname) => {
       const nextUrl = base64.encode(
         `${location.pathname}${location.search}${location.hash}`
       );
       navigate(
-        {
-          pathname: "/signin",
-          search: createSearchParams({ next: nextUrl }).toString(),
-        },
+        { pathname, search: createSearchParams({ next: nextUrl }).toString() },
         { replace: true }
       );
+    };
+
+    if (!isLoggedIn) {
+      navigateWithNextUrl("/signin");
     } else if (type === "edit") {
       const getItemInfo = async () => {
         const viewItemDetailResult = await dispatch(
@@ -54,6 +56,17 @@ const ItemAction = ({ type }) => {
         );
         if (!viewItemDetailResult.success) {
           notifyNegative(viewItemDetailResult.error.message);
+        } else {
+          const itemDetail = viewItemDetailResult.data;
+          if (itemDetail.author.id !== userInfo.id) {
+            notifyNegative(
+              "You are not allowed to perform that operation. Please try using another account."
+            );
+            navigate(
+              { pathname: `/categories/${categoryId}/items/${itemId}` },
+              { replace: true }
+            );
+          }
         }
       };
       getItemInfo();
@@ -68,6 +81,7 @@ const ItemAction = ({ type }) => {
     location.search,
     navigate,
     type,
+    userInfo.id,
   ]);
 
   return (
@@ -263,7 +277,7 @@ const ItemActionView = ({
         </div>
         <div className="buttonSection">
           <ButtonItem
-            data-testid="itemActionButton"
+            data-testid={type === "add" ? "addItemButton" : "editItemButton"}
             className="u-marginBottomTiny"
             value={type === "add" ? "Create item" : "Update item"}
             variant={type === "add" ? "primary" : "accent"}
