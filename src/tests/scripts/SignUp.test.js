@@ -77,6 +77,9 @@ describe("sign up", () => {
   // SIgn up failed
   it("should return name field error", async () => {
     render(<App />, { route: "/signup" });
+    // Type other valid inputs
+    userEvent.type(screen.getByTestId("email"), mockedUser.email);
+    userEvent.type(screen.getByTestId("password"), mockedUser.password);
     // Missing name
     userEvent.click(screen.getByTestId("signUpButton"));
     expect(
@@ -97,6 +100,9 @@ describe("sign up", () => {
 
   it("should return email field error", async () => {
     render(<App />, { route: "/signup" });
+    // Type other valid inputs
+    userEvent.type(screen.getByTestId("name"), mockedUser.name);
+    userEvent.type(screen.getByTestId("password"), mockedUser.password);
     // Missing email
     userEvent.click(screen.getByTestId("signUpButton"));
     expect(
@@ -117,6 +123,9 @@ describe("sign up", () => {
 
   it("should return password field error", async () => {
     render(<App />, { route: "/signup" });
+    // Type other valid inputs
+    userEvent.type(screen.getByTestId("name"), mockedUser.name);
+    userEvent.type(screen.getByTestId("email"), mockedUser.email);
     // Missing password
     userEvent.click(screen.getByTestId("signUpButton"));
     await screen.findByText(/shorter than minimum length 6\./i);

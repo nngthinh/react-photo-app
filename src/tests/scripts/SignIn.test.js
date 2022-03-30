@@ -70,6 +70,9 @@ describe("sign in", () => {
   it("should return email field error", async () => {
     render(<App />, { route: "/signin" });
 
+    // Type other valid inputs
+    userEvent.type(screen.getByTestId("password"), mockedUser.password);
+
     // Missing email
     userEvent.click(screen.getByTestId("signInButton"));
     expect(
@@ -93,6 +96,9 @@ describe("sign in", () => {
   it("should return password field error", async () => {
     render(<App />, { route: "/signin" });
 
+    // Type other valid inputs
+    userEvent.type(screen.getByTestId("email"), mockedUser.email);
+
     // Missing password
     userEvent.click(screen.getByTestId("signInButton"));
     await screen.findByText(/shorter than minimum length 6\./i);
@@ -110,7 +116,6 @@ describe("sign in", () => {
 
   it("should return invalid email or password error", async () => {
     render(<App />, { route: "/signin" });
-
     // Wrong email
     userEvent.type(screen.getByTestId("email"), wrongEmail);
     userEvent.type(screen.getByTestId("password"), mockedUser.password);
