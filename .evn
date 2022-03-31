@@ -1,2 +1,0 @@
-REACT_APP_PROD_API_ENDPOINT = "http://localhost:8080"
-REACT_APP_DEV_API_ENDPOINT = "http://localhost:8080"
