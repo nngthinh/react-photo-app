@@ -1,5 +1,12 @@
 import { useState, useReducer } from "react";
 import { useDispatch } from "react-redux";
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
+import { Separator } from "@ahaui/react";
+import base64 from "base-64";
 import { signInAction, signUpAction } from "actions/user";
 import { ButtonItem, InputItem } from "components/Common/Items";
 import {
@@ -7,15 +14,9 @@ import {
   validateEmail,
   validatePassword,
 } from "utils/validations/auth";
-import "./index.css";
-import {
-  createSearchParams,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
-import { Separator } from "@ahaui/react";
 import { notifyNegative, notifyPositive } from "components/Common/Toast";
-import base64 from "base-64";
+import "./index.css";
+import { UserInputAction } from "constants/actions";
 
 // Components
 const SignUp = () => {
@@ -43,12 +44,12 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
   const [name, setName] = useReducer(
     (name, nameAction) => {
       switch (nameAction.type) {
-        case "ON_CHANGE":
+        case UserInputAction.ON_CHANGE:
           return {
             value: nameAction.value,
             error: null,
           };
-        case "ON_VALIDATE":
+        case UserInputAction.ON_VALIDATE:
           return {
             value: name.value,
             error: nameAction.error ?? validateName(name.value),
@@ -63,12 +64,12 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
   const [email, setEmail] = useReducer(
     (email, emailAction) => {
       switch (emailAction.type) {
-        case "ON_CHANGE":
+        case UserInputAction.ON_CHANGE:
           return {
             value: emailAction.value,
             error: null,
           };
-        case "ON_VALIDATE":
+        case UserInputAction.ON_VALIDATE:
           return {
             value: email.value,
             error: emailAction.error ?? validateEmail(email.value),
@@ -83,12 +84,12 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
   const [password, setPassword] = useReducer(
     (password, passwordAction) => {
       switch (passwordAction.type) {
-        case "ON_CHANGE":
+        case UserInputAction.ON_CHANGE:
           return {
             value: passwordAction.value,
             error: null,
           };
-        case "ON_VALIDATE":
+        case UserInputAction.ON_VALIDATE:
           return {
             value: password.value,
             error: passwordAction.error ?? validatePassword(password.value),
@@ -124,9 +125,9 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
       validateEmail(email.value) ||
       validatePassword(password.value)
     ) {
-      setName({ type: "ON_VALIDATE" });
-      setEmail({ type: "ON_VALIDATE" });
-      setPassword({ type: "ON_VALIDATE" });
+      setName({ type: UserInputAction.ON_VALIDATE });
+      setEmail({ type: UserInputAction.ON_VALIDATE });
+      setPassword({ type: UserInputAction.ON_VALIDATE });
       return;
     }
     setIsSubmitting(true);
@@ -150,9 +151,18 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
       // Field validation
       if (signUpResult.error.data) {
         const fieldErrors = signUpResult.error.data;
-        setName({ type: "ON_VALIDATE", error: fieldErrors.name?.[0] });
-        setEmail({ type: "ON_VALIDATE", error: fieldErrors.email?.[0] });
-        setPassword({ type: "ON_VALIDATE", error: fieldErrors.password?.[0] });
+        setName({
+          type: UserInputAction.ON_VALIDATE,
+          error: fieldErrors.name?.[0],
+        });
+        setEmail({
+          type: UserInputAction.ON_VALIDATE,
+          error: fieldErrors.email?.[0],
+        });
+        setPassword({
+          type: UserInputAction.ON_VALIDATE,
+          error: fieldErrors.password?.[0],
+        });
       }
       const messageError = signUpResult.error.message;
       notifyNegative(String(messageError));
@@ -172,9 +182,12 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
             value={name.value}
             placeholder={"Name"}
             handleOnChange={(e) => {
-              setName({ type: "ON_CHANGE", value: e.target.value });
+              setName({
+                type: UserInputAction.ON_CHANGE,
+                value: e.target.value,
+              });
             }}
-            handleOnBlur={(e) => setName({ type: "ON_VALIDATE" })}
+            handleOnBlur={(e) => setName({ type: UserInputAction.ON_VALIDATE })}
             error={name.error}
             readOnly={isSubmitting}
           ></InputItem>
@@ -185,9 +198,14 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
             value={email.value}
             placeholder={"Email"}
             handleOnChange={(e) => {
-              setEmail({ type: "ON_CHANGE", value: e.target.value });
+              setEmail({
+                type: UserInputAction.ON_CHANGE,
+                value: e.target.value,
+              });
             }}
-            handleOnBlur={(e) => setEmail({ type: "ON_VALIDATE" })}
+            handleOnBlur={(e) =>
+              setEmail({ type: UserInputAction.ON_VALIDATE })
+            }
             error={email.error}
             readOnly={isSubmitting}
           ></InputItem>
@@ -198,9 +216,14 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
             value={password.value}
             placeholder={"Password"}
             handleOnChange={(e) => {
-              setPassword({ type: "ON_CHANGE", value: e.target.value });
+              setPassword({
+                type: UserInputAction.ON_CHANGE,
+                value: e.target.value,
+              });
             }}
-            handleOnBlur={(e) => setPassword({ type: "ON_VALIDATE" })}
+            handleOnBlur={(e) =>
+              setPassword({ type: UserInputAction.ON_VALIDATE })
+            }
             error={password.error}
             readOnly={isSubmitting}
           ></InputItem>

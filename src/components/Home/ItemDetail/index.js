@@ -1,13 +1,13 @@
-import { deleteItemAction, viewItemAction } from "actions/items";
-import { notifyNegative, notifyPositive } from "components/Common/Toast";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Skeleton } from "@ahaui/react";
-import { clearModalAction, showModalAction } from "actions/modal";
+import { notifyNegative, notifyPositive } from "components/Common/Toast";
 import { BreadcrumbItem, ButtonItem } from "components/Common/Items";
-import "./index.css";
+import { deleteItemAction, viewItemAction } from "actions/items";
+import { clearModalAction, showModalAction } from "actions/modal";
 import { viewCategoryAction } from "actions/categories";
+import "./index.css";
 
 const ItemDetail = () => {
   const { categoryId, itemId } = useParams();

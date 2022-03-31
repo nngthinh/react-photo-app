@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { viewCategoryAction } from "actions/categories";
-import { notifyNegative } from "components/Common/Toast";
 import { Skeleton, Separator } from "@ahaui/react";
-import "./index.css";
+import { notifyNegative } from "components/Common/Toast";
 import ItemsList from "components/Home/ItemsList";
 import { BreadcrumbItem, ButtonItem } from "components/Common/Items";
+import { viewCategoryAction } from "actions/categories";
+import "./index.css";
 
 const CategoryDetail = () => {
   const { categoryId } = useParams();

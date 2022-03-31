@@ -1,4 +1,4 @@
-import { KCategoriesAction } from "constants/actions";
+import { CategoriesAction } from "constants/actions";
 import { limitCategoriesPagination } from "constants/limit";
 
 const initialState = {
@@ -9,7 +9,7 @@ const initialState = {
 
 const categoriesReducer = (state = initialState, action) => {
   switch (action.type) {
-    case KCategoriesAction.VIEW_CATEGORIES_SUCCESS: {
+    case CategoriesAction.VIEW_CATEGORIES_SUCCESS: {
       const categoriesInfo = action.data;
       return {
         ...state,
@@ -21,21 +21,21 @@ const categoriesReducer = (state = initialState, action) => {
         list: categoriesInfo.items, // shouldn't be cached
       };
     }
-    case KCategoriesAction.VIEW_CATEGORIES_FAILED:
+    case CategoriesAction.VIEW_CATEGORIES_FAILED:
       return { ...state };
-    case KCategoriesAction.CREATE_CATEGORY_SUCCESS:
+    case CategoriesAction.CREATE_CATEGORY_SUCCESS:
       return { ...state };
-    case KCategoriesAction.CREATE_CATEGORY_FAILED:
+    case CategoriesAction.CREATE_CATEGORY_FAILED:
       return { ...state };
-    case KCategoriesAction.VIEW_CATEGORY_SUCCESS: {
+    case CategoriesAction.VIEW_CATEGORY_SUCCESS: {
       const categoryInfo = action.data;
       return { ...state, detail: categoryInfo };
     }
-    case KCategoriesAction.VIEW_CATEGORY_FAILED:
+    case CategoriesAction.VIEW_CATEGORY_FAILED:
       return { ...state };
-    case KCategoriesAction.UPDATE_CATEGORY_SUCCESS:
+    case CategoriesAction.UPDATE_CATEGORY_SUCCESS:
       return { ...state };
-    case KCategoriesAction.UPDATE_CATEGORY_FAILED:
+    case CategoriesAction.UPDATE_CATEGORY_FAILED:
       return { ...state };
     default:
       return state;

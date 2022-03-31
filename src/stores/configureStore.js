@@ -1,8 +1,8 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import thunkMiddleware from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
 import rootReducer from "reducers";
 import clientMiddleware from "stores/middlewares/client";
-import { composeWithDevTools } from "redux-devtools-extension";
 
 const configureStore = (preloadedState) => {
   // Middlewares

@@ -1,4 +1,4 @@
-import { KItemsAction } from "constants/actions";
+import { ItemsAction } from "constants/actions";
 import { limitItemsPagination } from "constants/limit";
 
 const initialState = {
@@ -9,7 +9,7 @@ const initialState = {
 
 const itemsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case KItemsAction.VIEW_ITEMS_SUCCESS: {
+    case ItemsAction.VIEW_ITEMS_SUCCESS: {
       const itemInfo = action.data;
       return {
         ...state,
@@ -19,25 +19,25 @@ const itemsReducer = (state = initialState, action) => {
         list: itemInfo.items,
       };
     }
-    case KItemsAction.VIEW_ITEMS_FAILED:
+    case ItemsAction.VIEW_ITEMS_FAILED:
       return { ...state };
-    case KItemsAction.CREATE_ITEM_SUCCESS:
+    case ItemsAction.CREATE_ITEM_SUCCESS:
       return { ...state };
-    case KItemsAction.CREATE_ITEM_FAILED:
+    case ItemsAction.CREATE_ITEM_FAILED:
       return { ...state };
-    case KItemsAction.VIEW_ITEM_SUCCESS: {
+    case ItemsAction.VIEW_ITEM_SUCCESS: {
       const itemInfo = action.data;
       return { ...state, detail: itemInfo };
     }
-    case KItemsAction.VIEW_ITEM_FAILED:
+    case ItemsAction.VIEW_ITEM_FAILED:
       return { ...state };
-    case KItemsAction.UPDATE_ITEM_SUCCESS:
+    case ItemsAction.UPDATE_ITEM_SUCCESS:
       return { ...state };
-    case KItemsAction.UPDATE_ITEM_FAILED:
+    case ItemsAction.UPDATE_ITEM_FAILED:
       return { ...state };
-    case KItemsAction.DELETE_ITEM_SUCCESS:
+    case ItemsAction.DELETE_ITEM_SUCCESS:
       return { ...state };
-    case KItemsAction.DELETE_ITEM_FAILED:
+    case ItemsAction.DELETE_ITEM_FAILED:
       return { ...state };
     default:
       return state;

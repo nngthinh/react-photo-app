@@ -1,5 +1,5 @@
-import { Pagination } from "@ahaui/react";
 import { useSearchParams } from "react-router-dom";
+import { Pagination } from "@ahaui/react";
 
 const PaginationItem = ({
   minIndex = 1,

@@ -1,5 +1,5 @@
-import Navbar from "components/Common/NavBar";
 import { Navigate, Route, Routes } from "react-router-dom";
+import Navbar from "components/Common/NavBar";
 import CategoriesList from "./CategoriesList";
 import CategoryAction from "./CategoryAction";
 import CategoryDetail from "./CategoryDetail";
@@ -42,7 +42,7 @@ const HomeView = () => {
           path="/categories/:categoryId/items/:itemId/edit"
           element={<ItemAction type="edit" />}
         ></Route>
-        {/* Replace wrong routes*/}
+        {/* Wrong routes*/}
         <Route
           path="/*"
           element={<Navigate to="/categories" replace={true} />}

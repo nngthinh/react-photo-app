@@ -1,4 +1,4 @@
-import { baseUrl } from "constants/apiUrl";
+import { baseUrl } from "configuration";
 import RestService from "utils/services/rest";
 
 class CategoriesRepository {

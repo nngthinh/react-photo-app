@@ -1,4 +1,4 @@
-import { KModalAction } from "constants/actions";
+import { ModalAction } from "constants/actions";
 
 const initialState = {
   show: false,
@@ -6,12 +6,12 @@ const initialState = {
 
 const modalReducer = (state = initialState, action) => {
   switch (action.type) {
-    case KModalAction.SHOW_MODAL:
+    case ModalAction.SHOW_MODAL:
       return {
         show: true,
         config: action.config,
       };
-    case KModalAction.CLEAR_MODAL:
+    case ModalAction.CLEAR_MODAL:
       return {
         show: false,
       };

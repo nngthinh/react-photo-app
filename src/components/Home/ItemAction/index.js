@@ -6,6 +6,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
+import base64 from "base-64";
 import { notifyNegative, notifyPositive } from "components/Common/Toast";
 import { validateDescription, validateImageUrl } from "utils/validations/items";
 import { ButtonItem, InputItem } from "components/Common/Items";
@@ -14,8 +15,8 @@ import {
   viewItemAction,
   updateItemAction,
 } from "actions/items";
-import base64 from "base-64";
 import "./index.css";
+import { UserInputAction } from "constants/actions";
 
 const ItemAction = ({ type }) => {
   const { categoryId, itemId } = useParams();
@@ -111,12 +112,12 @@ const ItemActionView = ({
   const [description, setDescription] = useReducer(
     (description, descriptionAction) => {
       switch (descriptionAction.type) {
-        case "ON_CHANGE":
+        case UserInputAction.ON_CHANGE:
           return {
             value: descriptionAction.value,
             error: null,
           };
-        case "ON_VALIDATE":
+        case UserInputAction.ON_VALIDATE:
           return {
             value: description.value,
             error:
@@ -132,12 +133,12 @@ const ItemActionView = ({
   const [imageUrl, setImageUrl] = useReducer(
     (imageUrl, imageUrlAction) => {
       switch (imageUrlAction.type) {
-        case "ON_CHANGE":
+        case UserInputAction.ON_CHANGE:
           return {
             value: imageUrlAction.value,
             error: null,
           };
-        case "ON_VALIDATE":
+        case UserInputAction.ON_VALIDATE:
           return {
             value: imageUrl.value,
             error: imageUrlAction.error ?? validateImageUrl(imageUrl.value),
@@ -152,8 +153,14 @@ const ItemActionView = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    setImageUrl({ type: "ON_CHANGE", value: itemDetail?.imageUrl ?? "" });
-    setDescription({ type: "ON_CHANGE", value: itemDetail?.description ?? "" });
+    setImageUrl({
+      type: UserInputAction.ON_CHANGE,
+      value: itemDetail?.imageUrl ?? "",
+    });
+    setDescription({
+      type: UserInputAction.ON_CHANGE,
+      value: itemDetail?.description ?? "",
+    });
   }, [itemDetail?.description, itemDetail?.imageUrl]);
 
   const navigate = useNavigate();
@@ -165,8 +172,8 @@ const ItemActionView = ({
       validateDescription(description.value) ||
       validateImageUrl(imageUrl.value)
     ) {
-      setDescription({ type: "ON_VALIDATE" });
-      setImageUrl({ type: "ON_VALIDATE" });
+      setDescription({ type: UserInputAction.ON_VALIDATE });
+      setImageUrl({ type: UserInputAction.ON_VALIDATE });
       return;
     }
 
@@ -187,10 +194,13 @@ const ItemActionView = ({
           if (createItemResult.error.data) {
             const errors = createItemResult.error;
             setDescription({
-              type: "ON_VALIDATE",
+              type: UserInputAction.ON_VALIDATE,
               error: errors.description[0],
             });
-            setImageUrl({ type: "ON_VALIDATE", error: errors.imageUrl[0] });
+            setImageUrl({
+              type: UserInputAction.ON_VALIDATE,
+              error: errors.imageUrl[0],
+            });
           } else {
             notifyNegative(createItemResult.error.message);
           }
@@ -217,10 +227,13 @@ const ItemActionView = ({
           if (updateItemResult.error.data) {
             const errors = updateItemResult.error;
             setDescription({
-              type: "ON_VALIDATE",
+              type: UserInputAction.ON_VALIDATE,
               error: errors.description[0],
             });
-            setImageUrl({ type: "ON_VALIDATE", error: errors.imageUrl[0] });
+            setImageUrl({
+              type: UserInputAction.ON_VALIDATE,
+              error: errors.imageUrl[0],
+            });
           } else {
             notifyNegative(updateItemResult.error.message);
           }
@@ -245,9 +258,14 @@ const ItemActionView = ({
               value={description.value}
               placeholder={"Description"}
               handleOnChange={(e) => {
-                setDescription({ type: "ON_CHANGE", value: e.target.value });
+                setDescription({
+                  type: UserInputAction.ON_CHANGE,
+                  value: e.target.value,
+                });
               }}
-              handleOnBlur={(e) => setDescription({ type: "ON_VALIDATE" })}
+              handleOnBlur={(e) =>
+                setDescription({ type: UserInputAction.ON_VALIDATE })
+              }
               error={description.error}
               readOnly={isSubmitting}
             ></InputItem>
@@ -258,10 +276,13 @@ const ItemActionView = ({
               value={imageUrl.value}
               placeholder={"Image URL"}
               handleOnChange={(e) => {
-                setImageUrl({ type: "ON_CHANGE", value: e.target.value });
+                setImageUrl({
+                  type: UserInputAction.ON_CHANGE,
+                  value: e.target.value,
+                });
               }}
               handleOnBlur={(e) => {
-                setImageUrl({ type: "ON_VALIDATE" });
+                setImageUrl({ type: UserInputAction.ON_VALIDATE });
               }}
               error={imageUrl.error}
               readOnly={isSubmitting}

@@ -1,11 +1,11 @@
-import { showModalAction, clearModalAction } from "actions/modal";
-import { signOutAction } from "actions/user";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { notifyNegative, notifyPositive } from "../Toast";
 import { Avatar, Icon, Dropdown, Toggle, Separator } from "@ahaui/react";
+import { signOutAction } from "actions/user";
+import { showModalAction, clearModalAction } from "actions/modal";
+import { notifyNegative, notifyPositive } from "../Toast";
 import "./index.css";
-import { useState } from "react";
 
 const Navbar = () => {
   const user = useSelector((state) => state.user);

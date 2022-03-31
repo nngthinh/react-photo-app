@@ -1,17 +1,18 @@
-import { useState, useReducer } from "react";
-import { signInAction } from "actions/user";
-import { ButtonItem, InputItem } from "components/Common/Items";
 import { useDispatch } from "react-redux";
+import { useState, useReducer } from "react";
 import {
   useNavigate,
   useSearchParams,
   createSearchParams,
 } from "react-router-dom";
-import { validateEmail, validatePassword } from "utils/validations/auth";
-import "./index.css";
-import { Separator } from "@ahaui/react";
-import { notifyNegative, notifyPositive } from "components/Common/Toast";
 import base64 from "base-64";
+import { Separator } from "@ahaui/react";
+import { signInAction } from "actions/user";
+import { ButtonItem, InputItem } from "components/Common/Items";
+import { validateEmail, validatePassword } from "utils/validations/auth";
+import { notifyNegative, notifyPositive } from "components/Common/Toast";
+import { UserInputAction } from "constants/actions";
+import "./index.css";
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -30,12 +31,12 @@ const SignInView = ({ nextUrl, onSignIn }) => {
   const [email, setEmail] = useReducer(
     (email, emailAction) => {
       switch (emailAction.type) {
-        case "ON_CHANGE":
+        case UserInputAction.ON_CHANGE:
           return {
             value: emailAction.value,
             error: null,
           };
-        case "ON_VALIDATE":
+        case UserInputAction.ON_VALIDATE:
           return {
             value: email.value,
             error: emailAction.error ?? validateEmail(email.value),
@@ -50,12 +51,12 @@ const SignInView = ({ nextUrl, onSignIn }) => {
   const [password, setPassword] = useReducer(
     (password, passwordAction) => {
       switch (passwordAction.type) {
-        case "ON_CHANGE":
+        case UserInputAction.ON_CHANGE:
           return {
             value: passwordAction.value,
             error: null,
           };
-        case "ON_VALIDATE":
+        case UserInputAction.ON_VALIDATE:
           return {
             value: password.value,
             error: passwordAction.error ?? validatePassword(password.value),
@@ -87,8 +88,8 @@ const SignInView = ({ nextUrl, onSignIn }) => {
   const handleSubmit = async () => {
     // Validate all fields before submitting
     if (validateEmail(email.value) || validatePassword(password.value)) {
-      setEmail({ type: "ON_VALIDATE" });
-      setPassword({ type: "ON_VALIDATE" });
+      setEmail({ type: UserInputAction.ON_VALIDATE });
+      setPassword({ type: UserInputAction.ON_VALIDATE });
       return;
     }
     setIsSubmitting(true);
@@ -101,8 +102,14 @@ const SignInView = ({ nextUrl, onSignIn }) => {
     } else {
       if (signInResult.error.data) {
         const fieldErrors = signInResult.error.data;
-        setEmail({ type: "ON_VALIDATE", error: fieldErrors.email?.[0] });
-        setPassword({ type: "ON_VALIDATE", error: fieldErrors.password?.[0] });
+        setEmail({
+          type: UserInputAction.ON_VALIDATE,
+          error: fieldErrors.email?.[0],
+        });
+        setPassword({
+          type: UserInputAction.ON_VALIDATE,
+          error: fieldErrors.password?.[0],
+        });
       } else {
         const messageError = signInResult.error.message;
         notifyNegative(String(messageError));
@@ -123,9 +130,14 @@ const SignInView = ({ nextUrl, onSignIn }) => {
             value={email.value}
             placeholder={"Email"}
             handleOnChange={(e) => {
-              setEmail({ type: "ON_CHANGE", value: e.target.value });
+              setEmail({
+                type: UserInputAction.ON_CHANGE,
+                value: e.target.value,
+              });
             }}
-            handleOnBlur={(e) => setEmail({ type: "ON_VALIDATE" })}
+            handleOnBlur={(e) =>
+              setEmail({ type: UserInputAction.ON_VALIDATE })
+            }
             error={email.error}
             readOnly={isSubmitting}
           ></InputItem>
@@ -136,9 +148,14 @@ const SignInView = ({ nextUrl, onSignIn }) => {
             value={password.value}
             placeholder={"Password"}
             handleOnChange={(e) => {
-              setPassword({ type: "ON_CHANGE", value: e.target.value });
+              setPassword({
+                type: UserInputAction.ON_CHANGE,
+                value: e.target.value,
+              });
             }}
-            handleOnBlur={(e) => setPassword({ type: "ON_VALIDATE" })}
+            handleOnBlur={(e) =>
+              setPassword({ type: UserInputAction.ON_VALIDATE })
+            }
             error={password.error}
             readOnly={isSubmitting}
           ></InputItem>

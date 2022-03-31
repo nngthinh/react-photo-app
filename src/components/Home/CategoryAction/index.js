@@ -6,20 +6,21 @@ import {
   useParams,
   createSearchParams,
 } from "react-router-dom";
-import {
-  createCategoryAction,
-  viewCategoryAction,
-  updateCategoryAction,
-} from "actions/categories";
+import base64 from "base-64";
 import { notifyNegative, notifyPositive } from "components/Common/Toast";
+import { ButtonItem, InputItem } from "components/Common/Items";
 import {
   validateDescription,
   validateImageUrl,
   validateName,
 } from "utils/validations/categories";
-import { ButtonItem, InputItem } from "components/Common/Items";
-import base64 from "base-64";
+import {
+  createCategoryAction,
+  viewCategoryAction,
+  updateCategoryAction,
+} from "actions/categories";
 import "./index.css";
+import { UserInputAction } from "constants/actions";
 
 const CategoryAction = ({ type }) => {
   const { categoryId } = useParams();
@@ -100,12 +101,12 @@ const CategoryActionView = ({
   const [name, setName] = useReducer(
     (name, nameAction) => {
       switch (nameAction.type) {
-        case "ON_CHANGE":
+        case UserInputAction.ON_CHANGE:
           return {
             value: nameAction.value,
             error: null,
           };
-        case "ON_VALIDATE":
+        case UserInputAction.ON_VALIDATE:
           return {
             value: name.value,
             error: nameAction.error ?? validateName(name.value),
@@ -120,12 +121,12 @@ const CategoryActionView = ({
   const [description, setDescription] = useReducer(
     (description, descriptionAction) => {
       switch (descriptionAction.type) {
-        case "ON_CHANGE":
+        case UserInputAction.ON_CHANGE:
           return {
             value: descriptionAction.value,
             error: null,
           };
-        case "ON_VALIDATE":
+        case UserInputAction.ON_VALIDATE:
           return {
             value: description.value,
             error:
@@ -141,12 +142,12 @@ const CategoryActionView = ({
   const [imageUrl, setImageUrl] = useReducer(
     (imageUrl, imageUrlAction) => {
       switch (imageUrlAction.type) {
-        case "ON_CHANGE":
+        case UserInputAction.ON_CHANGE:
           return {
             value: imageUrlAction.value,
             error: null,
           };
-        case "ON_VALIDATE":
+        case UserInputAction.ON_VALIDATE:
           return {
             value: imageUrl.value,
             error: imageUrlAction.error ?? validateImageUrl(imageUrl.value),
@@ -161,12 +162,18 @@ const CategoryActionView = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    setImageUrl({ type: "ON_CHANGE", value: categoryDetail?.imageUrl ?? "" });
+    setImageUrl({
+      type: UserInputAction.ON_CHANGE,
+      value: categoryDetail?.imageUrl ?? "",
+    });
     setDescription({
-      type: "ON_CHANGE",
+      type: UserInputAction.ON_CHANGE,
       value: categoryDetail?.description ?? "",
     });
-    setName({ type: "ON_CHANGE", value: categoryDetail?.name ?? "" });
+    setName({
+      type: UserInputAction.ON_CHANGE,
+      value: categoryDetail?.name ?? "",
+    });
   }, [
     categoryDetail?.description,
     categoryDetail?.imageUrl,
@@ -183,9 +190,9 @@ const CategoryActionView = ({
       validateDescription(description.value) ||
       validateImageUrl(imageUrl.value)
     ) {
-      setName({ type: "ON_VALIDATE" });
-      setDescription({ type: "ON_VALIDATE" });
-      setImageUrl({ type: "ON_VALIDATE" });
+      setName({ type: UserInputAction.ON_VALIDATE });
+      setDescription({ type: UserInputAction.ON_VALIDATE });
+      setImageUrl({ type: UserInputAction.ON_VALIDATE });
       return;
     }
 
@@ -205,12 +212,18 @@ const CategoryActionView = ({
         } else {
           if (createCategoryResult.error.data) {
             const errors = createCategoryResult.error;
-            setName({ type: "ON_VALIDATE", error: errors.name[0] });
+            setName({
+              type: UserInputAction.ON_VALIDATE,
+              error: errors.name[0],
+            });
             setDescription({
-              type: "ON_VALIDATE",
+              type: UserInputAction.ON_VALIDATE,
               error: errors.description[0],
             });
-            setImageUrl({ type: "ON_VALIDATE", error: errors.imageUrl[0] });
+            setImageUrl({
+              type: UserInputAction.ON_VALIDATE,
+              error: errors.imageUrl[0],
+            });
           } else {
             notifyNegative(createCategoryResult.error.message);
           }
@@ -237,12 +250,18 @@ const CategoryActionView = ({
         } else {
           if (updateCategoryResult.error.data) {
             const errors = updateCategoryResult.error;
-            setName({ type: "ON_VALIDATE", error: errors.name[0] });
+            setName({
+              type: UserInputAction.ON_VALIDATE,
+              error: errors.name[0],
+            });
             setDescription({
-              type: "ON_VALIDATE",
+              type: UserInputAction.ON_VALIDATE,
               error: errors.description[0],
             });
-            setImageUrl({ type: "ON_VALIDATE", error: errors.imageUrl[0] });
+            setImageUrl({
+              type: UserInputAction.ON_VALIDATE,
+              error: errors.imageUrl[0],
+            });
           } else {
             notifyNegative(updateCategoryResult.error.message);
           }
@@ -268,9 +287,14 @@ const CategoryActionView = ({
               value={name.value}
               placeholder={"Name"}
               handleOnChange={(e) => {
-                setName({ type: "ON_CHANGE", value: e.target.value });
+                setName({
+                  type: UserInputAction.ON_CHANGE,
+                  value: e.target.value,
+                });
               }}
-              handleOnBlur={(e) => setName({ type: "ON_VALIDATE" })}
+              handleOnBlur={(e) =>
+                setName({ type: UserInputAction.ON_VALIDATE })
+              }
               error={name.error}
               readOnly={isSubmitting}
             ></InputItem>
@@ -281,9 +305,14 @@ const CategoryActionView = ({
               value={description.value}
               placeholder={"Description"}
               handleOnChange={(e) => {
-                setDescription({ type: "ON_CHANGE", value: e.target.value });
+                setDescription({
+                  type: UserInputAction.ON_CHANGE,
+                  value: e.target.value,
+                });
               }}
-              handleOnBlur={(e) => setDescription({ type: "ON_VALIDATE" })}
+              handleOnBlur={(e) =>
+                setDescription({ type: UserInputAction.ON_VALIDATE })
+              }
               error={description.error}
               readOnly={isSubmitting}
             ></InputItem>
@@ -294,10 +323,13 @@ const CategoryActionView = ({
               value={imageUrl.value}
               placeholder={"Image URL"}
               handleOnChange={(e) => {
-                setImageUrl({ type: "ON_CHANGE", value: e.target.value });
+                setImageUrl({
+                  type: UserInputAction.ON_CHANGE,
+                  value: e.target.value,
+                });
               }}
               handleOnBlur={(e) => {
-                setImageUrl({ type: "ON_VALIDATE" });
+                setImageUrl({ type: UserInputAction.ON_VALIDATE });
               }}
               error={imageUrl.error}
               readOnly={isSubmitting}

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "@ahaui/css/dist/index.min.css";
-import { getUserInfoAction, signOutAction } from "actions/user";
+import { getUserInfoAction, cleanUserInfoAction } from "actions/user";
 import SignIn from "components/Auth/SignIn";
 import SignUp from "components/Auth/SignUp";
 import Home from "components/Home";
@@ -18,19 +18,19 @@ const App = () => {
 
   // Auto sign in
   useEffect(() => {
-    const autoSignIn = async (isLoggedIn) => {
+    const keepUserSession = async (isLoggedIn) => {
       if (isLoggedIn) {
         const getUserInfoResult = await dispatch(getUserInfoAction());
         if (!getUserInfoResult.success) {
           if (String(getUserInfoResult.error.message).includes("Network Error"))
             return;
-
-          dispatch(signOutAction());
+          // If it's expired user, wipe out the user info
+          dispatch(cleanUserInfoAction());
         }
       }
     };
-    autoSignIn(isLoggedIn);
-  });
+    keepUserSession(isLoggedIn);
+  }, [dispatch, isLoggedIn]);
   // Route page
   return (
     <>

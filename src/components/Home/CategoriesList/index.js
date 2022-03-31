@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Skeleton, Separator } from "@ahaui/react";
 import { ButtonItem, PaginationItem } from "components/Common/Items";
 import { notifyNegative } from "components/Common/Toast";
-import { viewCategoriesListAction } from "actions/categories";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { limitCategoriesPagination, limitCategoryDesc } from "constants/limit";
-import { Skeleton, Separator } from "@ahaui/react";
-import "./index.css";
+import { viewCategoriesListAction } from "actions/categories";
 import { shortenContent } from "utils/helpers/content";
+import "./index.css";
 
 const CategoriesList = () => {
   const categoriesPaginationTotal = useSelector(

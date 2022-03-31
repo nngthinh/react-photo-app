@@ -1,8 +1,8 @@
-const { KModalAction } = require("constants/actions");
+const { ModalAction } = require("constants/actions");
 
 const showModalAction = (contents, props) => {
   return {
-    type: KModalAction.SHOW_MODAL,
+    type: ModalAction.SHOW_MODAL,
     config: {
       contents: {
         title: "",
@@ -44,7 +44,7 @@ const showModalAction = (contents, props) => {
 
 const clearModalAction = () => {
   return {
-    type: KModalAction.CLEAR_MODAL,
+    type: ModalAction.CLEAR_MODAL,
   };
 };
 
