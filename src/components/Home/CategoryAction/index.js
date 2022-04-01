@@ -20,6 +20,7 @@ import {
   updateCategoryAction,
 } from "actions/categories";
 import { UserInputAction } from "constants/actions";
+import { ErrorImg, InitialImg } from "assets/images";
 import "./index.css";
 
 const CategoryAction = ({ type }) => {
@@ -274,8 +275,8 @@ const CategoryActionView = ({
   };
 
   return (
-    <div className="categoryAction container">
-      <div className="categoryActionWrapper">
+    <div className="categoryAction">
+      <div className="categoryActionWrapper container">
         <h1 className="u-marginBottomExtraLarge">
           {type === UserInputAction.TYPE_ADD
             ? "Create new category"
@@ -342,7 +343,22 @@ const CategoryActionView = ({
             <img
               className="categoryActionImg"
               src={imageUrl.value}
-              alt={imageUrl.error ? "Somethings went wrong" : "Waiting"}
+              alt={imageUrl.error ? "Cannot load the image" : "Waiting"}
+              onError={({ currentTarget }) => {
+                currentTarget.onError = null; // Prevent looping
+                // Blank url
+                if (imageUrl.value.length === 0) {
+                  currentTarget.src = InitialImg;
+                }
+                // Wrong url resource
+                else {
+                  currentTarget.src = ErrorImg;
+                  setImageUrl({
+                    type: UserInputAction.ON_VALIDATE,
+                    error: "Cannot load the image.",
+                  });
+                }
+              }}
             ></img>
           </div>
         </div>

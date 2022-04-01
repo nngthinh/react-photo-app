@@ -94,7 +94,7 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
   return (
     <div className="navbar u-shadowSmall">
       <div className="navbarWrapper container">
-        <div className="left Brown500 u-flex u-alignItemsCenter">
+        <div className="left u-flex u-alignItemsCenter">
           <span
             data-testid="home"
             className="home u-fontBold u-text400"

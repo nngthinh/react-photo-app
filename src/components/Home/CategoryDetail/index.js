@@ -60,8 +60,8 @@ const CategoryDetailView = ({ categoryId, categoryDetail }) => {
 
   return (
     <>
-      <div className="categoryDetail container">
-        <div className="categoryDetailWrapper">
+      <div className="categoryDetail">
+        <div className="categoryDetailWrapper container">
           <div className="u-marginVerticalMedium">
             {name ? (
               <BreadcrumbItem

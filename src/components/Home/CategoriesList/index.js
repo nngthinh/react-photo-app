@@ -71,8 +71,8 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
   };
 
   return (
-    <div className="categoriesList container">
-      <div className="categoriesListWrapper ">
+    <div className="categoriesList">
+      <div className="categoriesListWrapper container">
         <div className="u-marginBottomExtraLarge">
           <h1 className="u-textCenter">Topics</h1>
           <div className=" u-textCenter">What's your favorite one today?</div>

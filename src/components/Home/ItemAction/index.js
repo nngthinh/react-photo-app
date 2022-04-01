@@ -16,6 +16,7 @@ import {
   updateItemAction,
 } from "actions/items";
 import { UserInputAction } from "constants/actions";
+import { ErrorImg, InitialImg } from "assets/images";
 import "./index.css";
 
 const ItemAction = ({ type }) => {
@@ -244,8 +245,8 @@ const ItemActionView = ({
   };
 
   return (
-    <div className="itemAction container">
-      <div className="itemActionWrapper">
+    <div className="itemAction">
+      <div className="itemActionWrapper container">
         <h1 className="u-marginBottomExtraLarge">
           {UserInputAction.TYPE_ADD ? "Create new item" : "Edit item"}
         </h1>
@@ -292,7 +293,22 @@ const ItemActionView = ({
             <img
               className="itemActionImg"
               src={imageUrl.value}
-              alt={imageUrl.error ? "Somethings went wrong" : "Waiting"}
+              alt={imageUrl.error ? "Cannot load the image" : "Waiting"}
+              onError={({ currentTarget }) => {
+                currentTarget.onError = null; // Prevent looping
+                // Blank url
+                if (imageUrl.value.length === 0) {
+                  currentTarget.src = InitialImg;
+                }
+                // Wrong url resource
+                else {
+                  currentTarget.src = ErrorImg;
+                  setImageUrl({
+                    type: UserInputAction.ON_VALIDATE,
+                    error: "Cannot load the image.",
+                  });
+                }
+              }}
             ></img>
           </div>
         </div>

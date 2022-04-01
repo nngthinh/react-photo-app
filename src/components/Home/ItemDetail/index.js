@@ -113,8 +113,8 @@ const ItemDetailView = ({
 
   return (
     <>
-      <div className="itemDetail container">
-        <div className="itemDetailWrapper">
+      <div className="itemDetail">
+        <div className="itemDetailWrapper container">
           <div className="u-marginVerticalMedium">
             {itemDetail && categoryDetail ? (
               <BreadcrumbItem
