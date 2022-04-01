@@ -15,8 +15,8 @@ import {
   viewItemAction,
   updateItemAction,
 } from "actions/items";
-import "./index.css";
 import { UserInputAction } from "constants/actions";
+import "./index.css";
 
 const ItemAction = ({ type }) => {
   const { categoryId, itemId } = useParams();
@@ -50,7 +50,7 @@ const ItemAction = ({ type }) => {
 
     if (!isLoggedIn) {
       navigateWithNextUrl("/signin");
-    } else if (type === "edit") {
+    } else if (UserInputAction.TYPE_EDIT) {
       const getItemInfo = async () => {
         const viewItemDetailResult = await dispatch(
           viewItemAction(categoryId, itemId)
@@ -178,7 +178,7 @@ const ItemActionView = ({
     }
 
     // Add item
-    if (type === "add") {
+    if (UserInputAction.TYPE_ADD) {
       const createItem = async () => {
         setIsSubmitting(true);
         const createItemResult = await onCreateItem(
@@ -247,7 +247,7 @@ const ItemActionView = ({
     <div className="itemAction container">
       <div className="itemActionWrapper">
         <h1 className="u-marginBottomExtraLarge">
-          {type === "add" ? "Create new item" : "Edit item"}
+          {UserInputAction.TYPE_ADD ? "Create new item" : "Edit item"}
         </h1>
         <div className="inputSecion u-marginBottomLarge Grid">
           <div className="u-sizeFull md:u-size9of12 u-marginBottomMedium">
@@ -298,10 +298,12 @@ const ItemActionView = ({
         </div>
         <div className="buttonSection">
           <ButtonItem
-            data-testid={type === "add" ? "addItemButton" : "editItemButton"}
+            data-testid={
+              UserInputAction.TYPE_ADD ? "addItemButton" : "editItemButton"
+            }
             className="u-marginBottomTiny"
-            value={type === "add" ? "Create item" : "Update item"}
-            variant={type === "add" ? "primary" : "accent"}
+            value={UserInputAction.TYPE_ADD ? "Create item" : "Update item"}
+            variant={UserInputAction.TYPE_ADD ? "primary" : "accent"}
             onClick={handleSubmit}
             isSubmitting={isSubmitting}
           ></ButtonItem>

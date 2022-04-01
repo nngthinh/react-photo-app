@@ -66,6 +66,8 @@ const ModalAction = {
 const UserInputAction = {
   ON_CHANGE: "ON_CHANGE",
   ON_VALIDATE: "ON_VALIDATE",
+  TYPE_ADD: "ADD",
+  TYPE_EDIT: "EDIT",
 };
 
 export {

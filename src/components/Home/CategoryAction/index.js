@@ -19,8 +19,8 @@ import {
   viewCategoryAction,
   updateCategoryAction,
 } from "actions/categories";
-import "./index.css";
 import { UserInputAction } from "constants/actions";
+import "./index.css";
 
 const CategoryAction = ({ type }) => {
   const { categoryId } = useParams();
@@ -39,18 +39,19 @@ const CategoryAction = ({ type }) => {
   // In adding category, no operation is required in advance
   // In editing category, we need to fetch it's data
   useEffect(() => {
-    if (!isLoggedIn) {
+    const navigateWithNextUrl = (pathname) => {
       const nextUrl = base64.encode(
         `${location.pathname}${location.search}${location.hash}`
       );
       navigate(
-        {
-          pathname: "/signin",
-          search: createSearchParams({ next: nextUrl }).toString(),
-        },
+        { pathname, search: createSearchParams({ next: nextUrl }).toString() },
         { replace: true }
       );
-    } else if (type === "edit") {
+    };
+
+    if (!isLoggedIn) {
+      navigateWithNextUrl("/signin");
+    } else if (type === UserInputAction.TYPE_EDIT) {
       const getCategoryInfo = async () => {
         const viewCategoryDetailResult = await dispatch(
           viewCategoryAction(categoryId)
@@ -74,9 +75,9 @@ const CategoryAction = ({ type }) => {
 
   return (
     isLoggedIn &&
-    (type === "add" ? (
+    (type === UserInputAction.TYPE_ADD ? (
       <CategoryActionView
-        type="add"
+        type={UserInputAction.TYPE_ADD}
         onCreateCategory={dispatchCreateCategory}
       ></CategoryActionView>
     ) : (
@@ -197,7 +198,7 @@ const CategoryActionView = ({
     }
 
     // Add category
-    if (type === "add") {
+    if (UserInputAction.TYPE_ADD) {
       const createCategory = async () => {
         setIsSubmitting(true);
         const createCategoryResult = await onCreateCategory(
@@ -276,7 +277,9 @@ const CategoryActionView = ({
     <div className="categoryAction container">
       <div className="categoryActionWrapper">
         <h1 className="u-marginBottomExtraLarge">
-          {type === "add" ? "Create new category" : "Edit category"}
+          {type === UserInputAction.TYPE_ADD
+            ? "Create new category"
+            : "Edit category"}
         </h1>
         <div className="inputSecion u-marginBottomLarge Grid">
           <div className="u-sizeFull md:u-size9of12 u-marginBottomMedium">
@@ -346,11 +349,15 @@ const CategoryActionView = ({
         <div className="buttonSection">
           <ButtonItem
             data-testid={
-              type === "add" ? "addCategoryButton" : "editCategoryButton"
+              UserInputAction.TYPE_ADD
+                ? "addCategoryButton"
+                : "editCategoryButton"
             }
             className="u-marginBottomTiny"
-            value={type === "add" ? "Create category" : "Update category"}
-            variant={type === "add" ? "primary" : "accent"}
+            value={
+              UserInputAction.TYPE_ADD ? "Create category" : "Update category"
+            }
+            variant={UserInputAction.TYPE_ADD ? "primary" : "accent"}
             onClick={handleSubmit}
             isSubmitting={isSubmitting}
           ></ButtonItem>
