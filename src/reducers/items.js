@@ -1,5 +1,5 @@
 import { ItemsAction } from "constants/actions";
-import { limitItemsPagination } from "constants/limit";
+import CustomLimit from "constants/limit";
 
 const initialState = {
   pagination: {},
@@ -14,7 +14,7 @@ const itemsReducer = (state = initialState, action) => {
       return {
         ...state,
         pagination: {
-          total: Math.ceil(itemInfo.totalItems / limitItemsPagination),
+          total: Math.ceil(itemInfo.totalItems / CustomLimit.ITEM_PAGINATION),
         },
         list: itemInfo.items,
       };

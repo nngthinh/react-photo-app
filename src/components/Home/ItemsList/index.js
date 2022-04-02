@@ -5,7 +5,7 @@ import { Skeleton } from "@ahaui/react";
 import { viewItemsListAction } from "actions/items";
 import { ButtonItem, PaginationItem } from "components/Common/Items";
 import { notifyNegative } from "components/Common/Toast";
-import { limitItemDesc, limitItemsPagination } from "constants/limit";
+import CustomLimit from "constants/limit";
 import { shortenContent } from "utils/helpers/content";
 import "./index.css";
 
@@ -37,8 +37,8 @@ const ItemsList = ({ categoryId }) => {
   useEffect(() => {
     const viewItemsList = async () => {
       const [offset, limit] = [
-        limitItemsPagination * (page - 1),
-        limitItemsPagination,
+        CustomLimit.ITEM_PAGINATION * (page - 1),
+        CustomLimit.ITEM_PAGINATION,
       ];
       const viewItemsListResult = await dispatch(
         viewItemsListAction(categoryId, offset, limit)
@@ -125,7 +125,10 @@ const ItemsListView = ({
                       className="u-text200"
                       data-testid={`itemDetail-${item.id}-description`}
                     >
-                      {shortenContent(item.description, limitItemDesc)}
+                      {shortenContent(
+                        item.description,
+                        CustomLimit.ITEM_DESCRIPTION
+                      )}
                     </div>
                   </Link>
                   <div className="u-marginTopSmall u-text200">
@@ -155,7 +158,7 @@ const ItemsListView = ({
           ))}
         </div>
       ) : (
-        [...Array(limitItemsPagination).keys()].map((id) => (
+        [...Array(CustomLimit.ITEM_PAGINATION).keys()].map((id) => (
           <div
             key={id}
             className="u-flex u-alignItemsCenter u-justifyContentBetween u-sizeFull u-marginBottomSmall"

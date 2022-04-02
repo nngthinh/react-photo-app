@@ -373,9 +373,11 @@ const CategoryActionView = ({
             }
             className="u-marginBottomTiny"
             value={
-              UserInputAction.TYPE_ADD ? "Create category" : "Update category"
+              type === UserInputAction.TYPE_ADD
+                ? "Create category"
+                : "Update category"
             }
-            variant={UserInputAction.TYPE_ADD ? "primary" : "accent"}
+            variant={type === UserInputAction.TYPE_ADD ? "primary" : "accent"}
             onClick={handleSubmit}
             isSubmitting={isSubmitting}
           ></ButtonItem>

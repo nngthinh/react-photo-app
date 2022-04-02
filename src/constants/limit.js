@@ -1,11 +1,8 @@
-const limitCategoriesPagination = 4;
-const limitItemsPagination = 8;
-const limitCategoryDesc = 30;
-const limitItemDesc = 100;
-
-export {
-  limitCategoriesPagination,
-  limitItemsPagination,
-  limitCategoryDesc,
-  limitItemDesc,
+const CustomLimit = {
+  CATEGORY_PAGINATION: 4,
+  ITEM_PAGINATION: 8,
+  CATEGORY_DESCRIPTION: 30,
+  ITEM_DESCRIPTION: 100,
 };
+
+export default CustomLimit;

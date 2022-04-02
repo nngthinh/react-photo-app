@@ -6,20 +6,36 @@ import CategoryDetail from "components/Home/CategoryDetail";
 import ItemAction from "components/Home/ItemAction";
 import ItemDetail from "components/Home/ItemDetail";
 import { UserInputAction } from "constants/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { cleanUserInfoAction, getUserInfoAction } from "actions/user";
 
 const Home = () => {
+  // States
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const dispatch = useDispatch();
+
+  // Keep user session
+  useEffect(() => {
+    const keepUserSession = async (isLoggedIn) => {
+      if (isLoggedIn) {
+        const getUserInfoResult = await dispatch(getUserInfoAction());
+        if (!getUserInfoResult.success) {
+          // If there's a network error, do nothing
+          if (String(getUserInfoResult.error.message).includes("Network Error"))
+            return;
+          // If user session is expired or invalid, wipe out that session
+          dispatch(cleanUserInfoAction());
+        }
+      }
+    };
+    keepUserSession(isLoggedIn);
+  }, [dispatch, isLoggedIn]);
+
   return <HomeView />;
 };
 
 const HomeView = () => {
-  // useEffect(() => {
-  //   first
-
-  //   return () => {
-  //     second
-  //   }
-  // }, [third])
-
   return (
     <>
       <Navbar />

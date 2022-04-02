@@ -1,8 +1,6 @@
-import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import "@ahaui/css/dist/index.min.css";
-import { getUserInfoAction, cleanUserInfoAction } from "actions/user";
 import SignIn from "components/Auth/SignIn";
 import SignUp from "components/Auth/SignUp";
 import Home from "components/Home";
@@ -11,26 +9,7 @@ import CustomModal from "components/Common/Modal";
 import "./App.css";
 
 const App = () => {
-  // States
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const modal = useSelector((state) => state.modal);
-  const dispatch = useDispatch();
-
-  // Auto sign in
-  useEffect(() => {
-    const keepUserSession = async (isLoggedIn) => {
-      if (isLoggedIn) {
-        const getUserInfoResult = await dispatch(getUserInfoAction());
-        if (!getUserInfoResult.success) {
-          if (String(getUserInfoResult.error.message).includes("Network Error"))
-            return;
-          // If it's expired user, wipe out the user info
-          dispatch(cleanUserInfoAction());
-        }
-      }
-    };
-    keepUserSession(isLoggedIn);
-  }, [dispatch, isLoggedIn]);
   // Route page
   return (
     <>

@@ -1,5 +1,5 @@
 import { CategoriesAction } from "constants/actions";
-import { limitCategoriesPagination } from "constants/limit";
+import CustomLimit from "constants/limit";
 
 const initialState = {
   pagination: {},
@@ -15,7 +15,7 @@ const categoriesReducer = (state = initialState, action) => {
         ...state,
         pagination: {
           total: Math.ceil(
-            categoriesInfo.totalItems / limitCategoriesPagination
+            categoriesInfo.totalItems / CustomLimit.CATEGORY_PAGINATION
           ),
         },
         list: categoriesInfo.items, // shouldn't be cached

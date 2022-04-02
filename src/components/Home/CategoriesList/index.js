@@ -4,9 +4,10 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Skeleton, Separator } from "@ahaui/react";
 import { ButtonItem, PaginationItem } from "components/Common/Items";
 import { notifyNegative } from "components/Common/Toast";
-import { limitCategoriesPagination, limitCategoryDesc } from "constants/limit";
+import CustomLimit from "constants/limit";
 import { viewCategoriesListAction } from "actions/categories";
 import { shortenContent } from "utils/helpers/content";
+import CustomError from "constants/error";
 import "./index.css";
 
 const CategoriesList = () => {
@@ -39,15 +40,27 @@ const CategoriesList = () => {
   useEffect(() => {
     const getCategoriesList = async () => {
       const [offset, limit] = [
-        limitCategoriesPagination * (page - 1),
-        limitCategoriesPagination,
+        CustomLimit.CATEGORY_PAGINATION * (page - 1),
+        CustomLimit.CATEGORY_PAGINATION,
       ];
       const viewCategoriesListResult = await dispatch(
         viewCategoriesListAction(offset, limit)
       );
 
       if (!viewCategoriesListResult.success) {
-        notifyNegative(viewCategoriesListResult.error.message);
+        if (
+          String(
+            viewCategoriesListResult.error.message.includes(
+              CustomError.NETWORK_ERROR
+            )
+          )
+        ) {
+          window.addEventListener("offline", (event) => {
+            console.log("The network connection has been lost.");
+          });
+        } else {
+          notifyNegative(viewCategoriesListResult.error.message);
+        }
       }
     };
     getCategoriesList();
@@ -123,12 +136,15 @@ const CategoriesListView = ({ categoryPagination, categoriesList = [] }) => {
                       className="u-textLeft u-textGray"
                       data-testid={`categoryDetail-${category.id}-description`}
                     >
-                      {shortenContent(category.description, limitCategoryDesc)}
+                      {shortenContent(
+                        category.description,
+                        CustomLimit.CATEGORY_DESCRIPTION
+                      )}
                     </div>
                   </Link>
                 </div>
               ))
-            : [...Array(limitCategoriesPagination).keys()].map((id) => (
+            : [...Array(CustomLimit.CATEGORY_PAGINATION).keys()].map((id) => (
                 <div
                   key={id}
                   className="u-sizeFull md:u-size6of12 lg:u-size3of12 u-marginBottomLarge "
