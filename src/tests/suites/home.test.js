@@ -97,7 +97,7 @@ afterEach(() => {
 // Testing
 describe("categories list", () => {
   // Navigation
-  it("able to go to create category page for guest", async () => {
+  it("should be able to go to create category page for guest", async () => {
     render(<App />);
     userEvent.click(screen.getByTestId("navigateCreateCategoryButton"));
     await waitFor(() => expect(window.location.pathname).toBe("/signin"));
@@ -111,7 +111,7 @@ describe("categories list", () => {
     );
   });
 
-  it("able to go to create category page for user", async () => {
+  it("should be able to go to create category page for user", async () => {
     render(<App />, {}, { initialState: mockedUser1State });
     userEvent.click(screen.getByTestId("navigateCreateCategoryButton"));
     await waitFor(() =>
@@ -119,7 +119,7 @@ describe("categories list", () => {
     );
   });
 
-  it("able to go to category detail page", async () => {
+  it("should be able to go to category detail page", async () => {
     render(<App />);
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(1));
     userEvent.click(await screen.findByTestId("categoryDetail-1"));
@@ -157,7 +157,7 @@ describe("categories list", () => {
     );
   });
 
-  it("able to use pagination for category list", async () => {
+  it("should be able to use pagination for category list", async () => {
     const categoriesList = categoriesData.items;
     render(<App />);
     // Wait for categories list request

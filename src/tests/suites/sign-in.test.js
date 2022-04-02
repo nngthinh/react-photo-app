@@ -39,7 +39,7 @@ afterEach(() => {
 // Testing
 describe("sign in", () => {
   // Navigation
-  it("able to go to sign up page", async () => {
+  it("should be able to go to sign up page", async () => {
     render(<App />, { route: "/signin" });
     userEvent.click(screen.getByTestId("navigateSignUpButton"));
     await screen.findByTestId("signUpButton");

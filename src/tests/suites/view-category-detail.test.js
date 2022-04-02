@@ -101,7 +101,7 @@ afterEach(() => {
 // Testing
 describe("breadcrumb", () => {
   // Navigation
-  it("able to navigate between pages", async () => {
+  it("should be able to navigate between pages", async () => {
     render(<App />, { route: "/categories/1" });
     userEvent.click(await screen.findByTestId("breadcrumb-1"));
     await waitFor(() => expect(window.location.pathname).toBe("/categories"));
@@ -118,7 +118,7 @@ describe("breadcrumb", () => {
 
 describe("category detail", () => {
   // Navigation
-  it("able to go to edit category page for guest", async () => {
+  it("should be able to go to edit category page for guest", async () => {
     render(<App />, { route: "/categories/1" });
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
     userEvent.click(await screen.findByTestId("navigateEditCategoryButton"));
@@ -132,7 +132,7 @@ describe("category detail", () => {
       expect(window.location.pathname).toBe("/categories/1/edit")
     );
   });
-  it("able to go to edit category page for user", async () => {
+  it("should be able to go to edit category page for user", async () => {
     render(
       <App />,
       { route: "/categories/1" },
@@ -188,7 +188,7 @@ describe("items list", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("able to go to edit item page for author user", async () => {
+  it("should be able to go to edit item page for author user", async () => {
     render(
       <App />,
       { route: "/categories/1" },
@@ -200,7 +200,7 @@ describe("items list", () => {
     await screen.findByTestId("itemDetail-1-editItemButton");
   });
 
-  it("able to go to item detail page", async () => {
+  it("should be able to go to item detail page", async () => {
     render(<App />, { route: "/categories/1" });
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
     userEvent.click(await screen.findByTestId("itemDetail-1"));
@@ -230,7 +230,7 @@ describe("items list", () => {
     );
   });
 
-  it("able to use pagination for items list", async () => {
+  it("should be able to use pagination for items list", async () => {
     const itemsList = itemsData.items;
     render(<App />, { route: "/categories/1" });
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));

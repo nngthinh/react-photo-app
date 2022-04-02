@@ -18,7 +18,7 @@ afterEach(() => {
 });
 
 describe("authenticate implicitly", () => {
-  it("able to sign out automatically for expired user", async () => {
+  it("should be able to sign out automatically for expired user", async () => {
     RestService.getWithToken.mockImplementationOnce(async (url, config) =>
       Promise.reject({ message: "Wrong token or any message" })
     );
@@ -38,7 +38,7 @@ describe("authenticate implicitly", () => {
     });
   });
 
-  it("able to keep user session", async () => {
+  it("should be able to keep user session", async () => {
     RestService.getWithToken.mockImplementationOnce(async (url, config) =>
       Promise.resolve({
         name: usersData.info[1].name,

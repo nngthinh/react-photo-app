@@ -103,14 +103,14 @@ afterEach(() => {
 // Testing
 describe("breadcrumb", () => {
   // Navigation
-  it("able to navigate to home", async () => {
+  it("should be able to navigate to home", async () => {
     render(<App />, { route: "/categories/1/items/1" });
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
     userEvent.click(await screen.findByTestId("breadcrumb-1"));
     await waitFor(() => expect(window.location.pathname).toBe("/categories"));
   });
 
-  it("able to navigate to category detail", async () => {
+  it("should be able to navigate to category detail", async () => {
     render(<App />, { route: "/categories/1/items/1" });
     await waitFor(() => expect(RestService.get.mock.calls.length).toBe(2));
     userEvent.click(await screen.findByTestId("breadcrumb-2"));
@@ -155,7 +155,7 @@ describe("item detail", () => {
     await screen.findByTestId("author");
   });
 
-  it("able to go to edit item page for author user", async () => {
+  it("should be able to go to edit item page for author user", async () => {
     render(
       <App />,
       { route: "/categories/1/items/1" },
@@ -201,7 +201,7 @@ describe("item detail", () => {
     expect(screen.queryByTestId("deleteItemButton")).not.toBeInTheDocument();
   });
 
-  it("able to delete item for author user", async () => {
+  it("should be able to delete item for author user", async () => {
     render(
       <App />,
       { route: "/categories/1/items/1" },
