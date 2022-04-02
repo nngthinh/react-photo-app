@@ -25,27 +25,8 @@ describe("breadcrumb", () => {
     RestService.get.mockImplementation(async (url, configs) => {
       const urlObj = new URL(url);
       const paramsList = urlObj.pathname.split("/");
-      // Item detail
-      if (urlObj.pathname.match(/\/categories\/[\d]*\/items\/[\d]*/)) {
-        const [, , categoryId, , itemId] = paramsList;
-        // Get items list of specific category
-        const itemDetail = itemsData.items
-          .filter(
-            (item) =>
-              item.categoryId === parseInt(categoryId) &&
-              item.id === parseInt(itemId)
-          )
-          .map((item) => ({
-            ...item,
-            author: {
-              id: item.authorId,
-              name: usersData.info[item.authorId].name,
-            },
-          }))[0];
-        return Promise.resolve({ ...itemDetail });
-      }
       // Items list
-      else if (urlObj.pathname.match(/\/categories\/[\d]*\/items/)) {
+      if (urlObj.pathname.match(/\/categories\/[\d]*\/items/)) {
         const [offset, limit] = urlObj.searchParams.values();
         const [, , categoryId] = paramsList;
         // Get items list of specific category
@@ -91,15 +72,10 @@ describe("breadcrumb", () => {
         ? Promise.resolve({ name: usersData.info[userId].name, id: userId })
         : Promise.reject({});
     });
-
-    // - User sign in
-    RestService.post.mockImplementation(async (url, body, configs) => {
-      return Promise.resolve({ accessToken: usersData.info[1].token });
-    });
   });
 
   // Navigation
-  it("should be able to navigate between pages", async () => {
+  it("should be able to navigate to home", async () => {
     render(<App />, { route: "/categories/1" });
     userEvent.click(await screen.findByTestId("breadcrumb-1"));
     await waitFor(() => expect(window.location.pathname).toBe("/categories"));

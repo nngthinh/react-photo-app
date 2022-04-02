@@ -93,11 +93,6 @@ describe("breadcrumb", () => {
         ? Promise.resolve({ name: usersData.info[userId].name, id: userId })
         : Promise.reject({});
     });
-
-    // - User sign in
-    RestService.post.mockImplementation(async (url, body, configs) => {
-      return Promise.resolve({ accessToken: usersData.info[1].token });
-    });
   });
 
   // Navigation
