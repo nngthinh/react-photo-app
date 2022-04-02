@@ -102,7 +102,7 @@ describe("navigation", () => {
     expect(window.location.pathname).toBe("/signin");
   });
 
-  it("should be able to go home", async () => {
+  it("able to go home", async () => {
     // Assertion
     render(<App />, { route: "/categories/1/items/1" });
     // Click to home button
@@ -110,7 +110,7 @@ describe("navigation", () => {
     await waitFor(() => expect(window.location.pathname).toBe("/categories"));
   });
 
-  it("should be able to sign out for user", async () => {
+  it("able to sign out for user", async () => {
     // Assertion
     render(<App />, {}, { initialState: mockedUser1State });
     // Click to home button
