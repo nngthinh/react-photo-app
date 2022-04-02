@@ -10,13 +10,14 @@ import {
   viewItemAction,
 } from "actions/items";
 import { clearModalAction, showModalAction } from "actions/modal";
-import { viewCategoryAction } from "actions/categories";
+import { viewCategoryAction, clearCategoryAction } from "actions/categories";
 import "./index.css";
 
 const ItemDetail = () => {
   const { categoryId, itemId } = useParams();
   const userInfo = useSelector((state) => state.user.info);
   const itemDetail = useSelector((state) => state.items.detail);
+  const categoryDetail = useSelector((state) => state.categories.detail);
   const dispatch = useDispatch();
   const dispatchShowModal = (content, props) =>
     dispatch(showModalAction(content, props));
@@ -24,17 +25,7 @@ const ItemDetail = () => {
   const dispatchDeleteItem = (categoryId, itemId) =>
     dispatch(deleteItemAction(categoryId, itemId));
 
-  const [categoryDetail, setCategoryDetail] = useState(); // For breadcrumb
   useEffect(() => {
-    const viewCategoryDetail = async () => {
-      const viewCategoryDetailResult = await dispatch(
-        viewCategoryAction(categoryId)
-      );
-      if (!viewCategoryDetailResult.success) {
-        notifyNegative(viewCategoryDetailResult.error.message);
-      }
-      setCategoryDetail(viewCategoryDetailResult.data);
-    };
     const viewItemDetail = async () => {
       const viewItemDetailResult = await dispatch(
         viewItemAction(categoryId, itemId)
@@ -44,12 +35,27 @@ const ItemDetail = () => {
       }
     };
     viewItemDetail();
-    viewCategoryDetail();
 
     return () => {
       dispatch(clearItemAction());
     };
   }, [categoryId, dispatch, itemId]);
+
+  useEffect(() => {
+    const viewCategoryDetail = async () => {
+      const viewCategoryDetailResult = await dispatch(
+        viewCategoryAction(categoryId)
+      );
+      if (!viewCategoryDetailResult.success) {
+        notifyNegative(viewCategoryDetailResult.error.message);
+      }
+    };
+    viewCategoryDetail();
+
+    return () => {
+      dispatch(clearCategoryAction());
+    };
+  }, [categoryId, dispatch]);
 
   return (
     <ItemDetailView
