@@ -18,6 +18,7 @@ import {
   createCategoryAction,
   viewCategoryAction,
   updateCategoryAction,
+  clearCategoryAction,
 } from "actions/categories";
 import { UserInputAction } from "constants/actions";
 import { ErrorImg, InitialImg } from "assets/images";
@@ -63,6 +64,10 @@ const CategoryAction = ({ type }) => {
       };
       getCategoryInfo();
     }
+
+    return () => {
+      dispatch(clearCategoryAction());
+    };
   }, [
     categoryId,
     dispatch,
@@ -74,21 +79,18 @@ const CategoryAction = ({ type }) => {
     type,
   ]);
 
-  return (
-    isLoggedIn &&
-    (type === UserInputAction.TYPE_ADD ? (
-      <CategoryActionView
-        type={UserInputAction.TYPE_ADD}
-        onCreateCategory={dispatchCreateCategory}
-      ></CategoryActionView>
-    ) : (
-      <CategoryActionView
-        type="edit"
-        categoryId={categoryId}
-        categoryDetail={categoryDetail}
-        onUpdateCategory={dispatchUpdateCategory}
-      ></CategoryActionView>
-    ))
+  return type === UserInputAction.TYPE_ADD ? (
+    <CategoryActionView
+      type={UserInputAction.TYPE_ADD}
+      onCreateCategory={dispatchCreateCategory}
+    ></CategoryActionView>
+  ) : (
+    <CategoryActionView
+      type="edit"
+      categoryId={categoryId}
+      categoryDetail={categoryDetail}
+      onUpdateCategory={dispatchUpdateCategory}
+    ></CategoryActionView>
   );
 };
 
@@ -199,7 +201,7 @@ const CategoryActionView = ({
     }
 
     // Add category
-    if (UserInputAction.TYPE_ADD) {
+    if (type === UserInputAction.TYPE_ADD) {
       const createCategory = async () => {
         setIsSubmitting(true);
         const createCategoryResult = await onCreateCategory(
@@ -365,7 +367,7 @@ const CategoryActionView = ({
         <div className="buttonSection">
           <ButtonItem
             data-testid={
-              UserInputAction.TYPE_ADD
+              type === UserInputAction.TYPE_ADD
                 ? "addCategoryButton"
                 : "editCategoryButton"
             }

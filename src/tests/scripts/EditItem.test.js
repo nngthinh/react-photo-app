@@ -12,7 +12,7 @@ const mockedUser2State = createMockedState(2);
 const mockedItemDetail = {
   id: 999,
   description: "item description -1",
-  imageUrl: "https://google.com",
+  imageUrl: "https://picsum.photos/200",
 };
 
 jest.mock("utils/services/rest", () => ({
@@ -158,8 +158,13 @@ describe("edit item", () => {
       await screen.findByTestId("description"),
       mockedItemDetail.description
     );
+    userEvent.clear(await screen.findByTestId("imageUrl"));
     userEvent.type(
       await screen.findByTestId("imageUrl"),
+      mockedItemDetail.imageUrl
+    );
+    expect(await screen.findByTestId("itemImageUrl")).toHaveAttribute(
+      "src",
       mockedItemDetail.imageUrl
     );
     userEvent.click(screen.getByTestId("editItemButton"));

@@ -37,6 +37,8 @@ const categoriesReducer = (state = initialState, action) => {
       return { ...state };
     case CategoriesAction.UPDATE_CATEGORY_FAILED:
       return { ...state };
+    case CategoriesAction.CLEAR_CATEGORY_INFO:
+      return { ...initialState };
     default:
       return state;
   }

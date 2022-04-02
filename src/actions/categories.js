@@ -28,9 +28,14 @@ const updateCategoryAction = (categoryId, name, description, imageUrl) => ({
     ),
 });
 
+const clearCategoryAction = () => ({
+  type: CategoriesAction.CLEAR_CATEGORY_INFO,
+});
+
 export {
   viewCategoriesListAction,
   createCategoryAction,
   viewCategoryAction,
   updateCategoryAction,
+  clearCategoryAction,
 };

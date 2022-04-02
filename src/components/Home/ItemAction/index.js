@@ -14,6 +14,7 @@ import {
   createItemAction,
   viewItemAction,
   updateItemAction,
+  clearItemAction,
 } from "actions/items";
 import { UserInputAction } from "constants/actions";
 import { ErrorImg, InitialImg } from "assets/images";
@@ -51,7 +52,7 @@ const ItemAction = ({ type }) => {
 
     if (!isLoggedIn) {
       navigateWithNextUrl("/signin");
-    } else if (UserInputAction.TYPE_EDIT) {
+    } else if (type === UserInputAction.TYPE_EDIT) {
       const getItemInfo = async () => {
         const viewItemDetailResult = await dispatch(
           viewItemAction(categoryId, itemId)
@@ -73,6 +74,10 @@ const ItemAction = ({ type }) => {
       };
       getItemInfo();
     }
+
+    return () => {
+      dispatch(clearItemAction());
+    };
   }, [
     categoryId,
     dispatch,
@@ -87,16 +92,14 @@ const ItemAction = ({ type }) => {
   ]);
 
   return (
-    isLoggedIn && (
-      <ItemActionView
-        type={type}
-        categoryId={categoryId}
-        itemId={itemId}
-        itemDetail={itemDetail}
-        onCreateItem={dispatchCreateItem}
-        onUpdateItem={dispatchUpdateItem}
-      ></ItemActionView>
-    )
+    <ItemActionView
+      type={type}
+      categoryId={categoryId}
+      itemId={itemId}
+      itemDetail={itemDetail}
+      onCreateItem={dispatchCreateItem}
+      onUpdateItem={dispatchUpdateItem}
+    ></ItemActionView>
   );
 };
 
@@ -179,7 +182,7 @@ const ItemActionView = ({
     }
 
     // Add item
-    if (UserInputAction.TYPE_ADD) {
+    if (type === UserInputAction.TYPE_ADD) {
       const createItem = async () => {
         setIsSubmitting(true);
         const createItemResult = await onCreateItem(
@@ -248,7 +251,7 @@ const ItemActionView = ({
     <div className="itemAction">
       <div className="itemActionWrapper container">
         <h1 className="u-marginBottomExtraLarge">
-          {UserInputAction.TYPE_ADD ? "Create new item" : "Edit item"}
+          {type === UserInputAction.TYPE_ADD ? "Create new item" : "Edit item"}
         </h1>
         <div className="inputSecion u-marginBottomLarge Grid">
           <div className="u-sizeFull md:u-size9of12 u-marginBottomMedium">
@@ -291,6 +294,7 @@ const ItemActionView = ({
           </div>
           <div className="u-sizeFull md:u-size3of12">
             <img
+              data-testid="itemImageUrl"
               className="itemActionImg"
               src={imageUrl.value}
               alt={imageUrl.error ? "Cannot load the image" : "Waiting"}
@@ -315,11 +319,15 @@ const ItemActionView = ({
         <div className="buttonSection">
           <ButtonItem
             data-testid={
-              UserInputAction.TYPE_ADD ? "addItemButton" : "editItemButton"
+              type === UserInputAction.TYPE_ADD
+                ? "addItemButton"
+                : "editItemButton"
             }
             className="u-marginBottomTiny"
-            value={UserInputAction.TYPE_ADD ? "Create item" : "Update item"}
-            variant={UserInputAction.TYPE_ADD ? "primary" : "accent"}
+            value={
+              type === UserInputAction.TYPE_ADD ? "Create item" : "Update item"
+            }
+            variant={type === UserInputAction.TYPE_ADD ? "primary" : "accent"}
             onClick={handleSubmit}
             isSubmitting={isSubmitting}
           ></ButtonItem>

@@ -12,6 +12,14 @@ const Home = () => {
 };
 
 const HomeView = () => {
+  // useEffect(() => {
+  //   first
+
+  //   return () => {
+  //     second
+  //   }
+  // }, [third])
+
   return (
     <>
       <Navbar />

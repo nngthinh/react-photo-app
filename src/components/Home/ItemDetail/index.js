@@ -4,7 +4,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Skeleton } from "@ahaui/react";
 import { notifyNegative, notifyPositive } from "components/Common/Toast";
 import { BreadcrumbItem, ButtonItem } from "components/Common/Items";
-import { deleteItemAction, viewItemAction } from "actions/items";
+import {
+  clearItemAction,
+  deleteItemAction,
+  viewItemAction,
+} from "actions/items";
 import { clearModalAction, showModalAction } from "actions/modal";
 import { viewCategoryAction } from "actions/categories";
 import "./index.css";
@@ -41,6 +45,10 @@ const ItemDetail = () => {
     };
     viewItemDetail();
     viewCategoryDetail();
+
+    return () => {
+      dispatch(clearItemAction());
+    };
   }, [categoryId, dispatch, itemId]);
 
   return (

@@ -39,6 +39,8 @@ const itemsReducer = (state = initialState, action) => {
       return { ...state };
     case ItemsAction.DELETE_ITEM_FAILED:
       return { ...state };
+    case ItemsAction.CLEAR_ITEM_INFO:
+      return { ...initialState };
     default:
       return state;
   }

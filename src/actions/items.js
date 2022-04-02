@@ -29,10 +29,15 @@ const deleteItemAction = (categoryId, itemId) => ({
   pendingAction: async () => ItemsRepository.deleteItem(categoryId, itemId),
 });
 
+const clearItemAction = () => ({
+  type: ItemsAction.CLEAR_ITEM_INFO,
+});
+
 export {
   viewItemsListAction,
   createItemAction,
   viewItemAction,
   updateItemAction,
   deleteItemAction,
+  clearItemAction,
 };

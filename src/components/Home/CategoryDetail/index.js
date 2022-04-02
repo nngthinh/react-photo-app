@@ -6,7 +6,7 @@ import { Skeleton, Separator } from "@ahaui/react";
 import { notifyNegative } from "components/Common/Toast";
 import ItemsList from "components/Home/ItemsList";
 import { BreadcrumbItem, ButtonItem } from "components/Common/Items";
-import { viewCategoryAction } from "actions/categories";
+import { viewCategoryAction, clearCategoryAction } from "actions/categories";
 import "./index.css";
 
 const CategoryDetail = () => {
@@ -41,6 +41,9 @@ const CategoryDetail = () => {
       }
     };
     viewCategoryDetail();
+    return () => {
+      dispatch(clearCategoryAction());
+    };
   }, [categoryId, dispatch]);
 
   return (

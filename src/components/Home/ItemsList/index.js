@@ -47,6 +47,7 @@ const ItemsList = ({ categoryId }) => {
         notifyNegative(viewItemsListResult.error.message);
       }
     };
+
     if (page > 0) {
       viewItemsList();
     }
