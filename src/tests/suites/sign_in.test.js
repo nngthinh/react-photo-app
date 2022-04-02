@@ -14,30 +14,28 @@ jest.mock("utils/services/rest", () => ({
   post: jest.fn(),
 }));
 
-// Setup
-beforeEach(() => {
-  // Mock server
-  RestService.getWithToken.mockImplementation(async (url, config) =>
-    Promise.resolve({ name: mockedUser.name, id: mockedUser.id })
-  );
-  RestService.post.mockImplementation(async (url, body, config) => {
-    // Sign in
-    if (
-      body.email !== mockedUser.email ||
-      body.password !== mockedUser.password
-    ) {
-      return Promise.reject({ message: "Invalid email or password." });
-    }
-    return Promise.resolve({ accessToken: mockedUser.token });
-  });
-});
-
-afterEach(() => {
-  global.localStorage.clear();
-});
-
 // Testing
 describe("sign in", () => {
+  // Setup
+  beforeEach(() => {
+    // Clear env
+    window.localStorage.clear();
+    // Mock server
+    RestService.getWithToken.mockImplementation(async (url, config) =>
+      Promise.resolve({ name: mockedUser.name, id: mockedUser.id })
+    );
+    RestService.post.mockImplementation(async (url, body, config) => {
+      // Sign in
+      if (
+        body.email !== mockedUser.email ||
+        body.password !== mockedUser.password
+      ) {
+        return Promise.reject({ message: "Invalid email or password." });
+      }
+      return Promise.resolve({ accessToken: mockedUser.token });
+    });
+  });
+
   // Navigation
   it("should be able to go to sign up page", async () => {
     render(<App />, { route: "/signin" });

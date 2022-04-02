@@ -13,11 +13,11 @@ jest.mock("utils/services/rest", () => ({
 const mockedExpiredUserState = createMockedState(-1);
 const mockedUser1State = createMockedState(1);
 
-afterEach(() => {
-  global.localStorage.clear();
-});
-
 describe("authenticate implicitly", () => {
+  beforeEach(() => {
+    global.localStorage.clear();
+  });
+
   it("should be able to sign out automatically for expired user", async () => {
     RestService.getWithToken.mockImplementationOnce(async (url, config) =>
       Promise.reject({ message: "Wrong token or any message" })

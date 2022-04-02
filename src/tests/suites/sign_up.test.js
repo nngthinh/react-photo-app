@@ -13,39 +13,38 @@ jest.mock("utils/services/rest", () => ({
   post: jest.fn(),
 }));
 
-// Setup
-beforeEach(() => {
-  RestService.getWithToken.mockImplementation(async (url, config) =>
-    Promise.resolve({ name: mockedUser.name, id: mockedUser.id })
-  );
-  RestService.post.mockImplementation(async (url, body, config) => {
-    const { pathname } = new URL(url);
-    // Sign up
-    if (pathname === "/users") {
-      if (body.email === duplicatedEmail) {
-        return Promise.reject({ message: "Email already exists" });
-      }
-      return Promise.resolve({ data: {} });
-    }
-    // Sign in
-    else {
-      if (
-        body.email !== mockedUser.email ||
-        body.password !== mockedUser.password
-      ) {
-        return Promise.reject({ message: "Invalid email or password." });
-      }
-      return Promise.resolve({ accessToken: "sampleAccessToken" });
-    }
-  });
-});
-
-afterEach(() => {
-  global.localStorage.clear();
-});
-
 // Testing
 describe("sign up", () => {
+  // Setup
+  beforeEach(() => {
+    // Clear env
+    window.localStorage.clear();
+    // Mock api
+    RestService.getWithToken.mockImplementation(async (url, config) =>
+      Promise.resolve({ name: mockedUser.name, id: mockedUser.id })
+    );
+    RestService.post.mockImplementation(async (url, body, config) => {
+      const { pathname } = new URL(url);
+      // Sign up
+      if (pathname === "/users") {
+        if (body.email === duplicatedEmail) {
+          return Promise.reject({ message: "Email already exists" });
+        }
+        return Promise.resolve({ data: {} });
+      }
+      // Sign in
+      else {
+        if (
+          body.email !== mockedUser.email ||
+          body.password !== mockedUser.password
+        ) {
+          return Promise.reject({ message: "Invalid email or password." });
+        }
+        return Promise.resolve({ accessToken: "sampleAccessToken" });
+      }
+    });
+  });
+
   // Navigation
   it("should be able to go to sign in page", async () => {
     render(<App />, { route: "/signup" });

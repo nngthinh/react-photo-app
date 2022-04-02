@@ -22,96 +22,94 @@ jest.mock("utils/services/rest", () => ({
   putWithToken: jest.fn(),
 }));
 
-beforeEach(() => {
-  // Mock rest api
-  // - Category & item APIs
-  RestService.get.mockImplementation(async (url, configs) => {
-    const urlObj = new URL(url);
-    const paramsList = urlObj.pathname.split("/");
-    // Item detail
-    if (urlObj.pathname.match(/\/categories\/[\d]*\/items\/[\d]*/)) {
-      const [, , categoryId, , itemId] = paramsList;
-      // Get items list of specific category
-      const itemDetail = itemsData.items
-        .filter(
-          (item) =>
-            item.categoryId === parseInt(categoryId) &&
-            item.id === parseInt(itemId)
-        )
-        .map((item) => ({
-          ...item,
-          author: {
-            id: item.authorId,
-            name: usersData.info[item.authorId].name,
-          },
-        }))[0];
-      return Promise.resolve({ ...itemDetail });
-    }
-    // Items list
-    else if (urlObj.pathname.match(/\/categories\/[\d]*\/items/)) {
-      const [offset, limit] = urlObj.searchParams.values();
-      const [, , categoryId] = paramsList;
-
-      // Get items list of specific category
-      const itemsList = itemsData.items
-        .filter((item) => item.categoryId === parseInt(categoryId))
-        .map((item) => ({
-          ...item,
-          author: {
-            id: item.authorId,
-            name: usersData.info[item.authorId].name,
-          },
-        }));
-      return Promise.resolve({
-        items: itemsList.slice(offset, offset + limit),
-        totalItems: itemsList.length,
-      });
-    }
-    // Categories detail
-    else if (urlObj.pathname.match(/\/categories\/[\d]*/)) {
-      const [, , categoryId] = paramsList;
-
-      const categoryDetail = categoriesData.items.filter(
-        (category) => category.id === parseInt(categoryId)
-      )[0];
-      return Promise.resolve({ ...categoryDetail });
-    }
-    // Category list
-    else {
-      const [offset, limit] = urlObj.searchParams.values();
-      const categoriesList = categoriesData.items;
-      return Promise.resolve({
-        items: categoriesList.slice(offset, offset + limit),
-        totalItems: categoriesList.length,
-      });
-    }
-  });
-
-  // - Get user information API
-  RestService.getWithToken.mockImplementation(async (url, configs) => {
-    const token = loadState()?.user.token;
-    const userId = usersData.token[token];
-    return userId
-      ? Promise.resolve({ name: usersData.info[userId].name, id: userId })
-      : Promise.reject({});
-  });
-
-  // - User sign in
-  RestService.post.mockImplementation(async (url, body, configs) => {
-    return Promise.resolve({ accessToken: usersData.info[1].token });
-  });
-
-  // - Item action
-  RestService.putWithToken.mockImplementation(async (url, body, configs) => {
-    return Promise.resolve({ ...mockedItemDetail });
-  });
-});
-
-afterEach(() => {
-  global.localStorage.clear();
-});
-
 describe("edit item", () => {
+  beforeEach(() => {
+    // Clear env
+    window.localStorage.clear();
+    // Mock rest api
+    // - Category & item APIs
+    RestService.get.mockImplementation(async (url, configs) => {
+      const urlObj = new URL(url);
+      const paramsList = urlObj.pathname.split("/");
+      // Item detail
+      if (urlObj.pathname.match(/\/categories\/[\d]*\/items\/[\d]*/)) {
+        const [, , categoryId, , itemId] = paramsList;
+        // Get items list of specific category
+        const itemDetail = itemsData.items
+          .filter(
+            (item) =>
+              item.categoryId === parseInt(categoryId) &&
+              item.id === parseInt(itemId)
+          )
+          .map((item) => ({
+            ...item,
+            author: {
+              id: item.authorId,
+              name: usersData.info[item.authorId].name,
+            },
+          }))[0];
+        return Promise.resolve({ ...itemDetail });
+      }
+      // Items list
+      else if (urlObj.pathname.match(/\/categories\/[\d]*\/items/)) {
+        const [offset, limit] = urlObj.searchParams.values();
+        const [, , categoryId] = paramsList;
+
+        // Get items list of specific category
+        const itemsList = itemsData.items
+          .filter((item) => item.categoryId === parseInt(categoryId))
+          .map((item) => ({
+            ...item,
+            author: {
+              id: item.authorId,
+              name: usersData.info[item.authorId].name,
+            },
+          }));
+        return Promise.resolve({
+          items: itemsList.slice(offset, offset + limit),
+          totalItems: itemsList.length,
+        });
+      }
+      // Categories detail
+      else if (urlObj.pathname.match(/\/categories\/[\d]*/)) {
+        const [, , categoryId] = paramsList;
+
+        const categoryDetail = categoriesData.items.filter(
+          (category) => category.id === parseInt(categoryId)
+        )[0];
+        return Promise.resolve({ ...categoryDetail });
+      }
+      // Category list
+      else {
+        const [offset, limit] = urlObj.searchParams.values();
+        const categoriesList = categoriesData.items;
+        return Promise.resolve({
+          items: categoriesList.slice(offset, offset + limit),
+          totalItems: categoriesList.length,
+        });
+      }
+    });
+
+    // - Get user information API
+    RestService.getWithToken.mockImplementation(async (url, configs) => {
+      const token = loadState()?.user.token;
+      const userId = usersData.token[token];
+      return userId
+        ? Promise.resolve({ name: usersData.info[userId].name, id: userId })
+        : Promise.reject({});
+    });
+
+    // - User sign in
+    RestService.post.mockImplementation(async (url, body, configs) => {
+      return Promise.resolve({ accessToken: usersData.info[1].token });
+    });
+
+    // - Item action
+    RestService.putWithToken.mockImplementation(async (url, body, configs) => {
+      return Promise.resolve({ ...mockedItemDetail });
+    });
+  });
+
   it("navigate to sign in page for guest", async () => {
     render(<App />, { route: "/categories/1/items/1/edit" });
     expect(RestService.get.mock.calls.length).toBe(0);
