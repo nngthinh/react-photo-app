@@ -9,6 +9,8 @@ import { viewCategoriesListAction } from "actions/categories";
 import { shortenContent } from "utils/helpers/content";
 import CustomError from "constants/error";
 import "./index.css";
+import { useState } from "react";
+import OfflinePage from "components/Common/Offline";
 
 const CategoriesList = () => {
   const categoriesPaginationTotal = useSelector(
@@ -29,7 +31,9 @@ const CategoriesList = () => {
 
   const navigate = useNavigate();
 
-  // Fetch the categories list
+  const [isOnLine, setIsOnLine] = useState(true);
+
+  // Wrong page param
   useEffect(() => {
     if (page === 0) {
       // Navigate to default url
@@ -37,6 +41,7 @@ const CategoriesList = () => {
     }
   }, [navigate, page]);
 
+  // Fetch the categories list
   useEffect(() => {
     const getCategoriesList = async () => {
       const [offset, limit] = [
@@ -55,9 +60,7 @@ const CategoriesList = () => {
             )
           )
         ) {
-          window.addEventListener("offline", (event) => {
-            console.log("The network connection has been lost.");
-          });
+          setIsOnLine(false);
         } else {
           notifyNegative(viewCategoriesListResult.error.message);
         }
@@ -66,7 +69,7 @@ const CategoriesList = () => {
     getCategoriesList();
   }, [dispatch, page]);
 
-  return (
+  return isOnLine ? (
     <CategoriesListView
       categoryPagination={{
         maxIndex: categoriesPaginationTotal ?? 0,
@@ -74,6 +77,8 @@ const CategoriesList = () => {
       }}
       categoriesList={categoriesList}
     />
+  ) : (
+    <OfflinePage reconnect={() => navigate(0)} />
   );
 };
 

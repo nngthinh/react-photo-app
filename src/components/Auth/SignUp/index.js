@@ -15,8 +15,8 @@ import {
   validatePassword,
 } from "utils/validations/auth";
 import { notifyNegative, notifyPositive } from "components/Common/Toast";
-import "./index.css";
 import { UserInputAction } from "constants/actions";
+import "./index.css";
 
 // Components
 const SignUp = () => {
