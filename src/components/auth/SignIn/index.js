@@ -111,8 +111,8 @@ const SignInView = ({ nextUrl, onSignIn }) => {
           error: fieldErrors.password?.[0],
         });
       } else {
-        const messageError = signInResult.error.message;
-        notifyNegative(String(messageError));
+        // Show all error
+        notifyNegative(signInResult.error.message);
       }
     }
   };

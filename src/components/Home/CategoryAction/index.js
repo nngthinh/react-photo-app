@@ -59,6 +59,7 @@ const CategoryAction = ({ type }) => {
           viewCategoryAction(categoryId)
         );
         if (!viewCategoryDetailResult.success) {
+          if (viewCategoryDetailResult.skipError) return;
           notifyNegative(viewCategoryDetailResult.error.message);
         }
       };
@@ -229,6 +230,7 @@ const CategoryActionView = ({
               error: errors.imageUrl[0],
             });
           } else {
+            if (createCategoryResult.skipError) return;
             notifyNegative(createCategoryResult.error.message);
           }
         }
@@ -267,6 +269,7 @@ const CategoryActionView = ({
               error: errors.imageUrl[0],
             });
           } else {
+            if (updateCategoryResult.skipError) return;
             notifyNegative(updateCategoryResult.error.message);
           }
         }

@@ -164,8 +164,8 @@ const SignUpView = ({ nextUrl, onSignUp, onAutoSignIn }) => {
           error: fieldErrors.password?.[0],
         });
       }
-      const messageError = signUpResult.error.message;
-      notifyNegative(String(messageError));
+      // Show all error
+      notifyNegative(signUpResult.error.message);
     }
   };
 

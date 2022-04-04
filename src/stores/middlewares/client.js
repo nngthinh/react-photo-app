@@ -1,3 +1,5 @@
+import CustomError from "constants/error";
+
 // Executes async query to the backend
 const clientMiddleware = (store) => (next) => async (action) => {
   if (!action.pendingActionType) {
@@ -14,8 +16,17 @@ const clientMiddleware = (store) => (next) => async (action) => {
     nextAction = { type: `${type}_SUCCESS`, data };
     returnValue = { success: true, data };
   } catch (error) {
-    nextAction = { type: `${type}_FAILED`, error };
-    returnValue = { success: false, error };
+    // Skip toast message
+    const skipError =
+      error.message &&
+      String(error.message).includes(CustomError.NETWORK_ERROR);
+
+    nextAction = {
+      type: `${type}_FAILED`,
+      skipError,
+      error,
+    };
+    returnValue = { success: false, skipError, error };
   }
 
   // Run next action

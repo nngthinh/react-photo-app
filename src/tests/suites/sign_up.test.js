@@ -1,8 +1,8 @@
+import userEvent from "@testing-library/user-event";
+import { render, screen, waitFor } from "tests/utils/rtl";
+import { usersData } from "tests/fixtures/database";
 import RestService from "utils/services/rest";
 import App from "App";
-import { render, screen, waitFor } from "tests/utils/rtl";
-import userEvent from "@testing-library/user-event";
-import { usersData } from "tests/fixtures/database";
 
 // Mock data
 const mockedUser = usersData.info[1]; // get the first user info

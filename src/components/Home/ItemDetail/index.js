@@ -31,6 +31,7 @@ const ItemDetail = () => {
         viewItemAction(categoryId, itemId)
       );
       if (!viewItemDetailResult.success) {
+        if (viewItemDetailResult.skipError) return;
         notifyNegative(viewItemDetailResult.error.message);
       }
     };
@@ -47,6 +48,7 @@ const ItemDetail = () => {
         viewCategoryAction(categoryId)
       );
       if (!viewCategoryDetailResult.success) {
+        if (viewCategoryDetailResult.skipError) return;
         notifyNegative(viewCategoryDetailResult.error.message);
       }
     };
@@ -93,6 +95,7 @@ const ItemDetailView = ({
         onClearModal();
         notifyPositive("Delete item successfully.");
       } else {
+        if (deleteItemResult.skipError) return;
         notifyNegative(deleteItemResult.error.message);
       }
     };

@@ -46,6 +46,8 @@ const NavbarView = ({ user, onSignOut, onShowModal, onClearModal }) => {
         navigate("/");
         notifyPositive("Sign out successfully.");
       } else {
+        // Skip error
+        if (signOutResult.skipError) return;
         notifyNegative(signOutResult.error.message);
       }
     };

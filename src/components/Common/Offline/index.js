@@ -1,15 +1,21 @@
 import { ButtonItem } from "components/Common/Items";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./index.css";
 
-const OfflinePage = ({ reconnect }) => {
-  useEffect(() => {
-    const intervalId = setInterval(reconnect, 30000);
+const OfflinePage = () => {
+  const navigate = useNavigate();
+  const reconnect = () => {
+    navigate(0);
+  };
 
+  // Set interval for reconnect function
+  useEffect(() => {
+    const intervalId = setInterval(reconnect, 5000);
     return () => {
       clearInterval(intervalId);
     };
-  }, [reconnect]);
+  });
 
   return <OfflinePageView reconnect={reconnect} />;
 };

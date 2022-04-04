@@ -58,6 +58,7 @@ const ItemAction = ({ type }) => {
           viewItemAction(categoryId, itemId)
         );
         if (!viewItemDetailResult.success) {
+          if (viewItemDetailResult.skipError) return;
           notifyNegative(viewItemDetailResult.error.message);
         } else {
           const itemDetail = viewItemDetailResult.data;
@@ -206,6 +207,7 @@ const ItemActionView = ({
               error: errors.imageUrl[0],
             });
           } else {
+            if (createItemResult.skipError) return;
             notifyNegative(createItemResult.error.message);
           }
         }
@@ -239,6 +241,7 @@ const ItemActionView = ({
               error: errors.imageUrl[0],
             });
           } else {
+            if (updateItemResult.skipError) return;
             notifyNegative(updateItemResult.error.message);
           }
         }

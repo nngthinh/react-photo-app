@@ -74,10 +74,16 @@ const UserInputAction = {
   TYPE_EDIT: "EDIT",
 };
 
+const GeneralAction = {
+  NETWORK_ERROR: "NETWORK_ERROR",
+  NETWORK_OK: "NETWORK_OK",
+};
+
 export {
   UserAction,
   CategoriesAction,
   ItemsAction,
   ModalAction,
   UserInputAction,
+  GeneralAction,
 };

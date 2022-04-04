@@ -1,10 +1,10 @@
-import App from "App";
+import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor } from "tests/utils/rtl";
 import { createMockedState } from "tests/fixtures/state";
-import userEvent from "@testing-library/user-event";
-import RestService from "utils/services/rest";
 import { usersData, categoriesData, itemsData } from "tests/fixtures/database";
+import RestService from "utils/services/rest";
 import { loadState } from "utils/services/localStorage";
+import App from "App";
 
 jest.mock("utils/services/rest", () => ({
   get: jest.fn(),

@@ -37,6 +37,7 @@ const CategoryDetail = () => {
         viewCategoryAction(categoryId)
       );
       if (!viewCategoyDetailResult.success) {
+        if (viewCategoyDetailResult.skipError) return;
         notifyNegative(viewCategoyDetailResult.error.message);
       }
     };

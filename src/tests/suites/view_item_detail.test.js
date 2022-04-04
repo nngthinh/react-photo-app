@@ -1,10 +1,10 @@
-import App from "App";
-import { render, screen, waitFor } from "tests/utils/rtl";
-import { createMockedState } from "tests/fixtures/state";
 import userEvent from "@testing-library/user-event";
 import RestService from "utils/services/rest";
 import { loadState } from "utils/services/localStorage";
+import { render, screen, waitFor } from "tests/utils/rtl";
+import { createMockedState } from "tests/fixtures/state";
 import { usersData, categoriesData, itemsData } from "tests/fixtures/database";
+import App from "App";
 
 const mockedUser1State = createMockedState(1);
 const mockedUser2State = createMockedState(2);

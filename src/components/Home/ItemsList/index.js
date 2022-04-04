@@ -44,6 +44,7 @@ const ItemsList = ({ categoryId }) => {
         viewItemsListAction(categoryId, offset, limit)
       );
       if (!viewItemsListResult.success) {
+        if (viewItemsListResult.skipError) return;
         notifyNegative(viewItemsListResult.error.message);
       }
     };

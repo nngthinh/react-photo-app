@@ -7,10 +7,7 @@ import { notifyNegative } from "components/Common/Toast";
 import CustomLimit from "constants/limit";
 import { viewCategoriesListAction } from "actions/categories";
 import { shortenContent } from "utils/helpers/content";
-import CustomError from "constants/error";
 import "./index.css";
-import { useState } from "react";
-import OfflinePage from "components/Common/Offline";
 
 const CategoriesList = () => {
   const categoriesPaginationTotal = useSelector(
@@ -30,8 +27,6 @@ const CategoriesList = () => {
       : parseInt(searchParams.get("page") ?? 0);
 
   const navigate = useNavigate();
-
-  const [isOnLine, setIsOnLine] = useState(true);
 
   // Wrong page param
   useEffect(() => {
@@ -53,23 +48,15 @@ const CategoriesList = () => {
       );
 
       if (!viewCategoriesListResult.success) {
-        if (
-          String(
-            viewCategoriesListResult.error.message.includes(
-              CustomError.NETWORK_ERROR
-            )
-          )
-        ) {
-          setIsOnLine(false);
-        } else {
-          notifyNegative(viewCategoriesListResult.error.message);
-        }
+        // Skip error
+        if (viewCategoriesListResult.skipError) return;
+        notifyNegative(viewCategoriesListResult.error.message);
       }
     };
     getCategoriesList();
   }, [dispatch, page]);
 
-  return isOnLine ? (
+  return (
     <CategoriesListView
       categoryPagination={{
         maxIndex: categoriesPaginationTotal ?? 0,
@@ -77,8 +64,6 @@ const CategoriesList = () => {
       }}
       categoriesList={categoriesList}
     />
-  ) : (
-    <OfflinePage reconnect={() => navigate(0)} />
   );
 };
 
