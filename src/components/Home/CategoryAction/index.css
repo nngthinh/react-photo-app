@@ -1,0 +1,9 @@
+.categoryAction {
+  margin-top: 64px;
+  margin-bottom: 64px;
+}
+
+.categoryActionImg {
+  width: 100%;
+  aspect-ratio: 1;
+}

@@ -1,0 +1,9 @@
+.itemDetail {
+  margin-top: 64px;
+  margin-bottom: 64px;
+}
+
+.itemDetailImg {
+  width: 100%;
+  aspect-ratio: 1;
+}

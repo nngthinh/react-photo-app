@@ -1,0 +1,12 @@
+.signUp {
+  margin-top: 64px;
+  margin-bottom: 64px;
+  display: flex;
+  justify-content: center;
+}
+
+.signUpWrapper {
+  max-width: 480px;
+  width: 100%;
+  padding: 64px 20px;
+}

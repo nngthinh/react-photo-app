@@ -1,0 +1,9 @@
+.categoryDetail {
+  margin-top: 64px;
+  margin-bottom: 64px;
+}
+
+.categoryDetailImg {
+  width: 100%;
+  aspect-ratio: 1;
+}
