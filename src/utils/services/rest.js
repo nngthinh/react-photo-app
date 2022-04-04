@@ -36,7 +36,7 @@ export default class RestService {
   static #formatError = (error) => {
     // Reject from server: Promise.reject
     if (error.response) {
-      const errorData = error.response.data;
+      const errorData = error.response.data; // Convention: https://stackoverflow.com/questions/47067929/how-to-handle-neterr-connection-refused-in-axios-vue-js
       return convertSnakeToCamelJSON(errorData);
     }
     // Other error e.g undefined data: Error

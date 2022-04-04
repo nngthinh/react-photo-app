@@ -22,7 +22,7 @@ const OfflinePage = () => {
 
 const OfflinePageView = ({ reconnect }) => {
   return (
-    <div className="offline">
+    <div className="offline" data-testid="offline-page">
       <div className="offlineWrapper container u-heigthFull">
         <div className="u-flex u-flexColumn u-alignItemCenter u-textCenter">
           <h2>You are offline.</h2>
@@ -34,6 +34,7 @@ const OfflinePageView = ({ reconnect }) => {
               size="medium"
               value="Try again"
               onClick={() => reconnect()}
+              data-testid="reconnectButton"
             />
           </div>
         </div>
